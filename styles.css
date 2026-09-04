@@ -144,6 +144,7 @@ h1{font-size:40px}h2{font-size:30px}
   align-items:center;justify-content:center;gap:8px;
   background:rgba(0,0,0,.72);pointer-events:none;
 }
+.stage-banner[hidden]{display:none!important}
 .stage-banner strong{font-size:42px;letter-spacing:.04em;text-shadow:0 0 22px #FF5A00}
 .stage-banner span{letter-spacing:.18em;font-weight:800;color:#FFB000}
 .stage-banner.show{animation:bannerIn .95s ease}
