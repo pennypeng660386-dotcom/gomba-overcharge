@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <title>GOMBA OVERCHARGE</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <section id="landing" class="screen active" aria-labelledby="landing-title">
+      <div class="brand">GOMBA</div>
+      <div class="hero-wrap">
+        <img class="hero-img" src="./assets/gomba.png" alt="GOMBA mascot" />
+        <div class="hero-glow"></div>
+      </div>
+      <h1 id="landing-title">OVERCHARGE</h1>
+      <p class="tagline">HOLD. RELEASE. CHARGE.</p>
+      <button id="playBtn" class="primary">PLAY</button>
+      <div class="meta-row">
+        <span>NO APP</span><span>30–60s</span><span>ONE THUMB</span>
+      </div>
+    </section>
+
+    <section id="game" class="screen" aria-labelledby="game-title">
+      <header class="hud">
+        <div><span class="hud-label">CORE</span><strong id="chargeText">0%</strong></div>
+        <div><span class="hud-label">COMBO</span><strong id="comboText">×0</strong></div>
+        <div><span class="hud-label">LIVES</span><strong id="livesText">♥♥♥</strong></div>
+      </header>
+
+      <div class="game-stage">
+        <div class="target-ring" id="targetRing">
+          <div class="perfect-zone" id="perfectZone"></div>
+          <div class="needle" id="needle"></div>
+          <div class="core">
+            <div class="core-fill" id="coreFill"></div>
+            <span id="coreLabel">HOLD</span>
+          </div>
+        </div>
+
+        <img class="game-mascot" src="./assets/gomba.png" alt="" />
+        <div id="feedback" class="feedback" aria-live="polite"></div>
+      </div>
+
+      <div class="charge-bar">
+        <div id="barFill" class="bar-fill"></div>
+      </div>
+      <p class="instruction">Hold anywhere. Release inside the orange zone.</p>
+      <button id="holdBtn" class="hold-btn">HOLD TO CHARGE</button>
+    </section>
+
+    <section id="result" class="screen" aria-labelledby="resultTitle">
+      <div class="brand">GOMBA</div>
+      <div id="resultBurst" class="result-burst">⚡</div>
+      <h2 id="resultTitle">FULLY CHARGED</h2>
+      <p id="resultSub">You woke the core.</p>
+
+      <div class="score-card">
+        <div><span>CORE</span><strong id="finalCore">100%</strong></div>
+        <div><span>BEST COMBO</span><strong id="finalCombo">×0</strong></div>
+        <div><span>TIME</span><strong id="finalTime">0:00</strong></div>
+      </div>
+
+      <button id="nextDropBtn" class="primary">GET THE NEXT DROP</button>
+      <button id="againBtn" class="secondary">PLAY AGAIN</button>
+    </section>
+
+    <section id="subscribe" class="screen" aria-labelledby="subscribeTitle">
+      <div class="brand">GOMBA</div>
+      <h2 id="subscribeTitle">STAY IN THE GAME</h2>
+      <p>Want the next GOMBA challenge?</p>
+      <p class="muted">Leave your email. We’ll tell you when the next game drops.</p>
+
+      <form id="subscribeForm" class="subscribe-form">
+        <input id="emailInput" type="email" placeholder="Your email address" required />
+        <button class="primary" type="submit">GET THE NEXT DROP</button>
+      </form>
+      <p class="microcopy">No spam. Just the next charge.</p>
+      <p id="subscribeSuccess" class="success" hidden>You’re on the list. ⚡</p>
+      <button id="subscribeAgainBtn" class="secondary">PLAY AGAIN</button>
+    </section>
+  </main>
+
+  <script src="./game.js"></script>
+</body>
+</html>
