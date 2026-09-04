@@ -1,6 +1,7 @@
 (() => {
   const SIZE = 8;
   const SAVE_KEY = 'gomba_overdrive_save';
+  const SOUND_KEY = 'gomba_overdrive_sound';
   const EASY = [
     [[0, 0]],
     [[0, 0], [0, 1]],
@@ -31,12 +32,15 @@
   const trayEl = $('tray');
   const ghostEl = $('dragGhost');
   const hintEl = $('firstHint');
+  const wrapEl = boardEl.parentElement;
 
   let save = loadSave();
   let state = null;
   let drag = null;
   let ctaShown = false;
   let afterCta = null;
+  let soundOn = localStorage.getItem(SOUND_KEY) !== '0';
+  let audioCtx = null;
 
   function track(eventName, extra = {}) {
     console.log('[GOMBA_EVENT]', eventName, { ts: Date.now(), ...extra });
@@ -68,6 +72,60 @@
     }));
   }
 
+  function ensureAudio() {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return;
+    if (!audioCtx) audioCtx = new Ctx();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+  }
+
+  function beep(freq, dur, type, vol) {
+    if (!soundOn || !audioCtx) return;
+    const t = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type || 'square';
+    osc.frequency.setValueAtTime(freq, t);
+    gain.gain.setValueAtTime(vol || 0.05, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(t);
+    osc.stop(t + dur);
+  }
+
+  function sfx(kind) {
+    if (!soundOn) return;
+    ensureAudio();
+    if (!audioCtx) return;
+    if (kind === 'tap') beep(880, 0.04, 'triangle', 0.03);
+    else if (kind === 'place') beep(240, 0.07, 'square', 0.05);
+    else if (kind === 'invalid') beep(120, 0.14, 'sawtooth', 0.04);
+    else if (kind === 'clear') {
+      beep(420, 0.08, 'square', 0.05);
+      setTimeout(() => beep(640, 0.1, 'square', 0.05), 45);
+    } else if (kind === 'combo') {
+      beep(520, 0.07, 'square', 0.05);
+      setTimeout(() => beep(760, 0.09, 'square', 0.05), 40);
+      setTimeout(() => beep(980, 0.12, 'square', 0.05), 90);
+    } else if (kind === 'overdrive') {
+      beep(300, 0.1, 'sawtooth', 0.05);
+      setTimeout(() => beep(500, 0.12, 'square', 0.06), 70);
+      setTimeout(() => beep(800, 0.18, 'square', 0.06), 150);
+    } else if (kind === 'over') {
+      beep(320, 0.12, 'sawtooth', 0.05);
+      setTimeout(() => beep(180, 0.22, 'triangle', 0.05), 90);
+    } else if (kind === 'stage') {
+      beep(500, 0.08, 'triangle', 0.05);
+      setTimeout(() => beep(750, 0.14, 'triangle', 0.05), 80);
+    }
+  }
+
+  function syncSoundBtn() {
+    $('soundBtn').textContent = soundOn ? 'SOUND ON' : 'SOUND OFF';
+    $('soundBtn').setAttribute('aria-pressed', soundOn ? 'true' : 'false');
+  }
+
   function show(name) {
     Object.values(screens).forEach(s => s.classList.remove('active'));
     screens[name].classList.add('active');
@@ -80,6 +138,24 @@
 
   function cloneCells(cells) {
     return cells.map(([r, c]) => [r, c]);
+  }
+
+  function pieceSize(cells) {
+    let maxR = 0;
+    let maxC = 0;
+    for (const [r, c] of cells) {
+      if (r > maxR) maxR = r;
+      if (c > maxC) maxC = c;
+    }
+    return { rows: maxR + 1, cols: maxC + 1 };
+  }
+
+  function rotateCells(cells) {
+    const { rows } = pieceSize(cells);
+    const next = cells.map(([r, c]) => [c, rows - 1 - r]);
+    const minR = Math.min(...next.map(p => p[0]));
+    const minC = Math.min(...next.map(p => p[1]));
+    return next.map(([r, c]) => [r - minR, c - minC]);
   }
 
   function canPlace(board, cells, r0, c0) {
@@ -101,15 +177,24 @@
     return false;
   }
 
+  function fitsWithRotations(board, cells) {
+    let cur = cloneCells(cells);
+    for (let i = 0; i < 4; i++) {
+      if (fitsAnywhere(board, cur)) return true;
+      cur = rotateCells(cur);
+    }
+    return false;
+  }
+
   function pickShape(board, stage) {
     const pool = stage >= 3 ? EASY.concat(LATER) : EASY;
     for (let i = 0; i < 10; i++) {
       const cells = cloneCells(pool[Math.floor(Math.random() * pool.length)]);
-      if (fitsAnywhere(board, cells)) return cells;
+      if (fitsWithRotations(board, cells)) return cells;
     }
     for (const shape of EASY) {
       const cells = cloneCells(shape);
-      if (fitsAnywhere(board, cells)) return cells;
+      if (fitsWithRotations(board, cells)) return cells;
     }
     return cloneCells(EASY[0]);
   }
@@ -119,17 +204,7 @@
   }
 
   function anyPieceFits() {
-    return state.tray.some(p => p && fitsAnywhere(state.board, p));
-  }
-
-  function pieceSize(cells) {
-    let maxR = 0;
-    let maxC = 0;
-    for (const [r, c] of cells) {
-      if (r > maxR) maxR = r;
-      if (c > maxC) maxC = c;
-    }
-    return { rows: maxR + 1, cols: maxC + 1 };
+    return state.tray.some(p => p && fitsWithRotations(state.board, p));
   }
 
   function renderBoard(preview) {
@@ -161,7 +236,7 @@
   function renderTray() {
     trayEl.innerHTML = state.tray.map((piece, i) => {
       if (!piece) return '<div class="piece-slot empty"></div>';
-      return `<div class="piece-slot" data-tray="${i}">${renderPieceGrid(piece, 'mini')}</div>`;
+      return `<div class="piece-slot" data-tray="${i}"><button type="button" class="rotate-btn" data-rotate="${i}" aria-label="Rotate">↻</button>${renderPieceGrid(piece, 'mini')}</div>`;
     }).join('');
   }
 
@@ -176,11 +251,19 @@
     $('mascotWrap').classList.toggle('charged', state.core >= 70);
   }
 
-  function flashMsg(text) {
+  function flashMsg(text, kind) {
     const el = $('feedback');
     el.textContent = text;
+    el.className = `feedback show ${kind || ''}`;
     clearTimeout(flashMsg.t);
-    flashMsg.t = setTimeout(() => { el.textContent = ''; }, 700);
+    flashMsg.t = setTimeout(() => { el.textContent = ''; el.className = 'feedback'; }, 720);
+  }
+
+  function cheerFor(n, combo) {
+    if (combo >= 5) return ['UNSTOPPABLE!', 'unstoppable'];
+    if (combo >= 3) return ['AMAZING!', 'amazing'];
+    if (n >= 2 || combo >= 2) return ['GREAT!', 'great'];
+    return ['NICE!', 'nice'];
   }
 
   function bumpFlash(overdrive) {
@@ -191,7 +274,39 @@
     setTimeout(() => shell.classList.remove('flash', 'overdrive-fx'), 500);
   }
 
+  function playBoardFx(mode) {
+    wrapEl.classList.remove('zap', 'zap-multi', 'zap-od');
+    void wrapEl.offsetWidth;
+    wrapEl.classList.add(mode);
+    setTimeout(() => wrapEl.classList.remove('zap', 'zap-multi', 'zap-od'), 450);
+  }
+
+  function showStageBanner(n) {
+    const el = $('stageBanner');
+    $('stageBannerNum').textContent = `STAGE ${n}`;
+    el.hidden = false;
+    el.classList.remove('show');
+    void el.offsetWidth;
+    el.classList.add('show');
+    sfx('stage');
+    setTimeout(() => { el.classList.remove('show'); el.hidden = true; }, 1000);
+  }
+
+  function checkStage() {
+    const next = Math.max(1 + Math.floor(state.score / 500), 1 + state.overdrives);
+    if (next > state.stage) {
+      state.stage = next;
+      if (state.stage > save.highestStage) {
+        save.highestStage = state.stage;
+        persist();
+      }
+      updateHud();
+      showStageBanner(state.stage);
+    }
+  }
+
   function startGame() {
+    ensureAudio();
     state = {
       board: emptyBoard(),
       tray: [null, null, null],
@@ -277,20 +392,21 @@
     state.overdrives += 1;
     save.totalOverdrives += 1;
     state.core = 0;
-    if (state.overdrives % 3 === 0) state.stage += 1;
-    if (state.stage > save.highestStage) save.highestStage = state.stage;
     persist();
     $('mascotWrap').classList.add('overdrive');
     bumpFlash(true);
-    flashMsg('OVERDRIVE ⚡');
+    playBoardFx('zap-od');
+    flashMsg('OVERDRIVE!', 'overdrive');
+    sfx('overdrive');
     state.clearing = marks;
     renderBoard();
+    checkStage();
     setTimeout(() => {
       state.clearing = null;
       $('mascotWrap').classList.remove('overdrive');
       renderBoard();
       updateHud();
-    }, 180);
+    }, 280);
     track('overdrive', { stage: state.stage, target });
     if (state.overdrives === 3 && !ctaShown) maybeShowCta('overdrive3');
   }
@@ -306,22 +422,27 @@
       state.core = Math.min(100, state.core + n * 20);
       const marks = applyClears(state.board, lines);
       state.clearing = marks;
-      bumpFlash(false);
-      flashMsg(state.combo >= 2 ? `COMBO ×${state.combo}` : 'ZAP! ⚡');
+      bumpFlash(n >= 2);
+      playBoardFx(n >= 2 ? 'zap-multi' : 'zap');
+      const [text, kind] = cheerFor(n, state.combo);
+      flashMsg(text, kind);
+      sfx(state.combo >= 2 || n >= 2 ? 'combo' : 'clear');
       track('line_clear', { lines: n, combo: state.combo });
       renderBoard();
       updateHud();
+      checkStage();
       setTimeout(() => {
         state.clearing = null;
         renderBoard();
         if (state.core >= 100) triggerOverdrive();
         else updateHud();
         finishTurn();
-      }, 160);
+      }, 280);
     } else {
       state.combo = 0;
       updateHud();
       renderBoard();
+      checkStage();
       finishTurn();
     }
   }
@@ -344,6 +465,8 @@
     $('finalBest').textContent = String(save.bestScore);
     $('finalOver').textContent = String(state.overdrives);
     $('finalCombo').textContent = `×${state.bestCombo}`;
+    $('finalStage').textContent = String(state.stage);
+    sfx('over');
     show('result');
     track('game_over', { score: state.score, overdrives: state.overdrives, stage: state.stage });
     const meaningful = state.score >= 250 || state.overdrives >= 1 || state.combo >= 3 || state.bestCombo >= 3;
@@ -360,10 +483,6 @@
     else setTimeout(() => { if (screens.result.classList.contains('active')) show('cta'); }, 700);
   }
 
-  function closeCtaToPlay() {
-    show('game');
-  }
-
   function goHome() {
     drag = null;
     ghostEl.hidden = true;
@@ -371,12 +490,18 @@
     show('landing');
   }
 
+  function rotateTray(index) {
+    if (!state || drag || !state.tray[index]) return;
+    state.tray[index] = rotateCells(state.tray[index]);
+    renderTray();
+  }
+
   function cellSize() {
     const rect = boardEl.getBoundingClientRect();
     return rect.width / SIZE;
   }
 
-  function boardOrigin(clientX, clientY, cells, grab) {
+  function boardOrigin(clientX, clientY, grab) {
     const lift = 72;
     const size = cellSize();
     const rect = boardEl.getBoundingClientRect();
@@ -384,7 +509,7 @@
     const top = clientY - (grab.r + 0.5) * size - lift;
     const c0 = Math.round((left - rect.left) / size);
     const r0 = Math.round((top - rect.top) / size);
-    return { r0, c0, left, top, size, cells };
+    return { r0, c0, left, top, size };
   }
 
   function paintGhost(cells, size) {
@@ -396,6 +521,14 @@
 
   function onPointerDown(e) {
     if (!state) return;
+    const rot = e.target.closest('[data-rotate]');
+    if (rot) {
+      e.preventDefault();
+      e.stopPropagation();
+      rotateTray(Number(rot.dataset.rotate));
+      sfx('tap');
+      return;
+    }
     const slot = e.target.closest('[data-tray]');
     if (!slot) return;
     const index = Number(slot.dataset.tray);
@@ -403,11 +536,7 @@
     if (!piece) return;
     e.preventDefault();
     slot.setPointerCapture?.(e.pointerId);
-    const { rows, cols } = pieceSize(piece);
-    const grab = { r: Math.min(rows - 1, Math.floor(rows / 2)), c: Math.min(cols - 1, Math.floor(cols / 2)) };
-    for (const [r, c] of piece) {
-      if (r === 0 && c === 0) { grab.r = 0; grab.c = 0; break; }
-    }
+    const grab = { r: 0, c: 0 };
     drag = { index, cells: piece, grab };
     const size = cellSize();
     paintGhost(piece, size);
@@ -417,7 +546,7 @@
 
   function moveDrag(clientX, clientY) {
     if (!drag) return;
-    const pos = boardOrigin(clientX, clientY, drag.cells, drag.grab);
+    const pos = boardOrigin(clientX, clientY, drag.grab);
     ghostEl.style.left = pos.left + 'px';
     ghostEl.style.top = pos.top + 'px';
     const preview = findPreview(pos.r0, pos.c0, drag.cells);
@@ -445,9 +574,11 @@
       state.tray[current.index] = null;
       hintEl.classList.add('gone');
       sessionStorage.setItem('gomba_hint_seen', '1');
+      sfx('place');
       track('piece_place', { cells: current.cells.length });
       afterPlace(current.cells);
     } else {
+      sfx('invalid');
       renderBoard();
       renderTray();
     }
@@ -458,18 +589,29 @@
   window.addEventListener('pointerup', onPointerUp, { passive: false });
   window.addEventListener('pointercancel', onPointerUp, { passive: false });
 
-  $('playBtn').addEventListener('click', startGame);
-  $('againBtn').addEventListener('click', () => { track('retry'); startGame(); });
-  $('backHomeBtn').addEventListener('click', goHome);
-  $('gameClose').addEventListener('click', goHome);
-  $('resultClose').addEventListener('click', goHome);
-  $('ctaClose').addEventListener('click', goHome);
-  $('ctaHome').addEventListener('click', goHome);
-  $('ctaKeep').addEventListener('click', () => {
+  function tapThen(fn) {
+    return () => { sfx('tap'); fn(); };
+  }
+
+  $('soundBtn').addEventListener('click', () => {
+    soundOn = !soundOn;
+    localStorage.setItem(SOUND_KEY, soundOn ? '1' : '0');
+    syncSoundBtn();
+    if (soundOn) { ensureAudio(); sfx('tap'); }
+  });
+
+  $('playBtn').addEventListener('click', tapThen(startGame));
+  $('againBtn').addEventListener('click', tapThen(() => { track('retry'); startGame(); }));
+  $('backHomeBtn').addEventListener('click', tapThen(goHome));
+  $('gameClose').addEventListener('click', tapThen(goHome));
+  $('resultClose').addEventListener('click', tapThen(goHome));
+  $('ctaClose').addEventListener('click', tapThen(goHome));
+  $('ctaHome').addEventListener('click', tapThen(goHome));
+  $('ctaKeep').addEventListener('click', tapThen(() => {
     if (afterCta === 'game' && state) show('game');
     else if (state) show('result');
     else show('landing');
-  });
+  }));
 
   $('ctaForm').addEventListener('submit', e => {
     e.preventDefault();
@@ -479,6 +621,7 @@
     const phoneOk = phone.replace(/\D/g, '').length >= 6;
     if (!emailOk && !phoneOk) return;
     // TODO: connect to FUNLE CRM game_subscriber endpoint in later phase.
+    sfx('tap');
     $('ctaThanks').hidden = false;
     $('ctaEmail').value = '';
     $('ctaPhone').value = '';
@@ -488,6 +631,7 @@
     navigator.serviceWorker.register('./service-worker.js').catch(() => {});
   }
 
+  syncSoundBtn();
   $('bestText').textContent = String(save.bestScore);
   track('play_visit');
 })();

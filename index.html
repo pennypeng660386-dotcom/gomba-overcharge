@@ -14,7 +14,12 @@
 </head>
 <body>
   <main class="app-shell" id="appShell">
+    <button type="button" class="nav-sound" id="soundBtn" aria-pressed="true">SOUND ON</button>
     <div class="fx-flash" id="fxFlash" aria-hidden="true"></div>
+    <div id="stageBanner" class="stage-banner" hidden>
+      <strong id="stageBannerNum">STAGE 2</strong>
+      <span>POWER RISING</span>
+    </div>
 
     <section id="landing" class="screen active" aria-labelledby="landing-title">
       <div class="brand">GOMBA</div>
@@ -61,6 +66,7 @@
           <span>CLEAR ROWS &amp; COLUMNS</span>
         </div>
         <div id="board" class="board" aria-label="8 by 8 board"></div>
+        <div id="boardFx" class="board-fx" aria-hidden="true"></div>
         <div id="feedback" class="feedback" aria-live="polite"></div>
       </div>
 
@@ -80,8 +86,9 @@
       <div class="score-card">
         <div><span>SCORE</span><strong id="finalScore">0</strong></div>
         <div><span>BEST SCORE</span><strong id="finalBest">0</strong></div>
-        <div><span>OVERDRIVES</span><strong id="finalOver">0</strong></div>
-        <div><span>BEST COMBO</span><strong id="finalCombo">×0</strong></div>
+        <div><span>MAX COMBO</span><strong id="finalCombo">×0</strong></div>
+        <div><span>STAGE REACHED</span><strong id="finalStage">1</strong></div>
+        <div class="span-2"><span>OVERDRIVES</span><strong id="finalOver">0</strong></div>
       </div>
       <button type="button" id="againBtn" class="primary">PLAY AGAIN</button>
       <button type="button" id="backHomeBtn" class="ghost">BACK TO START</button>
