@@ -1,58 +1,29 @@
-# GOMBA OVERCHARGE V0.1
+# GOMBA OVERDRIVE V0.2
 
-Standalone local gameplay prototype for GOMBA.
+Standalone relaxing block-clear puzzle for GOMBA.
 
-## Goal
-
-Validate the core loop before any Shopify production integration:
-
-PACKAGE → /play → PLAY → HOLD/RELEASE → WIN/FAIL → RETRY → POST-WIN EMAIL INTEREST
+PLACE → CLEAR → OVERDRIVE
 
 ## What works
 
-- Mobile-first landing page
-- One-thumb hold/release timing mechanic
-- PERFECT / GOOD / BURNOUT
-- 0–100% core charge
-- 3 lives
-- Win + fail result screens
-- Retry
-- Post-win email screen
-- Prototype analytics events written to browser console
+- 8×8 industrial board
+- 3 draggable energy pieces
+- Row and column clears
+- Core charge and OVERDRIVE
+- Offline-ready PWA (after first load)
+- Local best score / combo / overdrive stats
+- Optional email or phone CTA (not stored, not sent)
 
 ## Intentionally NOT connected yet
 
-- No real email storage/submission
+- No FUNLE CRM
 - No Shopify changes
-- No production deployment
 - No paid API/SaaS
-- No leaderboard/accounts
-- No second level/game
 
-## Run on Windows PowerShell
-
-From this project folder:
+## Run
 
 ```powershell
 python -m http.server 8080
 ```
 
-Then open:
-
-http://localhost:8080
-
-For phone testing on the same Wi-Fi, use your PC LAN IP with port 8080 after Windows Firewall allows Python.
-
-## Acceptance criteria for this prototype
-
-PASS only if:
-
-1. PLAY enters the game.
-2. Holding/releasing changes the timing result.
-3. PERFECT / GOOD add charge.
-4. BURNOUT removes a life.
-5. 100% reaches FULLY CHARGED.
-6. Three burnouts reach SHORT CIRCUIT.
-7. PLAY AGAIN starts a fresh game.
-8. Post-win CTA opens the email interest screen.
-9. No email is actually stored or sent yet.
+Then open http://localhost:8080

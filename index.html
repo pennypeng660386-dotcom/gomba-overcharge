@@ -3,86 +3,107 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0a0a0a" />
-  <title>GOMBA OVERCHARGE</title>
+  <meta name="theme-color" content="#0A0A0A" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="OVERDRIVE" />
+  <title>GOMBA OVERDRIVE</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" href="./assets/gomba.png" />
+  <link rel="apple-touch-icon" href="./assets/gomba.png" />
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-  <main class="app-shell">
+  <main class="app-shell" id="appShell">
+    <div class="fx-flash" id="fxFlash" aria-hidden="true"></div>
+
     <section id="landing" class="screen active" aria-labelledby="landing-title">
       <div class="brand">GOMBA</div>
       <div class="hero-wrap">
-        <img class="hero-img" src="./assets/gomba.png" alt="GOMBA mascot" />
         <div class="hero-glow"></div>
+        <div class="hero-sparks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <img class="hero-img" src="./assets/gomba.png" alt="GOMBA mascot" />
       </div>
-      <h1 id="landing-title">OVERCHARGE</h1>
-      <p class="tagline">HOLD. RELEASE. CHARGE.</p>
-      <button id="playBtn" class="primary">PLAY</button>
-      <div class="meta-row">
-        <span>NO APP</span><span>30–60s</span><span>ONE THUMB</span>
-      </div>
+      <h1 id="landing-title">OVERDRIVE ⚡</h1>
+      <p class="tagline">PLACE. CLEAR. OVERDRIVE.</p>
+      <button type="button" id="playBtn" class="primary">PLAY</button>
+      <p class="meta-line">OFFLINE READY · NO APP · PLAY ANYTIME</p>
     </section>
 
     <section id="game" class="screen" aria-labelledby="game-title">
-      <header class="hud">
-        <div><span class="hud-label">CORE</span><strong id="chargeText">0%</strong></div>
-        <div><span class="hud-label">COMBO</span><strong id="comboText">×0</strong></div>
-        <div><span class="hud-label">LIVES</span><strong id="livesText">♥♥♥</strong></div>
-      </header>
+      <button type="button" class="nav-close" id="gameClose" aria-label="Back to start">×</button>
+      <h2 id="game-title" class="sr-only">GOMBA OVERDRIVE</h2>
 
-      <div class="game-stage">
-        <div class="target-ring" id="targetRing">
-          <div class="perfect-zone" id="perfectZone"></div>
-          <div class="needle" id="needle"></div>
-          <div class="core">
-            <div class="core-fill" id="coreFill"></div>
-            <span id="coreLabel">HOLD</span>
+      <header class="top-hud">
+        <div class="mascot-wrap" id="mascotWrap">
+          <img class="hud-mascot" src="./assets/gomba.png" alt="" />
+          <div class="core-glow" id="coreGlow"></div>
+          <div class="mascot-bolts" id="mascotBolts" aria-hidden="true">⚡</div>
+        </div>
+        <div class="hud-stats">
+          <div class="core-row">
+            <span>CORE</span>
+            <strong id="coreText">0%</strong>
+          </div>
+          <div class="core-track"><div class="core-fill" id="coreFill"></div></div>
+          <div class="stat-grid">
+            <div><span>SCORE</span><strong id="scoreText">0</strong></div>
+            <div><span>BEST</span><strong id="bestText">0</strong></div>
+            <div><span>COMBO</span><strong id="comboText">×0</strong></div>
+            <div><span>STAGE</span><strong id="stageText">1</strong></div>
           </div>
         </div>
+      </header>
 
-        <img class="game-mascot" src="./assets/gomba.png" alt="" />
+      <div class="board-wrap">
+        <div id="firstHint" class="first-hint">
+          <span>DRAG BLOCKS</span>
+          <span class="hint-arrow">↓</span>
+          <span>CLEAR ROWS &amp; COLUMNS</span>
+        </div>
+        <div id="board" class="board" aria-label="8 by 8 board"></div>
         <div id="feedback" class="feedback" aria-live="polite"></div>
       </div>
 
-      <div class="charge-bar">
-        <div id="barFill" class="bar-fill"></div>
-      </div>
-      <p class="instruction">Hold anywhere. Release inside the orange zone.</p>
-      <button id="holdBtn" class="hold-btn">HOLD TO CHARGE</button>
+      <div id="tray" class="tray" aria-label="Pieces"></div>
+      <div id="dragGhost" class="drag-ghost" hidden></div>
     </section>
 
     <section id="result" class="screen" aria-labelledby="resultTitle">
+      <button type="button" class="nav-close" id="resultClose" aria-label="Back to start">×</button>
       <div class="brand">GOMBA</div>
-      <div id="resultBurst" class="result-burst">⚡</div>
-      <h2 id="resultTitle">FULLY CHARGED</h2>
-      <p id="resultSub">You woke the core.</p>
-
-      <div class="score-card">
-        <div><span>CORE</span><strong id="finalCore">100%</strong></div>
-        <div><span>BEST COMBO</span><strong id="finalCombo">×0</strong></div>
-        <div><span>TIME</span><strong id="finalTime">0:00</strong></div>
+      <div class="result-hero">
+        <img class="result-mascot" src="./assets/gomba.png" alt="GOMBA mascot" />
+        <div class="result-smoke" aria-hidden="true"><i></i><i></i><i></i></div>
       </div>
-
-      <button id="nextDropBtn" class="primary">GET THE NEXT DROP</button>
-      <button id="againBtn" class="secondary">PLAY AGAIN</button>
+      <p id="newBest" class="new-best" hidden>NEW BEST ⚡</p>
+      <h2 id="resultTitle">SHORT CIRCUIT</h2>
+      <div class="score-card">
+        <div><span>SCORE</span><strong id="finalScore">0</strong></div>
+        <div><span>BEST SCORE</span><strong id="finalBest">0</strong></div>
+        <div><span>OVERDRIVES</span><strong id="finalOver">0</strong></div>
+        <div><span>BEST COMBO</span><strong id="finalCombo">×0</strong></div>
+      </div>
+      <button type="button" id="againBtn" class="primary">PLAY AGAIN</button>
+      <button type="button" id="backHomeBtn" class="ghost">BACK TO START</button>
     </section>
 
-    <section id="subscribe" class="screen" aria-labelledby="subscribeTitle">
+    <section id="cta" class="screen" aria-labelledby="ctaTitle">
+      <button type="button" class="nav-close" id="ctaClose" aria-label="Back to start">×</button>
       <div class="brand">GOMBA</div>
-      <h2 id="subscribeTitle">STAY IN THE GAME</h2>
-      <p>Want the next GOMBA challenge?</p>
-      <p class="muted">Leave your email. We’ll tell you when the next game drops.</p>
-
-      <form id="subscribeForm" class="subscribe-form">
-        <input id="emailInput" type="email" placeholder="Your email address" required />
-        <button class="primary" type="submit">GET THE NEXT DROP</button>
+      <h2 id="ctaTitle">STAY IN THE GAME ⚡</h2>
+      <p>Unlock future GOMBA challenges &amp; drops.</p>
+      <p id="ctaOffline" class="offline-note" hidden>You’re offline — keep playing. Connect later to join.</p>
+      <form id="ctaForm" class="cta-form">
+        <input id="ctaEmail" type="email" autocomplete="email" placeholder="Email address" />
+        <p class="or">OR</p>
+        <input id="ctaPhone" type="tel" autocomplete="tel" placeholder="Phone number" />
+        <button type="submit" class="primary" id="ctaUnlock">UNLOCK</button>
       </form>
-      <p class="microcopy">No spam. Just the next charge.</p>
-      <p id="subscribeSuccess" class="success" hidden>You’re on the list. ⚡</p>
-      <button id="subscribeAgainBtn" class="secondary">PLAY AGAIN</button>
+      <p id="ctaThanks" class="success" hidden>You’re on the list. ⚡</p>
+      <button type="button" id="ctaKeep" class="secondary">KEEP PLAYING</button>
+      <button type="button" id="ctaHome" class="ghost">BACK TO START</button>
     </section>
   </main>
-
   <script src="./game.js"></script>
 </body>
 </html>

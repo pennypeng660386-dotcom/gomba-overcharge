@@ -1,0 +1,19 @@
+{
+  "name": "GOMBA OVERDRIVE",
+  "short_name": "OVERDRIVE",
+  "description": "Place blocks. Clear lines. Overdrive.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A0A0A",
+  "theme_color": "#FF5A00",
+  "icons": [
+    {
+      "src": "./assets/gomba.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
