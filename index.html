@@ -8,12 +8,116 @@
   <meta name="apple-mobile-web-app-title" content="OVERDRIVE" />
   <title>GOMBA OVERDRIVE</title>
   <link rel="manifest" href="./manifest.json" />
-  <link rel="icon" href="./assets/gomba.png" />
-  <link rel="apple-touch-icon" href="./assets/gomba.png" />
+  <link rel="icon" href="./assets/gomba-registered.svg" />
   <link rel="stylesheet" href="./styles.css" />
+  <style id="v04-visual-upgrade">
+    :root{--go:#FF5A00;--gold:#FFB000;--ink:#070707;--metal:#151515}
+    .app-shell{
+      background:
+        radial-gradient(circle at 50% 8%,rgba(255,90,0,.22),transparent 24%),
+        radial-gradient(circle at 100% 45%,rgba(255,176,0,.08),transparent 28%),
+        repeating-linear-gradient(135deg,rgba(255,255,255,.018) 0 1px,transparent 1px 8px),
+        linear-gradient(180deg,#100c09 0%,#070707 54%,#050505 100%);
+    }
+    .app-shell::before{
+      content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+      background:
+        linear-gradient(90deg,transparent 0 9%,rgba(255,90,0,.05) 9.2% 9.4%,transparent 9.6% 90%,rgba(255,90,0,.05) 90.2% 90.4%,transparent 90.6%),
+        repeating-linear-gradient(0deg,transparent 0 47px,rgba(255,90,0,.018) 48px);
+      opacity:.9;
+    }
+    .screen{z-index:1}
+    .ambient-energy{position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+    .ambient-energy i{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--gold);box-shadow:0 0 9px var(--go);opacity:.25;animation:ambientSpark 4.6s linear infinite}
+    .ambient-energy i:nth-child(1){left:8%;top:18%;animation-delay:.2s}.ambient-energy i:nth-child(2){left:86%;top:26%;animation-delay:1.1s}.ambient-energy i:nth-child(3){left:18%;top:58%;animation-delay:2.4s}.ambient-energy i:nth-child(4){left:78%;top:67%;animation-delay:3.2s}.ambient-energy i:nth-child(5){left:45%;top:34%;animation-delay:1.8s}.ambient-energy i:nth-child(6){left:60%;top:82%;animation-delay:.8s}
+    @keyframes ambientSpark{0%,100%{transform:translateY(12px) scale(.7);opacity:.08}35%{opacity:.7}70%{transform:translateY(-34px) scale(1.15);opacity:.18}}
+
+    #game{justify-content:flex-start;background:radial-gradient(circle at 50% 18%,rgba(255,90,0,.10),transparent 28%)}
+    .top-hud{
+      grid-template-columns:108px 1fr;gap:10px;margin:2px 28px 8px 0;padding:8px;
+      border:1px solid rgba(255,90,0,.18);border-radius:18px;
+      background:linear-gradient(180deg,rgba(28,20,14,.9),rgba(8,8,8,.92));
+      box-shadow:inset 0 1px rgba(255,255,255,.04),0 14px 38px rgba(0,0,0,.32),0 0 28px rgba(255,90,0,.06);
+    }
+    .mascot-wrap{
+      height:102px;overflow:hidden;border-radius:16px;isolation:isolate;
+      background:
+        radial-gradient(circle at 50% 40%,rgba(255,176,0,.25),transparent 32%),
+        repeating-linear-gradient(135deg,rgba(255,90,0,.08) 0 1px,transparent 1px 8px),
+        linear-gradient(145deg,#19110b,#080808 68%);
+      border:1px solid rgba(255,90,0,.36);
+      box-shadow:inset 0 0 28px rgba(255,90,0,.10),0 0 20px rgba(255,90,0,.10);
+    }
+    .mascot-wrap::before{
+      content:"";position:absolute;left:50%;top:50%;width:86px;height:86px;transform:translate(-50%,-50%);
+      border-radius:50%;background:conic-gradient(from 0deg,transparent 0 18%,var(--go) 22%,transparent 28% 58%,var(--gold) 63%,transparent 69%);
+      filter:blur(.2px);opacity:.65;animation:reactorSpin 7s linear infinite;z-index:0;
+    }
+    .mascot-wrap::after{content:"CORE LINK";position:absolute;left:8px;bottom:5px;z-index:4;font-size:7px;letter-spacing:.16em;color:#ffb76a;opacity:.8}
+    @keyframes reactorSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+    .hud-mascot{
+      inset:2px 0 0!important;width:100%!important;height:96%!important;object-fit:contain!important;object-position:center!important;
+      -webkit-mask-image:none!important;mask-image:none!important;filter:drop-shadow(0 7px 8px rgba(0,0,0,.6)) drop-shadow(0 0 12px rgba(255,90,0,.28))!important;z-index:2;
+    }
+    .core-glow{z-index:3;left:50%;top:10%;width:50px;height:50px;margin-left:-25px;background:radial-gradient(circle,#fff5c4 0,rgba(255,176,0,.78) 18%,rgba(255,90,0,.38) 42%,transparent 72%);filter:blur(.5px)}
+    .mascot-bolts{z-index:5;font-size:22px}
+    .hud-stats{padding-right:2px}
+    .core-row strong{color:var(--gold);text-shadow:0 0 8px rgba(255,176,0,.55)}
+    .core-track{height:10px;background:#0b0b0b;border-color:#4a2a16;box-shadow:inset 0 0 8px #000,0 0 10px rgba(255,90,0,.08)}
+    .core-fill{background:linear-gradient(90deg,#ffb000 0%,#ff7a00 52%,#ff3d00 100%);box-shadow:0 0 12px rgba(255,90,0,.72)}
+    .stat-grid div{background:linear-gradient(180deg,#151515,#0b0b0b);border-color:#352416;box-shadow:inset 0 1px rgba(255,255,255,.03)}
+    .stat-grid strong{color:#fff;text-shadow:0 0 10px rgba(255,90,0,.12)}
+
+    .game-status-strip{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 8px;padding:6px 10px;border-radius:10px;border:1px solid rgba(255,90,0,.16);background:rgba(8,8,8,.72);font-size:8px;font-weight:900;letter-spacing:.12em;color:#8f8f8f}
+    .game-status-strip b{color:var(--gold);font-size:8px;letter-spacing:.14em}
+    .game-status-strip .live-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:5px;background:var(--go);box-shadow:0 0 9px var(--go);animation:livePulse 1.3s ease-in-out infinite}
+    @keyframes livePulse{50%{opacity:.35;transform:scale(.72)}}
+
+    .board-wrap{flex:0 0 auto;width:100%;padding:8px;margin-top:0;border-radius:20px;background:linear-gradient(145deg,rgba(255,90,0,.10),rgba(255,255,255,.015));box-shadow:0 0 0 1px rgba(255,90,0,.16),0 18px 45px rgba(0,0,0,.38);overflow:visible}
+    .board-wrap::before{content:"";position:absolute;inset:2px;border-radius:18px;pointer-events:none;border:1px solid rgba(255,176,0,.10);box-shadow:inset 0 0 34px rgba(255,90,0,.08)}
+    .board-wrap::after{content:"ENERGY GRID";position:absolute;right:16px;top:-7px;padding:1px 7px;background:#090909;color:#7d5b42;font-size:7px;letter-spacing:.16em;border:1px solid rgba(255,90,0,.12);border-radius:8px}
+    .board{width:min(100%,calc(100dvh - 340px),400px);position:relative;z-index:2;padding:8px;gap:4px;background:radial-gradient(circle at 50% 44%,#17110d 0,#0d0d0d 60%,#080808 100%);border-color:#55301b;box-shadow:inset 0 0 38px rgba(0,0,0,.78),0 0 22px rgba(255,90,0,.10)}
+    .cell{background:linear-gradient(145deg,#202020,#151515);border-color:#303030;box-shadow:inset 0 1px rgba(255,255,255,.025);transition:transform .12s ease,filter .12s ease,box-shadow .12s ease}
+    .cell.filled{background:linear-gradient(145deg,#ffb000 0%,#ff7900 30%,#ff5a00 66%,#d94100 100%);border-color:#ffc15a;box-shadow:inset 0 2px 0 rgba(255,255,255,.22),inset 0 -3px 6px rgba(125,32,0,.42),0 0 10px rgba(255,90,0,.42)}
+    .cell.preview-ok{transform:scale(.94);background:rgba(255,120,0,.56);box-shadow:0 0 14px rgba(255,120,0,.9),inset 0 0 10px rgba(255,255,255,.12)}
+    .cell.clearing{animation:clearBurstV04 .38s cubic-bezier(.18,.75,.3,1);box-shadow:0 0 22px #fff,0 0 38px var(--gold),0 0 62px var(--go)!important}
+    @keyframes clearBurstV04{0%{transform:scale(1);filter:brightness(1)}28%{transform:scale(1.22);filter:brightness(3)}55%{transform:scale(.86) rotate(2deg);background:#fff}100%{transform:scale(.12);opacity:0;filter:brightness(4)}}
+    .board-fx{inset:3%;border-radius:16px;background:linear-gradient(90deg,transparent,rgba(255,90,0,.45),#fff 46%,#ffb000 52%,rgba(255,90,0,.45),transparent);filter:drop-shadow(0 0 12px var(--go)) drop-shadow(0 0 24px var(--gold))}
+    .board-wrap.zap,.board-wrap.zap-multi{animation:gridKick .38s ease}
+    .board-wrap.zap-od{animation:gridKickOD .56s ease}
+    @keyframes gridKick{28%{transform:scale(1.012);filter:brightness(1.24)}55%{transform:translateX(1px)}70%{transform:translateX(-1px)}100%{transform:none}}
+    @keyframes gridKickOD{25%{transform:scale(1.025);filter:brightness(1.5)}45%{transform:translateX(3px)}55%{transform:translateX(-3px)}100%{transform:none}}
+    .board-wrap.zap-multi::before,.board-wrap.zap-od::before{box-shadow:inset 0 0 45px rgba(255,176,0,.32),0 0 34px rgba(255,90,0,.36)}
+
+    .feedback{top:8%;font-style:italic;font-size:38px;letter-spacing:.02em;-webkit-text-stroke:1px rgba(255,255,255,.18);text-shadow:0 0 5px #fff,0 0 16px var(--gold),0 0 32px var(--go),3px 4px 0 rgba(0,0,0,.55)}
+    .feedback.show{animation:cheerV04 .78s cubic-bezier(.16,.8,.24,1)}
+    @keyframes cheerV04{0%{opacity:0;transform:translate(-50%,18px) scale(.55) rotate(-5deg)}20%{opacity:1;transform:translate(-50%,-2px) scale(1.22) rotate(1deg)}55%{opacity:1;transform:translate(-50%,-8px) scale(1)}100%{opacity:0;transform:translate(-50%,-38px) scale(.94)}}
+
+    .tray{margin-top:9px;gap:9px}
+    .piece-slot{background:linear-gradient(155deg,#171717,#0b0b0b 64%);border-color:#372719;box-shadow:inset 0 1px rgba(255,255,255,.035),0 9px 24px rgba(0,0,0,.28)}
+    .piece-slot::after{content:"";position:absolute;left:10px;right:10px;bottom:7px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,90,0,.26),transparent)}
+    .rotate-btn{border-color:#52321e;background:linear-gradient(180deg,#21160f,#101010);box-shadow:0 0 12px rgba(255,90,0,.08)}
+    .piece .mini{background:linear-gradient(145deg,#ffb000,#ff6500 52%,#e74600);box-shadow:inset 0 1px rgba(255,255,255,.22),0 0 8px rgba(255,90,0,.42)}
+
+    .stage-banner{background:radial-gradient(circle at 50% 50%,rgba(255,90,0,.19),rgba(0,0,0,.38) 38%,rgba(0,0,0,.56));backdrop-filter:blur(1.5px)}
+    .stage-banner::before,.stage-banner::after{content:"";position:absolute;width:72%;height:2px;left:14%;background:linear-gradient(90deg,transparent,var(--go),#fff,var(--go),transparent);box-shadow:0 0 15px var(--go)}
+    .stage-banner::before{top:38%;transform:skewX(-30deg)}.stage-banner::after{bottom:38%;transform:skewX(30deg)}
+    .stage-banner strong{font-style:italic;text-shadow:0 0 8px #fff,0 0 24px var(--go),0 0 44px var(--go)}
+
+    .hero-wrap{height:44vh;min-height:280px;border:1px solid rgba(255,90,0,.18);border-radius:28px;overflow:hidden;background:radial-gradient(circle at 50% 38%,rgba(255,176,0,.25),transparent 27%),repeating-linear-gradient(135deg,rgba(255,90,0,.06) 0 1px,transparent 1px 10px),linear-gradient(#19110b,#080808);box-shadow:inset 0 0 50px rgba(255,90,0,.07),0 16px 42px rgba(0,0,0,.4)}
+    .hero-wrap::after{content:"CORE SYSTEM // READY";position:absolute;left:16px;bottom:10px;font-size:8px;font-weight:900;letter-spacing:.15em;color:#9d6e4a;z-index:4}
+    .hero-img{width:auto!important;height:96%!important;max-width:92%!important;object-fit:contain!important;-webkit-mask-image:none!important;mask-image:none!important;filter:drop-shadow(0 12px 10px rgba(0,0,0,.55)) drop-shadow(0 0 24px rgba(255,90,0,.34))!important}
+    .result-hero{border:1px solid rgba(255,90,0,.14);border-radius:20px;overflow:hidden;background:radial-gradient(circle at 50% 45%,rgba(255,90,0,.17),transparent 32%),linear-gradient(#15100c,#080808)}
+    .result-mascot{inset:0!important;width:100%!important;height:100%!important;object-fit:contain!important;-webkit-mask-image:none!important;mask-image:none!important;filter:grayscale(.16) brightness(.72) drop-shadow(0 0 18px rgba(255,90,0,.24))!important}
+    .nav-sound,.nav-close{backdrop-filter:blur(8px);background:rgba(12,12,12,.88);border-color:#4a2f1d;box-shadow:0 6px 18px rgba(0,0,0,.3)}
+    .primary{background:linear-gradient(180deg,#ff9417 0,#ff5a00 58%,#e24600 100%);box-shadow:inset 0 1px rgba(255,255,255,.28),0 10px 28px rgba(255,90,0,.34)}
+
+    @media(max-height:700px){.top-hud{grid-template-columns:92px 1fr;padding:6px}.mascot-wrap{height:88px}.game-status-strip{padding:4px 8px;margin-bottom:5px}.board{width:min(100%,calc(100dvh - 300px),390px)}.tray{min-height:88px}.piece-slot{min-height:88px}}
+  </style>
 </head>
 <body>
   <main class="app-shell" id="appShell">
+    <div class="ambient-energy" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
     <button type="button" class="nav-sound" id="soundBtn" aria-pressed="true">SOUND ON</button>
     <div class="fx-flash" id="fxFlash" aria-hidden="true"></div>
     <div id="stageBanner" class="stage-banner" hidden>
@@ -26,7 +130,7 @@
       <div class="hero-wrap">
         <div class="hero-glow"></div>
         <div class="hero-sparks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-        <img class="hero-img" src="./assets/gomba.png" alt="GOMBA mascot" />
+        <img class="hero-img" src="./assets/gomba-registered.svg" alt="GOMBA mascot" />
       </div>
       <h1 id="landing-title">OVERDRIVE ⚡</h1>
       <p class="tagline">PLACE. CLEAR. OVERDRIVE.</p>
@@ -40,7 +144,7 @@
 
       <header class="top-hud">
         <div class="mascot-wrap" id="mascotWrap">
-          <img class="hud-mascot" src="./assets/gomba.png" alt="" />
+          <img class="hud-mascot" src="./assets/gomba-registered.svg" alt="" />
           <div class="core-glow" id="coreGlow"></div>
           <div class="mascot-bolts" id="mascotBolts" aria-hidden="true">⚡</div>
         </div>
@@ -58,6 +162,8 @@
           </div>
         </div>
       </header>
+
+      <div class="game-status-strip" aria-hidden="true"><span><i class="live-dot"></i>GRID ONLINE</span><b>LINE CLEAR → CORE CHARGE</b></div>
 
       <div class="board-wrap">
         <div id="firstHint" class="first-hint">
@@ -78,7 +184,7 @@
       <button type="button" class="nav-close" id="resultClose" aria-label="Back to start">×</button>
       <div class="brand">GOMBA</div>
       <div class="result-hero">
-        <img class="result-mascot" src="./assets/gomba.png" alt="GOMBA mascot" />
+        <img class="result-mascot" src="./assets/gomba-registered.svg" alt="GOMBA mascot" />
         <div class="result-smoke" aria-hidden="true"><i></i><i></i><i></i></div>
       </div>
       <p id="newBest" class="new-best" hidden>NEW BEST ⚡</p>
