@@ -14,6 +14,12 @@
 </head>
 <body>
   <main class="cabinet" id="appShell">
+    <div class="cab-haze" aria-hidden="true"></div>
+    <div class="cab-streaks" aria-hidden="true"><i></i><i></i><i></i></div>
+    <i class="bolt bolt-tl" aria-hidden="true"></i>
+    <i class="bolt bolt-tr" aria-hidden="true"></i>
+    <i class="bolt bolt-bl" aria-hidden="true"></i>
+    <i class="bolt bolt-br" aria-hidden="true"></i>
     <i class="pipe pipe-tl" aria-hidden="true"></i>
     <i class="pipe pipe-tr" aria-hidden="true"></i>
     <i class="pipe pipe-bl" aria-hidden="true"></i>
@@ -25,19 +31,21 @@
     </div>
 
     <section id="landing" class="screen active" aria-labelledby="landing-title">
-      <div class="title-logo">
-        <span>GOMBA</span>
-        <strong id="landing-title">OVERDRIVE</strong>
+      <div class="landing-stack">
+        <div class="title-logo">
+          <span>GOMBA</span>
+          <strong id="landing-title">OVERDRIVE</strong>
+        </div>
+        <div class="hero-reactor">
+          <div class="reactor-ring" aria-hidden="true"></div>
+          <div class="reactor-ring inner" aria-hidden="true"></div>
+          <div class="hero-sparks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <img class="hero-img" src="./assets/gomba-mascot.png" alt="GOMBA mascot" />
+        </div>
+        <p class="tagline">PLACE. CLEAR. OVERDRIVE.</p>
+        <button type="button" id="playBtn" class="play-btn">PLAY</button>
+        <p class="meta-line">OFFLINE READY</p>
       </div>
-      <div class="hero-reactor">
-        <div class="reactor-ring" aria-hidden="true"></div>
-        <div class="hero-sparks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-        <img class="hero-img" src="./assets/gomba-mascot.png" alt="GOMBA mascot" />
-      </div>
-      <p class="tagline">PLACE. CLEAR. OVERDRIVE.</p>
-      <button type="button" id="playBtn" class="play-btn">PLAY</button>
-      <p class="meta-line">OFFLINE READY</p>
-      <div class="landing-floor" aria-hidden="true"><b>GOMBA OVERDRIVE</b></div>
     </section>
 
     <section id="game" class="screen" aria-labelledby="game-title">
@@ -54,6 +62,7 @@
         <div class="mascot-chamber" id="mascotWrap">
           <div class="chamber-core" id="coreGlow"></div>
           <div class="chamber-arcs" aria-hidden="true"></div>
+          <div class="chamber-sparks" aria-hidden="true"><i></i><i></i><i></i></div>
           <img class="hud-mascot" src="./assets/gomba-mascot.png" alt="" />
         </div>
         <div class="dash">

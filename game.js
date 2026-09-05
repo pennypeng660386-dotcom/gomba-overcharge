@@ -4,6 +4,7 @@
   const SOUND_KEY = 'gomba_overdrive_sound';
   const CONTACT_KEY = 'gomba_contact_submitted';
   const CONTACT_AT = 'gomba_contact_submitted_at';
+  const CONTACT_IP = 'gomba_contact_ip';
   const EASY = [
     [[0, 0]],
     [[0, 0], [0, 1]],
@@ -59,9 +60,28 @@
     return localStorage.getItem(CONTACT_KEY) === '1';
   }
 
-  function markContactSubmitted() {
+  function markContactSubmitted(ip) {
     localStorage.setItem(CONTACT_KEY, '1');
     localStorage.setItem(CONTACT_AT, new Date().toISOString());
+    if (ip) localStorage.setItem(CONTACT_IP, ip);
+  }
+
+  async function readPublicIp() {
+    if (navigator.onLine === false) return '';
+    try {
+      const res = await fetch('https://api.ipify.org?format=json', { cache: 'no-store' });
+      const data = await res.json();
+      return data && data.ip ? String(data.ip) : '';
+    } catch (_) {
+      return '';
+    }
+  }
+
+  async function sameContactIp() {
+    const saved = localStorage.getItem(CONTACT_IP);
+    if (!saved) return false;
+    const ip = await readPublicIp();
+    return !!(ip && ip === saved);
   }
 
   function buildContactPayload(email, phone) {
@@ -452,7 +472,7 @@
     el.hidden = false;
     void el.offsetWidth;
     clearTimeout(showPraise.t);
-    showPraise.t = setTimeout(() => { el.hidden = true; }, 820);
+    showPraise.t = setTimeout(() => { el.hidden = true; }, 980);
   }
 
   function fireBeams(lines, explode) {
@@ -492,8 +512,8 @@
     const br = boardEl.getBoundingClientRect();
     const cx = br.left - lr.left + br.width / 2;
     const cy = br.top - lr.top + br.height / 2;
-    const shards = big ? 28 : 16;
-    const sparks = big ? 22 : 12;
+    const shards = big ? 36 : 22;
+    const sparks = big ? 28 : 16;
     for (let i = 0; i < shards; i++) {
       const p = document.createElement('i');
       p.className = 'shard';
@@ -522,7 +542,7 @@
     const core = $('mascotWrap').getBoundingClientRect();
     const tx = core.left - lr.left + core.width / 2;
     const ty = core.top - lr.top + core.height / 2;
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 12; i++) {
       const p = document.createElement('i');
       const sx = br.left - lr.left + br.width * (0.2 + Math.random() * 0.6);
       const sy = br.top - lr.top + br.height * (0.25 + Math.random() * 0.5);
@@ -543,7 +563,7 @@
     flashScreen();
     spawnDebris(n >= 2 || combo >= 3);
     spawnCoreBits();
-    shake(200);
+    shake(240);
     flashMsg(word);
     sfx(combo >= 2 || n >= 2 ? 'combo' : 'clear', word);
   }
@@ -750,8 +770,12 @@
     if (meaningful) maybeShowCta('gameover');
   }
 
-  function maybeShowCta(reason) {
+  async function maybeShowCta(reason) {
     if (contactSubmitted() || ctaShown) return;
+    if (await sameContactIp()) {
+      markContactSubmitted(localStorage.getItem(CONTACT_IP));
+      return;
+    }
     ctaShown = true;
     afterCta = reason === 'overdrive3' ? 'game' : 'result';
     $('ctaOffline').hidden = navigator.onLine !== false;
@@ -905,6 +929,7 @@
     if (!emailOk && !phoneOk) return;
     submitContactLead(buildContactPayload(emailOk ? email : '', phoneOk ? phone : ''));
     markContactSubmitted();
+    readPublicIp().then(ip => { if (ip) localStorage.setItem(CONTACT_IP, ip); });
     sfx('tap');
     $('ctaForm').hidden = true;
     $('ctaThanks').hidden = false;
@@ -931,7 +956,7 @@
     }
     if (detail.cta) {
       ctaShown = false;
-      maybeShowCta(detail.reason || 'gameover');
+      await maybeShowCta(detail.reason || 'gameover');
       return;
     }
     if (detail.rows || detail.cols) {
