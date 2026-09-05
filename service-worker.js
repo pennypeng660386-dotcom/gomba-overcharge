@@ -1,11 +1,13 @@
-const CACHE = 'gomba-overdrive-v0.4.1';
+const CACHE = 'gomba-overdrive-v0.5';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
   './v041.css',
+  './v05.css',
   './game.js',
   './v041.js',
+  './v05.js',
   './manifest.json',
   './assets/gomba.png'
 ];
