@@ -1,13 +1,11 @@
-const CACHE = 'gomba-overdrive-v0.6';
+const CACHE = 'gomba-overdrive-v0.7';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
-  './v06.css',
   './game.js',
-  './v06.js',
   './manifest.json',
-  './assets/gomba-game-cutout.svg'
+  './assets/gomba-mascot.png'
 ];
 
 self.addEventListener('install', event => {

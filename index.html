@@ -3,18 +3,21 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0A0A0A" />
+  <meta name="theme-color" content="#050505" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="OVERDRIVE" />
   <title>GOMBA OVERDRIVE</title>
   <link rel="manifest" href="./manifest.json" />
-  <link rel="icon" href="./assets/gomba-game-cutout.svg" />
+  <link rel="icon" href="./assets/gomba-mascot.png" />
+  <link rel="apple-touch-icon" href="./assets/gomba-mascot.png" />
   <link rel="stylesheet" href="./styles.css" />
-  <link rel="stylesheet" href="./v06.css" />
 </head>
 <body>
-  <main class="app-shell" id="appShell">
-    <button type="button" class="nav-sound" id="soundBtn" aria-pressed="true">SOUND ON</button>
+  <main class="cabinet" id="appShell">
+    <i class="pipe pipe-tl" aria-hidden="true"></i>
+    <i class="pipe pipe-tr" aria-hidden="true"></i>
+    <i class="pipe pipe-bl" aria-hidden="true"></i>
+    <i class="pipe pipe-br" aria-hidden="true"></i>
     <div class="fx-flash" id="fxFlash" aria-hidden="true"></div>
     <div id="stageBanner" class="stage-banner" hidden>
       <strong id="stageBannerNum">STAGE 2</strong>
@@ -22,29 +25,38 @@
     </div>
 
     <section id="landing" class="screen active" aria-labelledby="landing-title">
-      <div class="brand">GOMBA</div>
-      <div class="hero-wrap">
-        <div class="hero-glow"></div>
-        <div class="hero-sparks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-        <img class="hero-img" src="./assets/gomba-game-cutout.svg" alt="GOMBA mascot" />
+      <div class="title-logo">
+        <span>GOMBA</span>
+        <strong id="landing-title">OVERDRIVE</strong>
       </div>
-      <h1 id="landing-title">OVERDRIVE ⚡</h1>
+      <div class="hero-reactor">
+        <div class="reactor-ring" aria-hidden="true"></div>
+        <div class="hero-sparks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <img class="hero-img" src="./assets/gomba-mascot.png" alt="GOMBA mascot" />
+      </div>
       <p class="tagline">PLACE. CLEAR. OVERDRIVE.</p>
-      <button type="button" id="playBtn" class="primary">PLAY</button>
-      <p class="meta-line">OFFLINE READY · NO APP · PLAY ANYTIME</p>
+      <button type="button" id="playBtn" class="play-btn">PLAY</button>
+      <p class="meta-line">OFFLINE READY</p>
+      <div class="landing-floor" aria-hidden="true"><b>GOMBA OVERDRIVE</b></div>
     </section>
 
     <section id="game" class="screen" aria-labelledby="game-title">
-      <button type="button" class="nav-close" id="gameClose" aria-label="Back to start">×</button>
       <h2 id="game-title" class="sr-only">GOMBA OVERDRIVE</h2>
-      <div class="game-brandplate"><span>GOMBA</span><strong>OVERDRIVE</strong><i>⚡</i></div>
-      <header class="top-hud">
-        <div class="mascot-wrap" id="mascotWrap">
-          <img class="hud-mascot" src="./assets/gomba-game-cutout.svg" alt="" />
-          <div class="core-glow" id="coreGlow"></div>
-          <div class="mascot-bolts" id="mascotBolts" aria-hidden="true">⚡</div>
+      <header class="arcade-header">
+        <div class="logo-lockup"><span>GOMBA</span><strong>OVERDRIVE</strong></div>
+        <div class="header-controls">
+          <button type="button" class="metal-btn" id="soundBtn" aria-pressed="true">SOUND ON</button>
+          <button type="button" class="metal-btn close" id="gameClose" aria-label="Back to start">×</button>
         </div>
-        <div class="hud-stats">
+      </header>
+
+      <div class="reactor-hud">
+        <div class="mascot-chamber" id="mascotWrap">
+          <div class="chamber-core" id="coreGlow"></div>
+          <div class="chamber-arcs" aria-hidden="true"></div>
+          <img class="hud-mascot" src="./assets/gomba-mascot.png" alt="" />
+        </div>
+        <div class="dash">
           <div class="core-row"><span>CORE</span><strong id="coreText">0%</strong></div>
           <div class="core-track"><div class="core-fill" id="coreFill"></div></div>
           <div class="stat-grid">
@@ -54,26 +66,38 @@
             <div><span>STAGE</span><strong id="stageText">1</strong></div>
           </div>
         </div>
-      </header>
-      <div class="game-status-strip" aria-hidden="true"><span><i class="live-dot"></i>GRID ONLINE</span><b>LINE CLEAR → CORE CHARGE</b></div>
-      <div class="board-wrap">
-        <div id="firstHint" class="first-hint"><span>DRAG BLOCKS</span><span class="hint-arrow">↓</span><span>CLEAR ROWS &amp; COLUMNS</span></div>
-        <div id="board" class="board" aria-label="8 by 8 board"></div>
-        <div id="boardFx" class="board-fx" aria-hidden="true"></div>
-        <div id="feedback" class="feedback" aria-live="polite"></div>
       </div>
+
+      <div class="status-bar" id="statusBar">
+        <span id="statusLeft">⚡ ENERGY GRID</span>
+        <b>LINE CLEAR → CORE CHARGE</b>
+      </div>
+
+      <div class="board-machine" id="boardMachine">
+        <div id="firstHint" class="first-hint">
+          <span>DRAG BLOCKS</span><span class="hint-arrow">↓</span><span>CLEAR ROWS &amp; COLUMNS</span>
+        </div>
+        <div id="board" class="board" aria-label="8 by 8 board"></div>
+        <div id="fxLayer" class="fx-layer" aria-hidden="true"></div>
+        <div id="praise" class="praise" hidden>
+          <span class="word" id="praiseWord">AMAZING!</span>
+          <span class="plate" id="praisePlate">COMBO X4</span>
+        </div>
+        <div id="feedback" class="sr-only" aria-live="polite"></div>
+      </div>
+
       <div id="tray" class="tray" aria-label="Pieces"></div>
       <div id="dragGhost" class="drag-ghost" hidden></div>
     </section>
 
     <section id="result" class="screen" aria-labelledby="resultTitle">
-      <button type="button" class="nav-close" id="resultClose" aria-label="Back to start">×</button>
-      <div class="brand">GOMBA</div>
-      <div class="result-hero">
-        <img class="result-mascot" src="./assets/gomba-game-cutout.svg" alt="GOMBA mascot" />
+      <button type="button" class="metal-btn close abs" id="resultClose" aria-label="Back to start">×</button>
+      <div class="title-logo compact"><span>GOMBA</span><strong>OVERDRIVE</strong></div>
+      <div class="result-reactor">
+        <img class="result-mascot" src="./assets/gomba-mascot.png" alt="GOMBA mascot" />
         <div class="result-smoke" aria-hidden="true"><i></i><i></i><i></i></div>
       </div>
-      <p id="newBest" class="new-best" hidden>NEW RECORD! ⚡</p>
+      <p id="newBest" class="new-best" hidden>NEW BEST ⚡</p>
       <h2 id="resultTitle">SHORT CIRCUIT</h2>
       <div class="score-card">
         <div><span>SCORE</span><strong id="finalScore">0</strong></div>
@@ -82,28 +106,27 @@
         <div><span>STAGE REACHED</span><strong id="finalStage">1</strong></div>
         <div class="span-2"><span>OVERDRIVES</span><strong id="finalOver">0</strong></div>
       </div>
-      <button type="button" id="againBtn" class="primary">PLAY AGAIN</button>
-      <button type="button" id="backHomeBtn" class="ghost">BACK TO START</button>
+      <button type="button" id="againBtn" class="play-btn">PLAY AGAIN</button>
+      <button type="button" id="backHomeBtn" class="ghost-btn">BACK TO START</button>
     </section>
 
     <section id="cta" class="screen" aria-labelledby="ctaTitle">
-      <button type="button" class="nav-close" id="ctaClose" aria-label="Back to start">×</button>
-      <div class="brand">GOMBA</div>
+      <button type="button" class="metal-btn close abs" id="ctaClose" aria-label="Back to start">×</button>
+      <div class="title-logo compact"><span>GOMBA</span><strong>OVERDRIVE</strong></div>
       <h2 id="ctaTitle">STAY IN THE GAME ⚡</h2>
-      <p>Unlock future GOMBA challenges &amp; drops.</p>
+      <p class="cta-copy">Unlock future GOMBA challenges &amp; drops.</p>
       <p id="ctaOffline" class="offline-note" hidden>You’re offline — keep playing. Connect later to join.</p>
       <form id="ctaForm" class="cta-form">
         <input id="ctaEmail" type="email" autocomplete="email" placeholder="Email address" />
         <p class="or">OR</p>
         <input id="ctaPhone" type="tel" autocomplete="tel" placeholder="Phone number" />
-        <button type="submit" class="primary" id="ctaUnlock">UNLOCK</button>
+        <button type="submit" class="play-btn" id="ctaUnlock">UNLOCK</button>
       </form>
-      <p id="ctaThanks" class="success" hidden>You’re on the list. ⚡</p>
-      <button type="button" id="ctaKeep" class="secondary">KEEP PLAYING</button>
-      <button type="button" id="ctaHome" class="ghost">BACK TO START</button>
+      <p id="ctaThanks" class="success" hidden>YOU'RE IN ⚡</p>
+      <button type="button" id="ctaKeep" class="ghost-btn">KEEP PLAYING</button>
+      <button type="button" id="ctaHome" class="ghost-btn">BACK TO START</button>
     </section>
   </main>
   <script src="./game.js"></script>
-  <script src="./v06.js"></script>
 </body>
 </html>
