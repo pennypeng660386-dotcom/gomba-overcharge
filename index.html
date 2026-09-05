@@ -8,15 +8,12 @@
   <meta name="apple-mobile-web-app-title" content="OVERDRIVE" />
   <title>GOMBA OVERDRIVE</title>
   <link rel="manifest" href="./manifest.json" />
-  <link rel="icon" href="./assets/gomba.png" />
-  <link rel="apple-touch-icon" href="./assets/gomba.png" />
+  <link rel="icon" href="./assets/gomba-game-cutout.svg" />
   <link rel="stylesheet" href="./styles.css" />
-  <link rel="stylesheet" href="./v041.css" />
-  <link rel="stylesheet" href="./v05.css" />
+  <link rel="stylesheet" href="./v06.css" />
 </head>
 <body>
   <main class="app-shell" id="appShell">
-    <div class="ambient-energy" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
     <button type="button" class="nav-sound" id="soundBtn" aria-pressed="true">SOUND ON</button>
     <div class="fx-flash" id="fxFlash" aria-hidden="true"></div>
     <div id="stageBanner" class="stage-banner" hidden>
@@ -29,7 +26,7 @@
       <div class="hero-wrap">
         <div class="hero-glow"></div>
         <div class="hero-sparks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-        <img class="hero-img" src="./assets/gomba.png" alt="GOMBA mascot" />
+        <img class="hero-img" src="./assets/gomba-game-cutout.svg" alt="GOMBA mascot" />
       </div>
       <h1 id="landing-title">OVERDRIVE ⚡</h1>
       <p class="tagline">PLACE. CLEAR. OVERDRIVE.</p>
@@ -40,9 +37,10 @@
     <section id="game" class="screen" aria-labelledby="game-title">
       <button type="button" class="nav-close" id="gameClose" aria-label="Back to start">×</button>
       <h2 id="game-title" class="sr-only">GOMBA OVERDRIVE</h2>
+      <div class="game-brandplate"><span>GOMBA</span><strong>OVERDRIVE</strong><i>⚡</i></div>
       <header class="top-hud">
         <div class="mascot-wrap" id="mascotWrap">
-          <img class="hud-mascot" src="./assets/gomba.png" alt="" />
+          <img class="hud-mascot" src="./assets/gomba-game-cutout.svg" alt="" />
           <div class="core-glow" id="coreGlow"></div>
           <div class="mascot-bolts" id="mascotBolts" aria-hidden="true">⚡</div>
         </div>
@@ -72,7 +70,7 @@
       <button type="button" class="nav-close" id="resultClose" aria-label="Back to start">×</button>
       <div class="brand">GOMBA</div>
       <div class="result-hero">
-        <img class="result-mascot" src="./assets/gomba.png" alt="GOMBA mascot" />
+        <img class="result-mascot" src="./assets/gomba-game-cutout.svg" alt="GOMBA mascot" />
         <div class="result-smoke" aria-hidden="true"><i></i><i></i><i></i></div>
       </div>
       <p id="newBest" class="new-best" hidden>NEW RECORD! ⚡</p>
@@ -106,7 +104,6 @@
     </section>
   </main>
   <script src="./game.js"></script>
-  <script src="./v041.js"></script>
-  <script src="./v05.js"></script>
+  <script src="./v06.js"></script>
 </body>
 </html>
