@@ -271,15 +271,21 @@
   function goHome(){drag=null;busy=false;ghostEl.hidden=true;state=null;show('landing');}
   function rotateTray(index){if(!state||drag||!state.tray[index])return;state.tray[index]=rotateCells(state.tray[index]);renderTray();}
 
-  // V0.7.2: geometry comes from the REAL rendered cells, so CSS padding/gaps can never desync drag placement.
+  // V0.7.4: one local boardMachine coordinate system. Ghost and preview share the same r0/c0.
   function boardMetrics(){
+    const machine=$('boardMachine');
     const a=boardEl.querySelector('[data-r="0"][data-c="0"]');
     const x=boardEl.querySelector('[data-r="0"][data-c="1"]');
     const y=boardEl.querySelector('[data-r="1"][data-c="0"]');
-    if(!a||!x||!y)return null;
-    const qa=a.getBoundingClientRect(),qx=x.getBoundingClientRect(),qy=y.getBoundingClientRect(),br=boardEl.getBoundingClientRect();
-    const cx=qa.left+qa.width/2,cy=qa.top+qa.height/2;
-    return { board:br, cellW:qa.width, cellH:qa.height, stepX:(qx.left+qx.width/2)-cx, stepY:(qy.top+qy.height/2)-cy, centerX:cx, centerY:cy, gapX:Math.max(0,(qx.left-qa.right)), gapY:Math.max(0,(qy.top-qa.bottom)) };
+    if(!machine||!a||!x||!y)return null;
+    const mr=machine.getBoundingClientRect(),qa=a.getBoundingClientRect(),qx=x.getBoundingClientRect(),qy=y.getBoundingClientRect(),br=boardEl.getBoundingClientRect();
+    return {
+      machine:mr, board:br,
+      cellW:qa.width, cellH:qa.height,
+      stepX:qx.left-qa.left, stepY:qy.top-qa.top,
+      originX:qa.left-mr.left-machine.clientLeft, originY:qa.top-mr.top-machine.clientTop,
+      gapX:Math.max(0,qx.left-qa.right), gapY:Math.max(0,qy.top-qa.bottom)
+    };
   }
   function defaultGrab(cells){
     const {rows,cols}=pieceSize(cells), cr=(rows-1)/2, cc=(cols-1)/2;
@@ -293,16 +299,16 @@
     }
     const [r,c]=defaultGrab(cells); return {r,c};
   }
-  function snapFromPointer(clientX,clientY,grab){
-    const m=boardMetrics(); if(!m)return null;
-    const lift=Math.min(52,Math.max(28,m.cellH*.9));
-    const px=clientX, py=clientY-lift;
-    const marginX=m.stepX*.58, marginY=m.stepY*.58;
-    const inside=px>=m.board.left-marginX&&px<=m.board.right+marginX&&py>=m.board.top-marginY&&py<=m.board.bottom+marginY;
-    const hitC=Math.round((px-m.centerX)/m.stepX), hitR=Math.round((py-m.centerY)/m.stepY);
+  function snapFromPointer(clientX,clientY,grab,m){
+    if(!m)return null;
+    const machine=$('boardMachine');
+    const mr=machine.getBoundingClientRect(), br=boardEl.getBoundingClientRect();
+    const localX=clientX-mr.left-machine.clientLeft, localY=clientY-mr.top-machine.clientTop;
+    const hitC=Math.floor((localX-m.originX)/m.stepX);
+    const hitR=Math.floor((localY-m.originY)/m.stepY);
     const c0=hitC-grab.c, r0=hitR-grab.r;
-    const left=m.centerX+c0*m.stepX-m.cellW/2;
-    const top=m.centerY+r0*m.stepY-m.cellH/2;
+    const left=m.originX+c0*m.stepX, top=m.originY+r0*m.stepY;
+    const inside=clientX>=br.left&&clientX<=br.right&&clientY>=br.top&&clientY<=br.bottom;
     return {r0,c0,left,top,m,inside};
   }
   function paintGhost(cells,m){
@@ -313,7 +319,7 @@
   }
   function updateDragAt(clientX,clientY){
     if(!drag)return null;
-    const pos=snapFromPointer(clientX,clientY,drag.grab); if(!pos)return null;
+    const pos=snapFromPointer(clientX,clientY,drag.grab,drag.m); if(!pos)return null;
     if(!drag.painted){paintGhost(drag.cells,pos.m);drag.painted=true;}
     ghostEl.style.left=pos.left+'px';ghostEl.style.top=pos.top+'px';
     const preview=pos.inside?findPreview(pos.r0,pos.c0,drag.cells):{r0:pos.r0,c0:pos.c0,map:{},ok:false};
@@ -324,8 +330,9 @@
     const rot=e.target.closest('[data-rotate]');if(rot){e.preventDefault();e.stopPropagation();rotateTray(Number(rot.dataset.rotate));sfx('tap');return;}
     const slot=e.target.closest('[data-tray]');if(!slot)return;
     const index=Number(slot.dataset.tray),piece=state.tray[index];if(!piece)return;
-    e.preventDefault();slot.setPointerCapture?.(e.pointerId);
-    drag={index,cells:cloneCells(piece),grab:pointGrab(e,slot,piece),painted:false,preview:null,last:null};
+    e.preventDefault();try{slot.setPointerCapture?.(e.pointerId);}catch(_){}
+    renderBoard();
+    drag={index,cells:cloneCells(piece),grab:pointGrab(e,slot,piece),painted:false,preview:null,last:null,m:boardMetrics()};
     ghostEl.hidden=false;updateDragAt(e.clientX,e.clientY);
   }
   function onPointerMove(e){if(!drag)return;e.preventDefault();updateDragAt(e.clientX,e.clientY);}
