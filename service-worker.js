@@ -1,11 +1,13 @@
-const CACHE = 'gomba-overdrive-v0.7.4';
+const CACHE = 'gomba-overdrive-v0.8';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
   './game.js',
+  './phaser-fx.js',
   './manifest.json',
-  './assets/gomba-mascot.png'
+  './assets/gomba-mascot.png',
+  './assets/vendor/phaser.min.js'
 ];
 
 self.addEventListener('install', event => {

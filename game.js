@@ -157,7 +157,7 @@
 
   function syncSoundBtn(){ $('soundBtn').textContent=soundOn?'SOUND ON':'SOUND OFF'; $('soundBtn').setAttribute('aria-pressed',soundOn?'true':'false'); }
   function syncOffline(){ $('statusLeft').textContent=navigator.onLine===false?'OFFLINE MODE':'⚡ ENERGY GRID'; }
-  function show(name){ Object.values(screens).forEach(s=>s.classList.remove('active')); screens[name].classList.add('active'); window.scrollTo(0,0); }
+  function show(name){ Object.values(screens).forEach(s=>s.classList.remove('active')); screens[name].classList.add('active'); window.scrollTo(0,0); if(window.GombaFX){GombaFX.setActive(name==='game');if(name==='game'&&state)GombaFX.syncCore(state.core);} }
 
   function emptyBoard(){ return Array.from({length:SIZE},()=>Array(SIZE).fill(0)); }
   function cloneCells(c){ return c.map(([r,col])=>[r,col]); }
@@ -205,12 +205,14 @@
     $('comboText').textContent=`×${state.combo}`; $('stageText').textContent=state.stage;
     $('coreText').textContent=`${Math.round(state.core)}%`; $('coreFill').style.width=`${state.core}%`;
     $('coreGlow').style.opacity=String(.2+state.core*.007); $('mascotWrap').classList.toggle('charged',state.core>=70);
+    if(window.GombaFX)GombaFX.syncCore(state.core);
   }
   function flashMsg(t){$('feedback').textContent=t;clearTimeout(flashMsg.t);flashMsg.t=setTimeout(()=>$('feedback').textContent='',850);}
   function cheerFor(n,combo){ if(combo>=5)return['UNSTOPPABLE!','unstoppable']; if(combo===4)return['EXCELLENT!','excellent']; if(combo===3)return['AMAZING!','amazing']; if(combo===2||n>=2)return['GREAT!','great']; return['NICE!','nice']; }
   function reactMascot(kind){
     const el=$('mascotWrap'); el.className='mascot-chamber'+(state?.core>=70?' charged':''); if(!kind)return;
     el.classList.add('react-'+kind); if(kind!=='gameover'){clearTimeout(reactMascot.t);reactMascot.t=setTimeout(()=>el.classList.remove('react-'+kind),950);}
+    if(window.GombaFX)GombaFX.mascotReact(kind,state?.core||0);
   }
   function shake(ms=200){shell.classList.remove('shaking');void shell.offsetWidth;shell.classList.add('shaking');setTimeout(()=>shell.classList.remove('shaking'),ms);}
   function flashScreen(){const e=$('fxFlash');e.classList.remove('on');void e.offsetWidth;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),300);}
@@ -237,7 +239,16 @@
     const tx=core.left-lr.left+core.width/2,ty=core.top-lr.top+core.height/2;
     for(let i=0;i<14;i++){const p=document.createElement('i'),sx=br.left-lr.left+br.width*(.15+Math.random()*.7),sy=br.top-lr.top+br.height*(.2+Math.random()*.6);p.className='core-bit';p.style.left=sx+'px';p.style.top=sy+'px';p.style.setProperty('--tx',(tx-sx)+'px');p.style.setProperty('--ty',(ty-sy)+'px');fxLayer.appendChild(p);setTimeout(()=>p.remove(),850);}
   }
-  function playClearFx(lines,n,combo,word,kind){ showPraise(word,combo);reactMascot(kind);fireBeams(lines,n>=2||combo>=3);flashScreen();spawnDebris(n>=2||combo>=3);spawnCoreBits();powerFrame(combo>=4);shake(combo>=4?320:250);flashMsg(word);sfx(combo>=2||n>=2?'combo':'clear',word); }
+  function playClearFx(lines,n,combo,word,kind){
+    reactMascot(kind);
+    if(window.GombaFX&&GombaFX.ready){
+      GombaFX.lineClear(lines,{n,combo});
+      GombaFX.combo(word,combo);
+    }else{
+      showPraise(word,combo);fireBeams(lines,n>=2||combo>=3);spawnDebris(n>=2||combo>=3);spawnCoreBits();
+    }
+    flashScreen();powerFrame(combo>=4);shake(combo>=4?320:250);flashMsg(word);sfx(combo>=2||n>=2?'combo':'clear',word);
+  }
 
   function showStageBanner(n){const e=$('stageBanner');$('stageBannerNum').textContent=`STAGE ${n}`;e.hidden=false;sfx('stage');setTimeout(()=>e.hidden=true,1000);}
   function checkStage(){const next=Math.max(1+Math.floor(state.score/500),1+state.overdrives);if(next>state.stage){state.stage=next;if(next>save.highestStage){save.highestStage=next;persist();}updateHud();showStageBanner(next);}}
@@ -255,7 +266,9 @@
     const target=pickOverdriveTarget(state.board), lines={rows:[],cols:[]}; if(target.type==='row')lines.rows.push(target.index);else lines.cols.push(target.index);
     const marks=applyClears(state.board,lines);state.score+=150+target.count*8;state.overdrives++;save.totalOverdrives++;state.core=0;persist();
     await wait(100);shell.classList.add('overdrive-dark');$('coreFill').classList.add('hot');reactMascot('overdrive');state.clearing=marks;renderBoard();updateHud();
-    fireBeams({rows:[target.type==='row'?target.index:3],cols:[target.type==='col'?target.index:3]},true);flashScreen();spawnDebris(true);spawnCoreBits();powerFrame(true);shake(360);showPraise('OVERDRIVE!',state.combo);flashMsg('OVERDRIVE!');sfx('overdrive');checkStage();track('overdrive',{stage:state.stage,target});
+    if(window.GombaFX&&GombaFX.ready){GombaFX.overdrive(target);}
+    else{fireBeams({rows:[target.type==='row'?target.index:3],cols:[target.type==='col'?target.index:3]},true);spawnDebris(true);spawnCoreBits();showPraise('OVERDRIVE!',state.combo);}
+    flashScreen();powerFrame(true);shake(360);flashMsg('OVERDRIVE!');sfx('overdrive');checkStage();track('overdrive',{stage:state.stage,target});
     await wait(950);state.clearing=null;$('coreFill').classList.remove('hot');shell.classList.remove('overdrive-dark');renderBoard();updateHud();if(state.overdrives===3)maybeShowCta('overdrive3');
   }
   async function afterPlace(cells){

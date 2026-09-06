@@ -8,6 +8,8 @@ body{font-family:Impact,"Arial Black",Arial,sans-serif;display:flex;justify-cont
 button,input{font:inherit}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 
 /* powered cabinet */
+.gomba-fx-host{position:absolute;inset:0;z-index:36;pointer-events:none;overflow:hidden}
+.gomba-fx-host canvas{pointer-events:none!important;display:block;width:100%;height:100%}
 .cabinet{position:relative;width:min(100vw,430px);height:100dvh;min-height:640px;padding:max(8px,env(safe-area-inset-top)) 9px max(10px,env(safe-area-inset-bottom));overflow:hidden;background:
 radial-gradient(circle at 50% 9%,rgba(255,135,0,.26),transparent 32%),
 linear-gradient(180deg,#1b0e05 0,#090909 31%,#030303 100%);border:8px solid #262626;box-shadow:

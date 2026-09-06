@@ -1,0 +1,12 @@
+{
+  "name": "gomba-overdrive",
+  "private": true,
+  "version": "0.7.4",
+  "description": "GOMBA OVERDRIVE — Phaser 4 is an FX capability only",
+  "scripts": {
+    "poc": "npx --yes serve -l 18766"
+  },
+  "dependencies": {
+    "phaser": "^4.2.1"
+  }
+}
