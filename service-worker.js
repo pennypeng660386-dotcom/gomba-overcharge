@@ -1,4 +1,4 @@
-const CACHE = 'gomba-overdrive-v0.8';
+const CACHE = 'gomba-overdrive-v0.9.2';
 const ASSETS = [
   './',
   './index.html',
@@ -7,6 +7,8 @@ const ASSETS = [
   './phaser-fx.js',
   './manifest.json',
   './assets/gomba-mascot.png',
+  './assets/ui/cabinet-skin.jpg',
+  './assets/reference/v09/03_cabinet_skin_production.png',
   './assets/vendor/phaser.min.js'
 ];
 
