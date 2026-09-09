@@ -32,4 +32,4 @@ Then open http://localhost:8080
 
 - Shell bitmap: `assets/ui/cabinet-skin.jpg` (also `assets/reference/v09/03_cabinet_skin_production.png` preferred in CSS)
 - Live DOM openings (HUD / board / trays) align over the skin; decorative CSS rim/bolts/pipes are hidden
-- Cache bump via `service-worker.js` (`gomba-overdrive-v0.9.x`) so clients pick up new CSS/assets
+- Cache bump via `service-worker.js` (`gomba-overdrive-v0.9.3`) so clients pick up new CSS/assets
