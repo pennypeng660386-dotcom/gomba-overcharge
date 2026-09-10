@@ -1,4 +1,4 @@
-const CACHE = 'gomba-overdrive-v0.9.8';
+const CACHE = 'gomba-overdrive-v0.9.9';
 const ASSETS = [
   './',
   './index.html',
@@ -9,7 +9,8 @@ const ASSETS = [
   './assets/gomba-mascot.png',
   './assets/ui/cabinet-skin.jpg',
   './assets/reference/v09/03_cabinet_skin_production.png',
-  './assets/vendor/phaser.min.js'
+  './assets/vendor/phaser.min.js',
+  './assets/vendor/gsap.min.js'
 ];
 
 self.addEventListener('install', event => {
