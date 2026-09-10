@@ -1435,199 +1435,261 @@ button,input{font:inherit}.sr-only{position:absolute;width:1px;height:1px;overfl
 }
 .skin-v09 #landing .landing-stack{z-index:3!important}
 
-/* ===== V0.9.22 — Phase A Clarity Build / 安静棋盘 ===== */
-/* 「不乱」first: board is the only hero. FX only on clear/combo. */
+/* ===== V0.9.23 — Concept Match Build (SoT: SOT-penny-target-gameplay.png) ===== */
+/* Strip Phase A quiet package. Restore high-bloom industrial chrome + clear spectacle. */
+/* Do NOT revive quiet-board / chrome dim / L/R mute veils. */
 
-/* R3 — Dim cabinet chrome far below board/blocks contrast */
+/* G1 — Full chrome energy: no dim, no veil, no mute bands */
 .cabinet.skin-v09 .cab-skin{
-  filter:brightness(.55) saturate(.58) contrast(.86);
-  opacity:.88;
+  filter:none!important;
+  opacity:1!important;
+  background-image:url("./assets/ui/cabinet-skin-v021.png");
 }
-/* Soft veil quiets painted L/R lightning without new skin art */
 .cabinet.skin-v09::after{
-  content:""!important;
-  display:block!important;
-  position:absolute;
-  inset:0;
-  z-index:1;
-  pointer-events:none;
-  background:
-    linear-gradient(90deg, rgba(0,0,0,.62) 0%, rgba(0,0,0,.28) 7%, transparent 14%, transparent 86%, rgba(0,0,0,.28) 93%, rgba(0,0,0,.62) 100%),
-    radial-gradient(ellipse 72% 58% at 50% 46%, transparent 36%, rgba(0,0,0,.18) 70%, rgba(0,0,0,.38) 100%);
-  opacity:1;
+  content:none!important;
+  display:none!important;
+  background:none!important;
+  opacity:0!important;
+}
+.skin-v09 #game.active::before,
+.skin-v09 #landing.active::before{
+  /* neutralize prior L/R mute bands */
+}
+/* Explicit kill of mute-band gradients if any residual ::before is used as veil */
+.skin-v09 #game.active::before{
+  content:none!important;
+  display:none!important;
+  background:none!important;
+  opacity:0!important;
 }
 
-/* R2 — One Hero Glow: PLAY (landing) + drag ghost (game). Kill persistent arcs. */
-.skin-v09 #game.active .chamber-arcs,
-.skin-v09 #game.active .chamber-sparks,
-.skin-v09 #landing .hero-sparks{
-  opacity:0!important;
-  visibility:hidden!important;
-  animation:none!important;
+/* G7 — HUD hot & readable (undo R4 low-contrast) */
+.skin-v09 #game.active .dash{
+  border-color:transparent!important;
+  box-shadow:none!important;
 }
-.skin-v09 #game.active .mascot-chamber:before{
-  animation:none!important;
-  opacity:.28!important;
-  box-shadow:inset 0 0 14px rgba(255,140,0,.3),0 0 10px rgba(255,120,0,.2)!important;
-  border-color:rgba(255,210,140,.35)!important;
+.skin-v09 #game.active .stat-grid strong{
+  color:#fff6d8!important;
+  text-shadow:0 0 6px rgba(255,190,60,.55),0 1px 0 #1a0800!important;
+  font-weight:800!important;
+  filter:none!important;
 }
-.skin-v09 #game.active .mascot-chamber{
+.skin-v09 #game.active .stat-grid strong.stat-flash{
+  color:#fffef0!important;
+  text-shadow:0 0 10px rgba(255,210,80,.95),0 0 20px rgba(255,120,0,.7)!important;
+}
+.skin-v09 #game.active .core-row strong{
+  color:#ffe9b0!important;
+  text-shadow:0 0 8px rgba(255,160,40,.6)!important;
+}
+.skin-v09 #game.active .core-track{
+  box-shadow:inset 0 0 8px rgba(0,0,0,.45),0 0 10px rgba(255,120,0,.35)!important;
+}
+.skin-v09 #game.active .core-fill{
+  box-shadow:0 0 14px #ff7500,0 0 28px rgba(255,90,0,.85),0 0 44px rgba(255,60,0,.45)!important;
+  filter:saturate(1.15) brightness(1.08);
+}
+
+/* G5 — Board cells + molten filled bloom */
+.skin-v09 #game.active .board{
+  background:#080808!important;
   box-shadow:
-    0 0 6px rgba(255,160,0,.2),
-    0 0 14px rgba(255,100,0,.16),
-    inset 0 0 12px rgba(255,180,60,.22)!important;
-  background:radial-gradient(circle at 50% 44%,#ffe8a0 0 5%,#ffb84a 12%,#ff8a00 30%,rgba(255,70,0,.4) 50%,rgba(20,6,0,.15) 70%,transparent 84%)!important;
-  filter:brightness(.9) saturate(.9);
+    inset 0 0 28px rgba(0,0,0,.75),
+    inset 0 0 18px rgba(255,100,0,.18),
+    0 0 20px rgba(255,90,0,.18)!important;
+  -webkit-mask-image:none!important;
+  mask-image:none!important;
 }
-.skin-v09 #game.active .hud-mascot{
-  filter:drop-shadow(0 0 5px rgba(255,170,40,.45)) drop-shadow(0 0 12px rgba(255,100,0,.28)) brightness(1.04) saturate(1.05)!important;
+.skin-v09 #game.active .cell{
+  border-color:#101010!important;
+  background:linear-gradient(145deg,#1a1a1a 0,#0c0c0c 55%,#040404 100%)!important;
+  box-shadow:inset 2px 2px 4px #000,inset -1px -1px rgba(255,255,255,.045),0 0 0 1px #000!important;
+}
+.skin-v09 #game.active .cell.filled{
+  animation:blockPulse 1.55s ease-in-out infinite alternate!important;
+  filter:brightness(1.14) saturate(1.22)!important;
+  border-color:#ffe08a!important;
+  background:
+    radial-gradient(circle at 28% 20%,rgba(255,255,230,.85) 0 10%,transparent 44%),
+    linear-gradient(145deg,#fff6c0 0,#ffd24a 12%,#ff9a00 38%,#ff5200 72%,#6a1200 100%)!important;
+  box-shadow:
+    inset 0 2px rgba(255,255,255,.78),
+    inset 0 -6px 10px rgba(90,15,0,.5),
+    0 0 10px #ffc000,
+    0 0 22px rgba(255,120,0,1),
+    0 0 42px rgba(255,70,0,.7)!important;
+}
+.skin-v09 #game.active .cell.filled:before{
+  box-shadow:inset 0 0 12px rgba(255,240,180,.4)!important;
+  border-color:rgba(255,245,200,.65)!important;
+}
+
+/* G6 — Tray / piece / mini heat (undo R7 quiet) */
+.skin-v09 #game.active .piece:after{
+  opacity:.7!important;
+  display:block!important;
+}
+.skin-v09 #game.active .piece .mini{
+  border-color:#ffe08a!important;
+  filter:brightness(1.1) saturate(1.18);
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.7),
+    0 0 10px #ffb800,
+    0 0 20px rgba(255,100,0,.95),
+    0 0 32px rgba(255,70,0,.55)!important;
+}
+.skin-v09 #game.active .rotate{
+  box-shadow:0 0 12px rgba(255,150,40,.75),0 0 22px rgba(255,100,0,.4)!important;
+  border-color:#ffb040!important;
+}
+
+/* G8 — Chamber peak react glow (idle may be calmer; peak hits SoT heat) */
+.skin-v09 #game.active .chamber-arcs{
+  opacity:.55!important;
+  visibility:visible!important;
+  animation:spin 3.2s linear infinite!important;
+  filter:drop-shadow(0 0 12px #ff7500) drop-shadow(0 0 24px rgba(255,100,0,.65))!important;
+}
+.skin-v09 #game.active .chamber-sparks{
+  opacity:.45!important;
+  visibility:visible!important;
 }
 .skin-v09 #game.active .chamber-core{
-  opacity:.55!important;
-  animation:none!important;
+  opacity:.85!important;
+  animation:pulse 1.3s ease-in-out infinite!important;
+}
+.skin-v09 #game.active .mascot-chamber:before{
+  animation:pulse 1.6s ease-in-out infinite!important;
+  opacity:.85!important;
+  box-shadow:0 0 22px #ff9800,0 0 44px rgba(255,120,0,.85),0 0 64px rgba(255,80,0,.45)!important;
+  border-color:rgba(255,230,150,.9)!important;
+}
+.skin-v09 #game.active .mascot-chamber{
+  filter:none!important;
+  box-shadow:
+    0 0 16px #fff6c8,
+    0 0 28px #ffb000,
+    0 0 52px rgba(255,100,0,.9),
+    0 0 78px rgba(255,60,0,.55),
+    inset 0 0 28px rgba(255,210,90,.55)!important;
+  background:radial-gradient(circle at 50% 44%,#fffce8 0 7%,#ffe08a 12%,#ffb000 22%,#ff7a00 38%,rgba(255,60,0,.7) 55%,rgba(40,10,0,.2) 72%,transparent 82%)!important;
+}
+.skin-v09 #game.active .hud-mascot{
+  filter:drop-shadow(0 0 1.5px #fff8d0) drop-shadow(0 0 5px #ffd24a) drop-shadow(0 0 12px #ff9a00) drop-shadow(0 0 24px rgba(255,110,0,.95)) drop-shadow(0 0 42px rgba(255,70,0,.75)) brightness(1.14) saturate(1.22)!important;
 }
 .skin-v09 #game.active .mascot-chamber.charged,
 .skin-v09 #game.active .mascot-chamber.react-amazing,
 .skin-v09 #game.active .mascot-chamber.react-excellent,
 .skin-v09 #game.active .mascot-chamber.react-unstoppable,
-.skin-v09 #game.active .mascot-chamber.react-overdrive{
+.skin-v09 #game.active .mascot-chamber.react-overdrive,
+.skin-v09 #game.active .mascot-chamber.react-great{
+  filter:brightness(1.2)!important;
   box-shadow:
-    0 0 14px rgba(255,200,80,.45),
-    0 0 28px rgba(255,110,0,.4),
-    inset 0 0 20px rgba(255,200,80,.4)!important;
+    0 0 28px #fff8d0,
+    0 0 48px #ffb000,
+    0 0 72px rgba(255,90,0,.95),
+    0 0 110px rgba(255,50,0,.65),
+    inset 0 0 36px rgba(255,220,100,.7)!important;
 }
-.skin-v09 #landing .hero-reactor:before,
-.skin-v09 #landing .hero-reactor:after,
-.skin-v09 #landing .reactor-ring{
-  opacity:.22!important;
-  animation:none!important;
-}
-/* PLAY keeps the single landing hero glow */
-.skin-v09 #landing .play-btn{
-  box-shadow:
-    inset 0 2px rgba(255,255,255,.72),
-    0 7px 0 #5a1800,
-    0 0 24px #ff7600,
-    0 0 48px rgba(255,90,0,.78)!important;
-}
-/* Dragged piece = in-game hero glow */
-.skin-v09 #game.active .drag-ghost{
-  filter:drop-shadow(0 0 12px #ff8500) drop-shadow(0 0 26px rgba(255,100,0,.75))!important;
+.skin-v09 #game.active .mascot-chamber.react-amazing .chamber-arcs,
+.skin-v09 #game.active .mascot-chamber.react-excellent .chamber-arcs,
+.skin-v09 #game.active .mascot-chamber.react-unstoppable .chamber-arcs,
+.skin-v09 #game.active .mascot-chamber.react-overdrive .chamber-arcs,
+.skin-v09 #game.active .mascot-chamber.react-great .chamber-arcs{
+  opacity:1!important;
+  filter:drop-shadow(0 0 16px #ff8500) drop-shadow(0 0 36px rgba(255,120,0,.9))!important;
 }
 
-/* R4 — HUD values low-contrast by default; brief flash on change */
-.skin-v09 #game.active .dash{
-  border-color:rgba(255,140,40,.22)!important;
-  box-shadow:inset 0 0 14px rgba(0,0,0,.4)!important;
+/* G3 + G9 — Praise typography/bloom match SoT; hide tutorial during praise/clear */
+.skin-v09 #game.active .praise{
+  z-index:80!important;
+  top:46%!important;
 }
-.skin-v09 #game.active .stat-grid strong{
-  color:rgba(255,228,180,.48)!important;
-  text-shadow:none!important;
-  font-weight:700!important;
-  transition:color .12s ease, text-shadow .12s ease, filter .12s ease;
+.skin-v09 #game.active .praise .word{
+  font-size:clamp(52px,15vw,84px)!important;
+  font-style:italic!important;
+  font-weight:900!important;
+  letter-spacing:.01em!important;
+  transform:skewX(-11deg)!important;
+  background-image:linear-gradient(180deg,#fffef0 0%,#fff6a8 18%,#ffe040 42%,#ffb000 68%,#ff6a00 100%)!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;
+  -webkit-text-stroke:5.5px #140500!important;
+  paint-order:stroke fill!important;
+  filter:
+    drop-shadow(0 4px 0 #0a0300)
+    drop-shadow(0 0 12px rgba(255,255,230,1))
+    drop-shadow(0 0 26px #ffc000)
+    drop-shadow(0 0 52px #ff6a00)
+    drop-shadow(0 0 90px rgba(255,70,0,.95))!important;
 }
-.skin-v09 #game.active .stat-grid strong.stat-flash{
-  color:#fff8e0!important;
-  text-shadow:0 0 8px rgba(255,190,60,.85),0 0 16px rgba(255,120,0,.55)!important;
-}
-.skin-v09 #game.active .core-row strong{
-  color:rgba(255,240,210,.55)!important;
-  text-shadow:none!important;
-}
-.skin-v09 #game.active .core-track{
-  box-shadow:inset 0 0 6px rgba(0,0,0,.5)!important;
-}
-
-/* R5 — Landing: kill hard dark card; weak feather so chrome stays continuous */
-.skin-v09 #landing.active:after{
-  /* R5 — nearly empty fill; skin hole + chrome continuity */
-  background:
-    radial-gradient(ellipse 70% 60% at 50% 42%, rgba(255,140,0,.05) 0%, transparent 65%)!important;
-  -webkit-mask-image:radial-gradient(ellipse 99% 98% at 50% 50%, #000 78%, transparent 100%)!important;
-  mask-image:radial-gradient(ellipse 99% 98% at 50% 50%, #000 78%, transparent 100%)!important;
-  opacity:.55!important;
-  border-radius:12px!important;
-}
-.skin-v09 #landing.active:before{
-  /* superseded by V0.9.22c mute bands */
-}
-.skin-v09 #landing .landing-stack{
-  background:transparent!important;
-  box-shadow:none!important;
-  border:0!important;
-}
-.skin-v09 #landing .tagline{
-  opacity:.7!important;
-  text-shadow:0 0 6px rgba(255,140,0,.28)!important;
-}
-
-/* R1 + R6 — Board inset-glow only; no L/R bleed arcs; no cell pulse */
-.skin-v09 #game.active .board{
-  background:#090909!important;
+.skin-v09 #game.active .praise .plate{
+  margin-top:14px!important;
+  padding:8px 26px!important;
+  border:2.8px solid #ff9a28!important;
+  border-radius:999px!important;
+  background:linear-gradient(180deg,#1c0c04 0%,#080808 100%)!important;
+  color:#ffe066!important;
+  letter-spacing:.16em!important;
+  font-size:clamp(15px,4.2vw,19px)!important;
+  font-weight:800!important;
+  text-shadow:0 0 10px rgba(255,190,60,.7)!important;
   box-shadow:
-    inset 0 0 24px rgba(0,0,0,.7),
-    inset 0 0 12px rgba(255,90,0,.1)!important;
-  /* Soft edge only — no hard shear, no side neon mix */
-  -webkit-mask-image:linear-gradient(90deg, transparent 0%, #000 1.4%, #000 98.6%, transparent 100%)!important;
-  mask-image:linear-gradient(90deg, transparent 0%, #000 1.4%, #000 98.6%, transparent 100%)!important;
+    0 0 12px #ff8a00,
+    0 0 28px rgba(255,100,0,.9),
+    0 0 52px rgba(255,70,0,.55),
+    inset 0 0 16px rgba(255,140,0,.32)!important;
 }
-.skin-v09 #game.active .cell.filled{
-  animation:none!important;
-  filter:brightness(1.06) saturate(1.05)!important;
-  box-shadow:
-    inset 0 2px rgba(255,255,255,.62),
-    inset 0 -5px 8px rgba(90,15,0,.48),
-    0 0 6px rgba(255,180,0,.55),
-    0 0 14px rgba(255,110,0,.42)!important;
+.skin-v09 #game.active .praise:before{
+  opacity:.95!important;
+  height:8px!important;
+  filter:blur(.2px)!important;
+  box-shadow:0 0 14px #fff,0 0 36px #ffae00,0 0 72px #ff5700,0 0 110px rgba(255,70,0,.8)!important;
 }
-.skin-v09 #game.active .cell.filled:before{
-  box-shadow:inset 0 0 6px rgba(255,240,180,.18)!important;
+.skin-v09 #game.active .first-hint,
+.skin-v09 #game.active #firstHint{
+  z-index:12;
 }
-
-/* R7 — Tray quieter than board (no competing neon frames) */
-.skin-v09 #game.active .piece:after{opacity:0!important}
-.skin-v09 #game.active .piece .mini{
-  box-shadow:
-    inset 0 1px rgba(255,255,255,.55),
-    0 0 5px rgba(255,140,0,.45),
-    0 0 10px rgba(255,90,0,.28)!important;
+/* Hide hint whenever praise is visible or clear FX peak class is on */
+.skin-v09 #game.active:has(#praise:not([hidden])) .first-hint,
+.skin-v09 #game.active:has(#praise:not([hidden])) #firstHint,
+.skin-v09 #game.active.praising .first-hint,
+.skin-v09 #game.active.praising #firstHint,
+.skin-v09 #game.active .first-hint.gone{
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
 }
-
-/* Keep gameplay FX host; no ambient layer above board chrome */
 .skin-v09 #game.active .gomba-fx-host{
-  z-index:26;
+  z-index:70!important;
 }
 
-
-/* V0.9.22c — mute painted L/R board-frame lightning (skin art residual) */
-.skin-v09 #game.active::before,
-.skin-v09 #landing.active::before{
-  content:""!important;
-  display:block!important;
-  position:absolute;
-  top:27.8%;
-  left:0;
-  right:0;
-  height:47.5%;
-  z-index:2;
-  pointer-events:none;
-  background:linear-gradient(90deg,
-    rgba(0,0,0,.82) 0%,
-    rgba(0,0,0,.7) 5.5%,
-    rgba(0,0,0,.35) 10.5%,
-    transparent 13.2%,
-    transparent 86.8%,
-    rgba(0,0,0,.35) 89.5%,
-    rgba(0,0,0,.7) 94.5%,
-    rgba(0,0,0,.82) 100%);
-  opacity:1;
-}
-/* Keep landing stack / board above mute bands */
-.skin-v09 #landing .landing-stack,
-.skin-v09 #landing .landing-chamber{z-index:3!important}
+/* Keep gameplay layers above residual chrome without mute bands */
 .skin-v09 #game.active #boardMachine,
 .skin-v09 #game.active .board-machine{z-index:3!important}
 .skin-v09 #game.active .reactor-hud,
 .skin-v09 #game.active .arcade-header,
 .skin-v09 #game.active #tray,
 .skin-v09 #game.active .tray{z-index:4!important}
+.skin-v09 #landing .landing-stack,
+.skin-v09 #landing .landing-chamber{z-index:3!important}
+
+
+/* V0.9.23 DOM clear beams + shards (fallback + additive to Phaser) */
+.skin-v09 #game.active .beam{
+  z-index:74!important;
+  filter:blur(.1px) brightness(1.35) saturate(1.2)!important;
+  box-shadow:0 0 10px #fff,0 0 22px #fff6c8,0 0 44px #ffd339,0 0 80px #ff7a00,0 0 130px #ff3e00!important;
+}
+.skin-v09 #game.active .beam.row{height:22px!important}
+.skin-v09 #game.active .beam.col{width:26px!important}
+.skin-v09 #game.active .beam.cross{width:190px!important;height:190px!important}
+.skin-v09 #game.active .shard{
+  width:14px!important;height:9px!important;
+  box-shadow:0 0 8px #ffb000,0 0 18px #ff7200,0 0 28px rgba(255,80,0,.85)!important;
+}
+.skin-v09 #game.active .spark{
+  width:5px!important;height:5px!important;
+  box-shadow:0 0 8px #fff,0 0 16px #ff8a00,0 0 28px #ff5a00!important;
+}
