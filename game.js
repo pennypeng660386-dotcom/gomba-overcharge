@@ -130,7 +130,7 @@
     try {
       speechSynthesis.cancel();
       const u=new SpeechSynthesisUtterance(word.replace('!',''));
-      /* Temporary: bright kid-like pitch until ElevenLabs samples load */
+      /* Fallback TTS if GOMBA_VO clip missing — bright/high pitch */
       u.lang='en-US'; u.rate=1.18; u.pitch=word==='OVERDRIVE!'?1.35:1.85; u.volume=1;
       const voices=speechSynthesis.getVoices();
       u.voice=voices.find(v=>/^en/i.test(v.lang)&&/Samantha|Kathy|Princess|Flo|Girl|Child|Kids|Siri|Zira|Aria|Jenny|Google UK English Female/i.test(v.name))
