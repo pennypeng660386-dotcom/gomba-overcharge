@@ -92,10 +92,6 @@
         </div>
         <div id="board" class="board" aria-label="8 by 8 board"></div>
         <div id="fxLayer" class="fx-layer" aria-hidden="true"></div>
-        <div id="praise" class="praise" hidden>
-          <span class="word" id="praiseWord">AMAZING!</span>
-          <span class="plate" id="praisePlate">COMBO X4</span>
-        </div>
         <div id="feedback" class="sr-only" aria-live="polite"></div>
         <div id="dragGhost" class="drag-ghost" hidden></div>
       </div>
@@ -140,6 +136,11 @@
       <button type="button" id="ctaHome" class="ghost-btn">BACK TO START</button>
     </section>
     <div id="gombaFxHost" class="gomba-fx-host" aria-hidden="true"></div>
+    <!-- V0.9.24 — praise ABOVE Phaser FX host (cabinet sibling, z above beams) -->
+    <div id="praise" class="praise" hidden>
+      <span class="word" id="praiseWord">AMAZING!</span>
+      <span class="plate" id="praisePlate">COMBO X4</span>
+    </div>
   </main>
   <script src="./assets/vendor/phaser.min.js"></script>
   <script src="./phaser-fx.js"></script>

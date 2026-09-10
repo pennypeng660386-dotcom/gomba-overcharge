@@ -130,32 +130,32 @@
       hot.generateTexture('fx-hot', 48, 48);
       hot.destroy();
 
-      /* V0.9.23 — hotter horizontal bolt beam */
+      /* V0.9.24 — thin orange bolt (not a white slab) */
       const beamH = this.add.graphics();
-      beamH.fillStyle(0xff3b00, 0.3);
-      beamH.fillRect(0, 0, 256, 48);
-      beamH.fillStyle(0xff8a00, 0.75);
-      beamH.fillRect(0, 8, 256, 32);
-      beamH.fillStyle(0xfff0b0, 1);
-      beamH.fillRect(0, 16, 256, 16);
-      beamH.fillStyle(0xffffff, 1);
-      beamH.fillRect(0, 20, 256, 8);
+      beamH.fillStyle(0xff3b00, 0.22);
+      beamH.fillRect(0, 14, 256, 20);
+      beamH.fillStyle(0xff8a00, 0.7);
+      beamH.fillRect(0, 18, 256, 12);
+      beamH.fillStyle(0xffe08a, 0.95);
+      beamH.fillRect(0, 21, 256, 6);
+      beamH.fillStyle(0xffffff, 0.85);
+      beamH.fillRect(0, 23, 256, 2);
       beamH.generateTexture('fx-beam-h', 256, 48);
       beamH.destroy();
 
-      /* V0.9.23 Concept Match — fatter white-hot vertical column blast */
+      /* V0.9.24 — molten vertical column (orange body, narrow white core) */
       const beamV = this.add.graphics();
-      beamV.fillStyle(0xff2a00, 0.35);
+      beamV.fillStyle(0xff2a00, 0.45);
       beamV.fillRect(0, 0, 64, 256);
-      beamV.fillStyle(0xff6a00, 0.75);
-      beamV.fillRect(8, 0, 48, 256);
-      beamV.fillStyle(0xffc43d, 1);
-      beamV.fillRect(16, 0, 32, 256);
-      beamV.fillStyle(0xfff6c8, 1);
-      beamV.fillRect(22, 0, 20, 256);
-      beamV.fillStyle(0xffffff, 1);
+      beamV.fillStyle(0xff6a00, 0.85);
+      beamV.fillRect(6, 0, 52, 256);
+      beamV.fillStyle(0xffa020, 1);
+      beamV.fillRect(14, 0, 36, 256);
+      beamV.fillStyle(0xffd24a, 1);
+      beamV.fillRect(20, 0, 24, 256);
+      beamV.fillStyle(0xfff6c8, 0.95);
       beamV.fillRect(26, 0, 12, 256);
-      beamV.fillStyle(0xffffff, 1);
+      beamV.fillStyle(0xffffff, 0.9);
       beamV.fillRect(29, 0, 6, 256);
       beamV.generateTexture('fx-beam-v', 64, 256);
       beamV.destroy();
@@ -370,7 +370,7 @@
       const b = cellAt(map, r, 7);
       if (!a || !b) return;
       const img = this.add.image((a.cx + b.cx) / 2, a.cy, 'fx-beam-h')
-        .setDisplaySize(map.board.w * 1.02, fat ? 42 : 26)
+        .setDisplaySize(map.board.w * 1.02, fat ? 18 : 12)
         .setBlendMode(Phaser.BlendModes.ADD)
         .setScale(0.08, 1)
         .setDepth(10)
@@ -387,7 +387,7 @@
       if (!a || !b) return;
       /* SoT column blast — fat white-hot vertical beam */
       const img = this.add.image(a.cx, (a.cy + b.cy) / 2, 'fx-beam-v')
-        .setDisplaySize(fat ? 56 : 38, map.board.h * 1.04)
+        .setDisplaySize(fat ? 44 : 30, map.board.h * 1.04)
         .setBlendMode(Phaser.BlendModes.ADD)
         .setScale(1, 0.08)
         .setDepth(10)
@@ -424,19 +424,20 @@
     }
 
     blast(x, y, dense) {
-      const cross = this.add.image(x, y, 'fx-cross').setBlendMode(Phaser.BlendModes.ADD).setScale(0.28).setDepth(13);
+      /* V0.9.24 — soft ember burst, not a white cross plate over praise */
+      const cross = this.add.image(x, y, 'fx-cross').setBlendMode(Phaser.BlendModes.ADD).setScale(0.18).setAlpha(dense ? 0.55 : 0.35).setDepth(9);
       this.tweens.add({
         targets: cross,
-        scale: dense ? 3.8 : 2.6,
+        scale: dense ? 1.6 : 1.15,
         alpha: 0,
-        duration: dense ? 760 : 560,
+        duration: dense ? 420 : 320,
         ease: 'Cubic.Out',
         onComplete: () => cross.destroy()
       });
-      this.sparks.explode(dense ? 140 : 72, x, y);
-      this.shards.explode(dense ? 88 : 48, x, y);
-      if (this.shardsTall) this.shardsTall.explode(dense ? 52 : 28, x, y);
-      this.embers.explode(dense ? 56 : 28, x, y);
+      this.sparks.explode(dense ? 90 : 64, x, y);
+      this.shards.explode(dense ? 36 : 24, x, y);
+      if (this.shardsTall) this.shardsTall.explode(dense ? 20 : 12, x, y);
+      this.embers.explode(dense ? 40 : 28, x, y);
     }
 
     shockwave(x, y) {
@@ -465,10 +466,10 @@
     }
 
     boardFlash(strong) {
-      /* V0.9.23 — hot peak flash without washing out DOM praise */
-      this.flash.setFillStyle(strong ? 0xffe8a8 : 0xffd080, 1);
-      this.flash.setAlpha(strong ? 0.28 : 0.16);
-      this.tweens.add({ targets: this.flash, alpha: 0, duration: strong ? 200 : 140 });
+      /* V0.9.24 — keep flash under praise; never wash AMAZING */
+      this.flash.setFillStyle(strong ? 0xffc878 : 0xffb060, 1);
+      this.flash.setAlpha(strong ? 0.14 : 0.08);
+      this.tweens.add({ targets: this.flash, alpha: 0, duration: strong ? 160 : 120 });
     }
 
     slam(word, plate, hold) {
@@ -492,41 +493,45 @@
         const right = map.board.x + map.board.w - inset;
         const top = map.board.y + inset;
         const bot = map.board.y + map.board.h - inset;
-        /* V0.9.23 Concept Match — SoT column blast + side bolts + shard debris */
+        /* V0.9.24 — SoT molten column + fine sparks; NO overexposed white cross */
         this.beamCol(map, 3, true);
-        this.beamRow(map, 3, true);
         const core = this.add.image(cx, cy, 'fx-beam-v')
-          .setDisplaySize(64, map.board.h * 1.02)
+          .setDisplaySize(52, map.board.h * 1.04)
           .setBlendMode(Phaser.BlendModes.ADD)
-          .setAlpha(1)
+          .setAlpha(0.98)
           .setDepth(12);
-        this.tweens.add({ targets: core, alpha: 0, delay: 280, duration: 320, onComplete: () => core.destroy() });
-        const core2 = this.add.image(cx, cy, 'fx-beam-v')
-          .setDisplaySize(28, map.board.h * 1.05)
+        this.tweens.add({ targets: core, alpha: 0, delay: 300, duration: 340, onComplete: () => core.destroy() });
+        const coreGlow = this.add.image(cx, cy, 'fx-beam-v')
+          .setDisplaySize(78, map.board.h * 1.0)
           .setBlendMode(Phaser.BlendModes.ADD)
-          .setAlpha(1)
-          .setDepth(13);
-        this.tweens.add({ targets: core2, alpha: 0, delay: 200, duration: 280, onComplete: () => core2.destroy() });
-        const crossH = this.add.image(cx, cy, 'fx-beam-h')
-          .setDisplaySize(map.board.w * 0.95, 36)
-          .setBlendMode(Phaser.BlendModes.ADD)
-          .setAlpha(0.95)
+          .setAlpha(0.55)
           .setDepth(11);
-        this.tweens.add({ targets: crossH, alpha: 0, delay: 240, duration: 280, onComplete: () => crossH.destroy() });
-        /* fat bolts into frame — SoT horizontal arcs */
-        this.bolt(cx, cy, left - 8, cy + (Math.random() - 0.5) * 18, true);
-        this.bolt(cx, cy, right + 8, cy + (Math.random() - 0.5) * 18, true);
-        this.bolt(cx, cy, left, cy - 24, true);
-        this.bolt(cx, cy, right, cy + 24, true);
-        this.bolt(cx, cy, cx + (Math.random() - 0.5) * 20, top, false);
-        this.bolt(cx, cy, cx + (Math.random() - 0.5) * 20, bot, false);
-        this.blast(cx, cy, true);
-        this.sparks.explode(64, cx, cy);
-        this.shards.explode(40, cx, cy);
-        if (this.shardsTall) this.shardsTall.explode(24, cx, cy);
-        this.embers.explode(28, cx, cy);
-        this.boardFlash(true);
-        this.cameras.main.shake(160, 0.011);
+        this.tweens.add({ targets: coreGlow, alpha: 0, delay: 220, duration: 360, onComplete: () => coreGlow.destroy() });
+        const coreHot = this.add.image(cx, cy, 'fx-beam-v')
+          .setDisplaySize(18, map.board.h * 1.06)
+          .setBlendMode(Phaser.BlendModes.ADD)
+          .setAlpha(0.9)
+          .setDepth(13);
+        this.tweens.add({ targets: coreHot, alpha: 0, delay: 180, duration: 280, onComplete: () => coreHot.destroy() });
+        /* thin horizontal energy arc only — never a white slab over AMAZING */
+        const crossH = this.add.image(cx, cy, 'fx-beam-h')
+          .setDisplaySize(map.board.w * 0.92, 10)
+          .setBlendMode(Phaser.BlendModes.ADD)
+          .setAlpha(0.7)
+          .setDepth(10);
+        this.tweens.add({ targets: crossH, alpha: 0, delay: 160, duration: 240, onComplete: () => crossH.destroy() });
+        /* side bolts into frame — SoT energy language */
+        this.bolt(cx, cy, left - 8, cy + (Math.random() - 0.5) * 14, true);
+        this.bolt(cx, cy, right + 8, cy + (Math.random() - 0.5) * 14, true);
+        this.bolt(cx, cy, left + 4, cy - 28, false);
+        this.bolt(cx, cy, right - 4, cy + 28, false);
+        this.blast(cx, cy, false);
+        this.sparks.explode(96, cx, cy);
+        this.shards.explode(28, cx, cy);
+        if (this.shardsTall) this.shardsTall.explode(16, cx, cy);
+        this.embers.explode(36, cx, cy);
+        this.boardFlash(false);
+        this.cameras.main.shake(140, 0.009);
       } else {
         this.sparks.explode(24, cx, cy);
       }
@@ -563,7 +568,7 @@
       if (!map) return;
       const rows = lines.rows || [];
       const cols = lines.cols || [];
-      const fat = true; /* V0.9.23 — SoT column blast always hot on clear */
+      const fat = true; /* V0.9.24 — molten columns stay hot; rows thinner via beamRow */
       this.heatCells(map, rows, cols);
       rows.forEach((r) => {
         this.beamRow(map, r, fat);
