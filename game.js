@@ -227,11 +227,24 @@
   function renderTray(){
     trayEl.innerHTML=state.tray.map((p,i)=>!p?'<div class="piece used"></div>':`<div class="piece" data-tray="${i}"><button type="button" class="rotate" data-rotate="${i}" aria-label="Rotate">↻</button>${renderPieceGrid(p,'mini')}</div>`).join('');
   }
+  function flashStat(el, next){
+    const v=String(next);
+    if(el.textContent===v) return;
+    el.textContent=v;
+    el.classList.remove('stat-flash');
+    void el.offsetWidth;
+    el.classList.add('stat-flash');
+    clearTimeout(el._statFlashT);
+    el._statFlashT=setTimeout(()=>el.classList.remove('stat-flash'),420);
+  }
   function updateHud(){
-    $('scoreText').textContent=state.score; $('bestText').textContent=Math.max(save.bestScore,state.score);
-    $('comboText').textContent=`×${state.combo}`; $('stageText').textContent=state.stage;
+    flashStat($('scoreText'), state.score);
+    flashStat($('bestText'), Math.max(save.bestScore,state.score));
+    flashStat($('comboText'), `×${state.combo}`);
+    flashStat($('stageText'), state.stage);
     $('coreText').textContent=`${Math.round(state.core)}%`; $('coreFill').style.width=`${state.core}%`;
-    $('coreGlow').style.opacity=String(.2+state.core*.007); $('mascotWrap').classList.toggle('charged',state.core>=70);
+    /* quieter default chamber glow — charged still marks high core */
+    $('coreGlow').style.opacity=String(.08+state.core*.004); $('mascotWrap').classList.toggle('charged',state.core>=70);
     if(window.GombaFX)GombaFX.syncCore(state.core);
   }
   function flashMsg(t){$('feedback').textContent=t;clearTimeout(flashMsg.t);flashMsg.t=setTimeout(()=>$('feedback').textContent='',850);}

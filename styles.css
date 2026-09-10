@@ -1434,3 +1434,168 @@ button,input{font:inherit}.sr-only{position:absolute;width:1px;height:1px;overfl
   border-radius:6px;
 }
 .skin-v09 #landing .landing-stack{z-index:3!important}
+
+/* ===== V0.9.22 — Phase A Clarity Build / 安静棋盘 ===== */
+/* 「不乱」first: board is the only hero. FX only on clear/combo. */
+
+/* R3 — Dim cabinet chrome far below board/blocks contrast */
+.cabinet.skin-v09 .cab-skin{
+  filter:brightness(.68) saturate(.72) contrast(.9);
+  opacity:.9;
+}
+/* Soft veil quiets painted L/R lightning without new skin art */
+.cabinet.skin-v09::after{
+  content:""!important;
+  display:block!important;
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.42) 0%, transparent 11%, transparent 89%, rgba(0,0,0,.42) 100%),
+    radial-gradient(ellipse 78% 62% at 50% 48%, transparent 42%, rgba(0,0,0,.22) 100%);
+  opacity:1;
+}
+
+/* R2 — One Hero Glow: PLAY (landing) + drag ghost (game). Kill persistent arcs. */
+.skin-v09 #game.active .chamber-arcs,
+.skin-v09 #game.active .chamber-sparks,
+.skin-v09 #landing .hero-sparks{
+  opacity:0!important;
+  visibility:hidden!important;
+  animation:none!important;
+}
+.skin-v09 #game.active .mascot-chamber:before{
+  animation:none!important;
+  opacity:.28!important;
+  box-shadow:inset 0 0 14px rgba(255,140,0,.3),0 0 10px rgba(255,120,0,.2)!important;
+  border-color:rgba(255,210,140,.35)!important;
+}
+.skin-v09 #game.active .mascot-chamber{
+  box-shadow:
+    0 0 8px rgba(255,160,0,.28),
+    0 0 18px rgba(255,100,0,.22),
+    inset 0 0 16px rgba(255,180,60,.32)!important;
+  background:radial-gradient(circle at 50% 44%,#fff6c8 0 6%,#ffc04a 14%,#ff8a00 32%,rgba(255,70,0,.55) 52%,rgba(30,8,0,.18) 72%,transparent 84%)!important;
+}
+.skin-v09 #game.active .hud-mascot{
+  filter:drop-shadow(0 0 5px rgba(255,170,40,.45)) drop-shadow(0 0 12px rgba(255,100,0,.28)) brightness(1.04) saturate(1.05)!important;
+}
+.skin-v09 #game.active .chamber-core{
+  opacity:.55!important;
+  animation:none!important;
+}
+.skin-v09 #game.active .mascot-chamber.charged,
+.skin-v09 #game.active .mascot-chamber.react-amazing,
+.skin-v09 #game.active .mascot-chamber.react-excellent,
+.skin-v09 #game.active .mascot-chamber.react-unstoppable,
+.skin-v09 #game.active .mascot-chamber.react-overdrive{
+  box-shadow:
+    0 0 14px rgba(255,200,80,.45),
+    0 0 28px rgba(255,110,0,.4),
+    inset 0 0 20px rgba(255,200,80,.4)!important;
+}
+.skin-v09 #landing .hero-reactor:before,
+.skin-v09 #landing .hero-reactor:after,
+.skin-v09 #landing .reactor-ring{
+  opacity:.22!important;
+  animation:none!important;
+}
+/* PLAY keeps the single landing hero glow */
+.skin-v09 #landing .play-btn{
+  box-shadow:
+    inset 0 2px rgba(255,255,255,.72),
+    0 7px 0 #5a1800,
+    0 0 24px #ff7600,
+    0 0 48px rgba(255,90,0,.78)!important;
+}
+/* Dragged piece = in-game hero glow */
+.skin-v09 #game.active .drag-ghost{
+  filter:drop-shadow(0 0 12px #ff8500) drop-shadow(0 0 26px rgba(255,100,0,.75))!important;
+}
+
+/* R4 — HUD values low-contrast by default; brief flash on change */
+.skin-v09 #game.active .dash{
+  border-color:rgba(255,140,40,.22)!important;
+  box-shadow:inset 0 0 14px rgba(0,0,0,.4)!important;
+}
+.skin-v09 #game.active .stat-grid strong{
+  color:rgba(255,228,180,.48)!important;
+  text-shadow:none!important;
+  font-weight:700!important;
+  transition:color .12s ease, text-shadow .12s ease, filter .12s ease;
+}
+.skin-v09 #game.active .stat-grid strong.stat-flash{
+  color:#fff8e0!important;
+  text-shadow:0 0 8px rgba(255,190,60,.85),0 0 16px rgba(255,120,0,.55)!important;
+}
+.skin-v09 #game.active .core-row strong{
+  color:rgba(255,240,210,.55)!important;
+  text-shadow:none!important;
+}
+.skin-v09 #game.active .core-track{
+  box-shadow:inset 0 0 6px rgba(0,0,0,.5)!important;
+}
+
+/* R5 — Landing: kill hard dark card; weak feather so chrome stays continuous */
+.skin-v09 #landing.active:after{
+  background:
+    radial-gradient(ellipse 74% 64% at 50% 40%, rgba(255,140,0,.07) 0%, rgba(0,0,0,.04) 48%, transparent 78%)!important;
+  -webkit-mask-image:radial-gradient(ellipse 98% 96% at 50% 50%, #000 72%, transparent 100%)!important;
+  mask-image:radial-gradient(ellipse 98% 96% at 50% 50%, #000 72%, transparent 100%)!important;
+  opacity:.9!important;
+  border-radius:10px!important;
+}
+.skin-v09 #landing.active:before{
+  background:
+    radial-gradient(ellipse 58% 48% at 50% 42%, rgba(255,130,0,.06) 0%, transparent 68%)!important;
+  -webkit-mask-image:radial-gradient(ellipse 90% 84% at 50% 48%, #000 38%, transparent 100%)!important;
+  mask-image:radial-gradient(ellipse 90% 84% at 50% 48%, #000 38%, transparent 100%)!important;
+  opacity:.7!important;
+}
+.skin-v09 #landing .landing-stack{
+  background:transparent!important;
+  box-shadow:none!important;
+  border:0!important;
+}
+.skin-v09 #landing .tagline{
+  opacity:.7!important;
+  text-shadow:0 0 6px rgba(255,140,0,.28)!important;
+}
+
+/* R1 + R6 — Board inset-glow only; no L/R bleed arcs; no cell pulse */
+.skin-v09 #game.active .board{
+  background:#090909!important;
+  box-shadow:
+    inset 0 0 24px rgba(0,0,0,.7),
+    inset 0 0 12px rgba(255,90,0,.1)!important;
+  /* Soft edge only — no hard shear, no side neon mix */
+  -webkit-mask-image:linear-gradient(90deg, transparent 0%, #000 1.4%, #000 98.6%, transparent 100%)!important;
+  mask-image:linear-gradient(90deg, transparent 0%, #000 1.4%, #000 98.6%, transparent 100%)!important;
+}
+.skin-v09 #game.active .cell.filled{
+  animation:none!important;
+  filter:none!important;
+  box-shadow:
+    inset 0 2px rgba(255,255,255,.58),
+    inset 0 -5px 8px rgba(90,15,0,.5),
+    0 0 5px rgba(255,170,0,.5),
+    0 0 12px rgba(255,100,0,.38)!important;
+}
+.skin-v09 #game.active .cell.filled:before{
+  box-shadow:inset 0 0 6px rgba(255,240,180,.18)!important;
+}
+
+/* R7 — Tray quieter than board (no competing neon frames) */
+.skin-v09 #game.active .piece:after{opacity:0!important}
+.skin-v09 #game.active .piece .mini{
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.55),
+    0 0 5px rgba(255,140,0,.45),
+    0 0 10px rgba(255,90,0,.28)!important;
+}
+
+/* Keep gameplay FX host; no ambient layer above board chrome */
+.skin-v09 #game.active .gomba-fx-host{
+  z-index:26;
+}
