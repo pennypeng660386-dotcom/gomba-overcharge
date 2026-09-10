@@ -121,7 +121,7 @@
     const clip=window.GOMBA_VO&&window.GOMBA_VO[key];
     if(clip){
       try{
-        const a=new Audio(clip); a.volume=.95; a.playbackRate=1.08; a.play().catch(()=>{});
+        const a=new Audio(clip); a.volume=.95; a.playbackRate=1; a.play().catch(()=>{});
         return;
       }catch(_){}
     }
