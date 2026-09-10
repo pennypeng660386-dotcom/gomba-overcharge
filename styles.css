@@ -1153,3 +1153,284 @@ button,input{font:inherit}.sr-only{position:absolute;width:1px;height:1px;overfl
   .skin-v09 #landing .hero-reactor{height:min(44%,155px)}
   .skin-v09 #landing .hero-img{width:58%!important;max-height:82%!important}
 }
+
+/* ===== V0.9.21 — whole-package cohesion + board flush + soft landing ===== */
+.cabinet.skin-v09 .cab-skin{
+  background-image:url("./assets/ui/cabinet-skin-v021.png");
+}
+
+/* Chamber: slightly larger contain so head fills porthole without lid clip */
+.skin-v09 #landing .landing-chamber img,
+.skin-v09 #game.active .hud-mascot{
+  width:78%!important;
+  height:78%!important;
+  max-width:78%!important;
+  max-height:78%!important;
+  margin:0!important;
+  object-fit:contain!important;
+  object-position:50% 52%!important;
+}
+
+/* Landing: feathered vignette — kill pasted black window feel */
+.skin-v09 #landing.active:before{
+  top:29.49%;
+  left:13.39%;
+  width:77.68%;
+  height:44.43%;
+  background:
+    radial-gradient(ellipse 68% 58% at 50% 40%, rgba(255,130,0,.16) 0%, rgba(18,8,0,.08) 42%, rgba(0,0,0,.14) 72%, transparent 100%);
+  border-radius:2px;
+  -webkit-mask-image:radial-gradient(ellipse 92% 88% at 50% 48%, #000 55%, transparent 100%);
+  mask-image:radial-gradient(ellipse 92% 88% at 50% 48%, #000 55%, transparent 100%);
+  opacity:.95;
+}
+.skin-v09 #landing .landing-stack{
+  top:29.49%;
+  left:13.39%;
+  width:77.68%;
+  height:44.43%;
+  overflow:visible!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  border:0!important;
+  padding:4.2% 3% 2%;
+  gap:clamp(2px,0.55vh,6px);
+  justify-content:center;
+  align-items:center;
+}
+.skin-v09 #landing .hero-reactor{
+  width:min(56%,168px);
+  height:min(48%,172px);
+  margin-top:0;
+  overflow:visible!important;
+}
+.skin-v09 #landing .hero-img{
+  width:62%!important;
+  max-height:88%!important;
+  object-fit:contain!important;
+  object-position:50% 55%;
+}
+.skin-v09 #landing .tagline{
+  margin:0;
+  opacity:.92;
+  letter-spacing:.12em;
+  text-shadow:0 0 10px rgba(255,140,0,.55);
+}
+.skin-v09 #landing .play-btn{
+  width:min(72%,220px);
+  min-height:clamp(40px,5.6vh,50px);
+  border-radius:14px;
+  box-shadow:
+    inset 0 2px rgba(255,255,255,.7),
+    0 7px 0 #5a1800,
+    0 0 22px #ff7600,
+    0 0 48px rgba(255,90,0,.7);
+}
+.skin-v09 #landing .meta-line{opacity:.75;margin-top:2px}
+
+/* Board: exact flush to v021/v020 hole — no dark rim gap */
+.skin-v09 #game.active #boardMachine,
+.skin-v09 #game.active .board-machine{
+  top:29.49%!important;
+  left:13.39%!important;
+  width:77.68%!important;
+  height:44.43%!important;
+  padding:0!important;
+  margin:0;
+  overflow:visible!important;
+  background:transparent;
+  border:0;
+  box-shadow:none;
+  filter:none!important;
+  outline:0;
+  z-index:3;
+}
+.skin-v09 #game.active .board{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  max-width:none;
+  aspect-ratio:auto;
+  margin:0;
+  padding:1.05%;
+  gap:1.55%;
+  box-sizing:border-box;
+  border:0;
+  border-radius:0;
+  /* Slightly softer well — less hard black card vs chrome */
+  background:
+    radial-gradient(ellipse 80% 70% at 50% 45%, rgba(255,110,0,.07), transparent 60%),
+    #060606;
+  box-shadow:
+    inset 0 0 16px rgba(0,0,0,.5),
+    -4px 0 12px rgba(255,100,0,.12),
+    4px 0 12px rgba(255,100,0,.12);
+  overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg, transparent 0%, #000 1.2%, #000 98.8%, transparent 100%);
+  mask-image:linear-gradient(90deg, transparent 0%, #000 1.2%, #000 98.8%, transparent 100%);
+}
+.skin-v09 #game.active .fx-layer{
+  inset:-1.5% -2.5%!important;
+  overflow:visible!important;
+  z-index:28;
+  -webkit-mask-image:linear-gradient(90deg, transparent 0%, #000 2.2%, #000 97.8%, transparent 100%);
+  mask-image:linear-gradient(90deg, transparent 0%, #000 2.2%, #000 97.8%, transparent 100%);
+  pointer-events:none;
+}
+
+/* Praise: single readable layer (DOM owns text; no muddy double) */
+.skin-v09 #game.active .praise{
+  z-index:72!important;
+  top:47%;
+}
+.skin-v09 #game.active .praise .word{
+  -webkit-text-stroke:3.5px #100300;
+  filter:
+    drop-shadow(0 2px 0 #080200)
+    drop-shadow(0 0 8px rgba(255,255,230,.9))
+    drop-shadow(0 0 18px #ffc000)
+    drop-shadow(0 0 32px rgba(255,90,0,.75));
+}
+.skin-v09 #game.active .praise:before{
+  opacity:.7;
+  height:4px;
+}
+
+/* Trays: exact bay hole; pieces optically centered in each bay */
+.skin-v09 #game.active #tray,
+.skin-v09 #game.active .tray{
+  top:77.57%!important;
+  left:9.46%!important;
+  right:10.31%!important;
+  height:9.51%!important;
+  /* Match unequal painted bay widths + equal chrome gaps */
+  grid-template-columns:27.28% 29% 27.69%!important;
+  gap:8.21%!important;
+  align-items:stretch;
+}
+.skin-v09 #game.active .piece{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  /* Equal inset so grids sit true-center (rotate chip is absolute) */
+  padding:10% 10% 10%!important;
+  box-sizing:border-box;
+  background:transparent!important;
+  border-color:transparent!important;
+  box-shadow:none!important;
+}
+.skin-v09 #game.active .piece .piece-grid{
+  margin:0 auto!important;
+  place-self:center;
+  transform:translateY(2%); /* optical center vs rotate chip */
+}
+.skin-v09 #game.active .rotate{
+  top:2%;
+  right:2%;
+  width:clamp(16px,3.8vw,22px);
+  height:clamp(16px,3.8vw,22px);
+  font-size:clamp(9px,2.4vw,12px);
+}
+.skin-v09 #game.active .piece .mini{
+  width:clamp(11px,2.9vw,15px);
+  height:clamp(11px,2.9vw,15px);
+}
+
+/* Keep HUD wells transparent — skin paints frames */
+.skin-v09 #game.active .stat-grid div{
+  background:transparent!important;
+  border-color:transparent!important;
+  box-shadow:none!important;
+}
+.skin-v09 #game.active .core-track{
+  background:transparent!important;
+}
+
+@media(max-height:720px){
+  .skin-v09 #landing .hero-reactor{height:min(46%,158px)}
+  .skin-v09 #landing .hero-img{width:60%!important;max-height:86%!important}
+}
+
+/* ===== V0.9.21b — flush cells, tray center, softer landing card ===== */
+.skin-v09 #landing .landing-chamber img,
+.skin-v09 #game.active .hud-mascot{
+  width:82%!important;
+  height:82%!important;
+  max-width:82%!important;
+  max-height:82%!important;
+  object-fit:contain!important;
+  object-position:50% 50%!important;
+}
+
+/* Landing vignette: wider feather, lower opacity — hole skin already soft-edged */
+.skin-v09 #landing.active:before{
+  top:28.6%;
+  left:12.2%;
+  width:80.2%;
+  height:46.2%;
+  background:
+    radial-gradient(ellipse 62% 54% at 50% 42%, rgba(255,130,0,.14) 0%, rgba(12,6,0,.06) 40%, transparent 72%);
+  -webkit-mask-image:radial-gradient(ellipse 88% 82% at 50% 48%, #000 40%, transparent 100%);
+  mask-image:radial-gradient(ellipse 88% 82% at 50% 48%, #000 40%, transparent 100%);
+  opacity:1;
+  border-radius:8px;
+}
+.skin-v09 #landing .landing-stack{
+  top:29.49%;
+  left:13.39%;
+  width:77.68%;
+  height:44.43%;
+  background:transparent!important;
+  box-shadow:none!important;
+  border:0!important;
+}
+
+/* Cells flush — minimal padding so grid meets chrome (no big dark rim) */
+.skin-v09 #game.active .board{
+  padding:0.35%!important;
+  gap:1.35%!important;
+  background:
+    radial-gradient(ellipse 78% 68% at 50% 45%, rgba(255,110,0,.05), transparent 58%),
+    #070707;
+}
+
+/* Tray piece optical center */
+.skin-v09 #game.active .piece{
+  display:grid!important;
+  place-items:center!important;
+  padding:0!important;
+  align-content:center!important;
+  justify-items:center!important;
+}
+.skin-v09 #game.active .piece .piece-grid{
+  grid-area:1 / 1;
+  margin:0!important;
+  transform:none!important;
+  place-self:center!important;
+}
+.skin-v09 #game.active .rotate{
+  position:absolute!important;
+  top:3%!important;
+  right:3%!important;
+  margin:0!important;
+  z-index:5;
+}
+
+/* Landing hole soft fill — chrome-lit, feathered (anti pasted-card) */
+.skin-v09 #landing.active:after{
+  content:"";
+  position:absolute;
+  top:29.49%;
+  left:13.39%;
+  width:77.68%;
+  height:44.43%;
+  z-index:1;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 38%, rgba(255,140,0,.2) 0%, rgba(40,16,0,.12) 38%, rgba(0,0,0,.28) 70%, rgba(0,0,0,.18) 100%);
+  -webkit-mask-image:radial-gradient(ellipse 96% 94% at 50% 50%, #000 62%, transparent 100%);
+  mask-image:radial-gradient(ellipse 96% 94% at 50% 50%, #000 62%, transparent 100%);
+  border-radius:6px;
+}
+.skin-v09 #landing .landing-stack{z-index:3!important}
