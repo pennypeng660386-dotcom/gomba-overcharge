@@ -287,44 +287,75 @@ button,input{font:inherit}.sr-only{position:absolute;width:1px;height:1px;overfl
 }
 
 /* Hide duplicate painted SCORE/BEST/COMBO/STAGE/CORE labels; keep live values */
+/* Absolute map inside .dash so values sit IN the painted boxes (not below them) */
 .skin-v09 #game.active .dash{
-  gap:3%;
-  justify-content:center;
+  position:relative;
+  display:block;
+  gap:0;
+  justify-content:unset;
   min-height:0;
   height:100%;
-  padding:1% 1% 0 0;
+  padding:0;
 }
 .skin-v09 #game.active .core-row span,
 .skin-v09 #game.active .stat-grid span{
-  opacity:0;height:0;overflow:hidden;margin:0;padding:0;font-size:0;line-height:0;
+  display:none!important;
 }
 .skin-v09 #game.active .core-row{
-  justify-content:flex-end;min-height:0;height:18%;align-items:center;
+  position:absolute;
+  top:2%;
+  right:2%;
+  left:auto;
+  width:auto;
+  height:20%;
+  margin:0;
+  justify-content:flex-end;
+  align-items:center;
+  z-index:2;
 }
 .skin-v09 #game.active .core-row strong{
-  font-size:clamp(11px,2.8vw,15px);color:#fff6d8;letter-spacing:.04em;
+  font-size:clamp(10px,2.6vw,14px);color:#fff6d8;letter-spacing:.04em;
   text-shadow:0 0 8px #ff8a00,0 0 16px rgba(255,90,0,.65);
 }
+/* Overlay fill on painted CORE bar */
 .skin-v09 #game.active .core-track{
-  height:14%;
-  min-height:8px;
-  background:rgba(0,0,0,.35);
-  border-color:rgba(255,138,34,.35);
-  box-shadow:inset 0 0 8px rgba(0,0,0,.65);
-}
-.skin-v09 #game.active .stat-grid{
-  gap:2%;
-  flex:1;
+  position:absolute;
+  top:22%;
+  left:1%;
+  right:1%;
+  height:18%;
   min-height:0;
+  margin:0;
+  padding:0;
+  background:rgba(0,0,0,.25);
+  border-color:transparent;
+  box-shadow:inset 0 0 6px rgba(0,0,0,.55);
+  z-index:1;
+}
+/* Four value cells centered inside painted SCORE/BEST/COMBO/STAGE boxes */
+.skin-v09 #game.active .stat-grid{
+  position:absolute;
+  top:48%;
+  left:0;
+  right:0;
+  height:44%;
+  margin:0;
+  gap:3%;
+  flex:none;
   align-content:stretch;
+  z-index:2;
 }
 .skin-v09 #game.active .stat-grid div{
-  padding:4% 1%;
+  padding:0;
+  margin:0;
   display:flex;align-items:center;justify-content:center;
   background:transparent;border-color:transparent;box-shadow:none;
 }
 .skin-v09 #game.active .stat-grid strong{
-  font-size:clamp(12px,3vw,16px);color:#fff4d6;
+  display:block;
+  line-height:1;
+  transform:translateY(-8%);
+  font-size:clamp(12px,3.1vw,17px);color:#fff4d6;
   text-shadow:0 0 8px rgba(255,140,0,.55);
 }
 
