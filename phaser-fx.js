@@ -423,25 +423,44 @@
 
     slam(word, plate, hold) {
       const map = boardMap();
-      if (map) this.praise.setPosition(map.board.cx, map.board.cy);
+      const cx = map ? map.board.cx : this.praise.x;
+      const cy = map ? map.board.cy : this.praise.y;
+      if (map) this.praise.setPosition(cx, cy);
       this.praiseWord.setText(word);
       this.praiseSub.setText(plate);
-      this.praiseWord.setFontSize(word.length > 10 ? 52 : 64);
-      this.praise.setAlpha(1).setScale(0.24);
-      this.sparks.explode(12, this.praise.x, this.praise.y);
+      this.praiseWord.setFontSize(word.length > 10 ? 56 : 72);
+      this.praise.setAlpha(1).setScale(0.18);
+      /* Concept-art hit: vertical beam + cross bolts + shard storm */
+      if (map) {
+        this.beamCol(map, 3, true);
+        this.beamCol(map, 4, true);
+        this.bolt(map.board.x, cy, map.board.x + map.board.w, cy, true);
+        this.bolt(map.board.x, cy - 18, map.board.x + map.board.w, cy + 12, true);
+        this.bolt(map.board.x, cy + 16, map.board.x + map.board.w, cy - 10, false);
+        this.bolt(cx, map.board.y, cx, map.board.y + map.board.h, true);
+        this.blast(cx, cy, true);
+        this.shockwave(cx, cy);
+        this.sparks.explode(56, cx, cy);
+        this.shards.explode(36, cx, cy);
+        this.embers.explode(22, cx, cy);
+        this.boardFlash(true);
+        this.cameras.main.shake(220, 0.012);
+      } else {
+        this.sparks.explode(28, cx, cy);
+      }
       this.tweens.killTweensOf(this.praise);
       this.tweens.add({
         targets: this.praise,
-        scale: 1.14,
-        duration: 130,
+        scale: 1.22,
+        duration: 140,
         ease: 'Back.Out',
         onComplete: () => {
           this.tweens.add({
             targets: this.praise,
-            scale: 0.98,
+            scale: 0.96,
             duration: 70,
             onComplete: () => {
-              this.tweens.add({ targets: this.praise, alpha: 0, scale: 1.04, delay: hold, duration: 180 });
+              this.tweens.add({ targets: this.praise, alpha: 0, scale: 1.08, delay: hold, duration: 200 });
             }
           });
         }
@@ -494,7 +513,9 @@
       if (!active) return;
       this.syncLayout();
       const plate = combo > 1 ? `COMBO X${combo}` : 'LINE CLEAR';
-      this.slam(word, plate, combo >= 4 ? 620 : 480);
+      this.slam(word, plate, combo >= 4 ? 700 : combo >= 2 ? 560 : 480);
+      this.arcNearMascot();
+      if (combo >= 2) this.time.delayedCall(50, () => this.arcNearMascot());
     }
 
     playOverdrive() {

@@ -114,15 +114,28 @@
   }
   function click() { noise(0,.035,.028,2200); tone(180,0,.06,'triangle',.035,70); }
   function speak(word) {
-    if(!soundOn || !('speechSynthesis' in window)) return;
-    if(!['GREAT!','AMAZING!','EXCELLENT!','UNSTOPPABLE!','OVERDRIVE!'].includes(word)) return;
-    const now=Date.now(); if(now-lastSpeak<850) return; lastSpeak=now;
+    if(!soundOn) return;
+    const now=Date.now(); if(now-lastSpeak<700) return; lastSpeak=now;
+    /* Prefer prebaked cheerful kid VO (ElevenLabs) when present */
+    const key=(word||'').replace('!','').toUpperCase();
+    const clip=window.GOMBA_VO&&window.GOMBA_VO[key];
+    if(clip){
+      try{
+        const a=new Audio(clip); a.volume=.95; a.playbackRate=1; a.play().catch(()=>{});
+        return;
+      }catch(_){}
+    }
+    if(!('speechSynthesis' in window)) return;
+    if(!['NICE!','GREAT!','AMAZING!','EXCELLENT!','UNSTOPPABLE!','OVERDRIVE!'].includes(word)) return;
     try {
       speechSynthesis.cancel();
       const u=new SpeechSynthesisUtterance(word.replace('!',''));
-      u.lang='en-US'; u.rate=1.02; u.pitch=word==='OVERDRIVE!'?.78:1.08; u.volume=.95;
+      /* Temporary: bright kid-like pitch until ElevenLabs samples load */
+      u.lang='en-US'; u.rate=1.18; u.pitch=word==='OVERDRIVE!'?1.35:1.85; u.volume=1;
       const voices=speechSynthesis.getVoices();
-      u.voice=voices.find(v=>/^en/i.test(v.lang)&&/Samantha|Daniel|Aria|Google US English|Karen/i.test(v.name)) || voices.find(v=>/^en/i.test(v.lang)) || null;
+      u.voice=voices.find(v=>/^en/i.test(v.lang)&&/Samantha|Kathy|Princess|Flo|Girl|Child|Kids|Siri|Zira|Aria|Jenny|Google UK English Female/i.test(v.name))
+        || voices.find(v=>/^en/i.test(v.lang)&&/female|woman/i.test(v.name))
+        || voices.find(v=>/^en/i.test(v.lang)) || null;
       speechSynthesis.speak(u);
     } catch(_){}
   }
@@ -141,13 +154,12 @@
       [262,523,784,1047,1568,2093].forEach((f,i)=>tone(f,.1+i*.08,.28,i<2?'square':'triangle',.045));
       return;
     }
-    /* soft low thump + sparkle like match-3 / lesson-complete ding */
-    tone(word==='EXCELLENT!'||word==='UNSTOPPABLE!'?98:130,0,.12,'sine',.07,40);
-    noise(.005,.07,.038,word==='AMAZING!'||word==='EXCELLENT!'?2400:1600);
+    /* Cheerful sparkle — bright, no deep boom */
+    noise(.0,.05,.03,3200);
+    tone(880,0,.05,'sine',.035,1200);
     const ladder=sets[word]||sets['NICE!'];
-    ladder.forEach((f,i)=>tone(f,.03+i*.055,.16+(i*.02),'triangle',.048-.003*i));
-    /* shimmer tail */
-    [1760,2093,2637].forEach((f,i)=>tone(f,.12+ladder.length*.05+i*.03,.08,'sine',.016));
+    ladder.forEach((f,i)=>tone(f,.02+i*.045,.14+(i*.015),'triangle',.055-.004*i));
+    [2093,2637,3136].forEach((f,i)=>tone(f,.1+ladder.length*.04+i*.025,.07,'sine',.022));
   }
   function sfx(kind, word='') {
     if(!soundOn) return;
@@ -158,7 +170,7 @@
       tone(523,.04,.09,'sine',.035,784); tone(784,.09,.1,'triangle',.028);
     }
     else if(kind==='invalid'){ tone(140,0,.12,'sawtooth',.04,90); tone(110,.06,.14,'triangle',.035); }
-    else if(kind==='clear'||kind==='combo'){ rewardSfx(word||'NICE!'); if(kind==='combo') speak(word); }
+    else if(kind==='clear'||kind==='combo'){ rewardSfx(word||'NICE!'); speak(word||'NICE!'); }
     else if(kind==='overdrive'){ rewardSfx('OVERDRIVE!'); speak('OVERDRIVE!'); }
     else if(kind==='over'){ tone(330,0,.1,'triangle',.045); tone(196,.07,.22,'sine',.04,110); }
     else if(kind==='stage'){ tone(659,0,.07,'triangle',.05); tone(880,.07,.1,'triangle',.05); tone(1175,.14,.16,'sine',.04); }
@@ -264,7 +276,7 @@
   }
   function spawnDebris(big=false){
     const lr=fxLayer.getBoundingClientRect(), br=boardEl.getBoundingClientRect(), cx=br.left-lr.left+br.width/2, cy=br.top-lr.top+br.height/2;
-    const shards=big?46:28, sparks=big?38:22;
+    const shards=big?64:40, sparks=big?52:32;
     for(let i=0;i<shards;i++){const p=document.createElement('i');p.className='shard';p.style.left=(cx+(Math.random()-.5)*br.width*.65)+'px';p.style.top=(cy+(Math.random()-.5)*br.height*.35)+'px';p.style.setProperty('--dx',((Math.random()-.5)*(big?360:240))+'px');p.style.setProperty('--dy',((-50-Math.random()*(big?240:170)))+'px');fxLayer.appendChild(p);setTimeout(()=>p.remove(),760);}
     for(let i=0;i<sparks;i++){const p=document.createElement('i');p.className='spark';p.style.left=(cx+(Math.random()-.5)*br.width*.7)+'px';p.style.top=(cy+(Math.random()-.5)*br.height*.32)+'px';p.style.setProperty('--dx',((Math.random()-.5)*(big?420:290))+'px');p.style.setProperty('--dy',((-50-Math.random()*(big?260:190)))+'px');fxLayer.appendChild(p);setTimeout(()=>p.remove(),820);}
   }
