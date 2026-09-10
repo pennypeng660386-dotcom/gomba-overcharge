@@ -121,7 +121,7 @@
     const clip=window.GOMBA_VO&&window.GOMBA_VO[key];
     if(clip){
       try{
-        const a=new Audio(clip); a.volume=.95; a.playbackRate=1; a.play().catch(()=>{});
+        const a=new Audio(clip); a.volume=.95; a.playbackRate=1.08; a.play().catch(()=>{});
         return;
       }catch(_){}
     }
@@ -277,8 +277,8 @@
   function spawnDebris(big=false){
     const lr=fxLayer.getBoundingClientRect(), br=boardEl.getBoundingClientRect(), cx=br.left-lr.left+br.width/2, cy=br.top-lr.top+br.height/2;
     const shards=big?64:40, sparks=big?52:32;
-    for(let i=0;i<shards;i++){const p=document.createElement('i');p.className='shard';p.style.left=(cx+(Math.random()-.5)*br.width*.65)+'px';p.style.top=(cy+(Math.random()-.5)*br.height*.35)+'px';p.style.setProperty('--dx',((Math.random()-.5)*(big?360:240))+'px');p.style.setProperty('--dy',((-50-Math.random()*(big?240:170)))+'px');fxLayer.appendChild(p);setTimeout(()=>p.remove(),760);}
-    for(let i=0;i<sparks;i++){const p=document.createElement('i');p.className='spark';p.style.left=(cx+(Math.random()-.5)*br.width*.7)+'px';p.style.top=(cy+(Math.random()-.5)*br.height*.32)+'px';p.style.setProperty('--dx',((Math.random()-.5)*(big?420:290))+'px');p.style.setProperty('--dy',((-50-Math.random()*(big?260:190)))+'px');fxLayer.appendChild(p);setTimeout(()=>p.remove(),820);}
+    for(let i=0;i<shards;i++){const p=document.createElement('i');p.className='shard';p.style.left=(cx+(Math.random()-.5)*br.width*.7)+'px';p.style.top=(cy+(Math.random()-.5)*br.height*.4)+'px';p.style.setProperty('--dx',((Math.random()-.5)*(big?400:280))+'px');p.style.setProperty('--dy',((-40-Math.random()*(big?280:190)))+'px');p.style.setProperty('--rot',((Math.random()-.5)*720)+'deg');fxLayer.appendChild(p);setTimeout(()=>p.remove(),760);}
+    for(let i=0;i<sparks;i++){const p=document.createElement('i');p.className='spark';p.style.left=(cx+(Math.random()-.5)*br.width*.75)+'px';p.style.top=(cy+(Math.random()-.5)*br.height*.4)+'px';p.style.setProperty('--dx',((Math.random()-.5)*(big?460:320))+'px');p.style.setProperty('--dy',((-40-Math.random()*(big?280:200)))+'px');fxLayer.appendChild(p);setTimeout(()=>p.remove(),820);}
   }
   function spawnCoreBits(){
     const lr=fxLayer.getBoundingClientRect(),br=boardEl.getBoundingClientRect(),core=$('mascotWrap').getBoundingClientRect();
@@ -292,6 +292,8 @@
     if(window.GombaFX&&GombaFX.ready){
       GombaFX.lineClear(lines,{n,combo});
       GombaFX.combo(word,combo);
+      /* Extra DOM rect shards/sparks (show through transparent Phaser canvas) */
+      spawnDebris(n>=2||combo>=3);
     }else{
       fireBeams(lines,n>=2||combo>=3);spawnDebris(n>=2||combo>=3);spawnCoreBits();
     }
@@ -314,8 +316,9 @@
     const target=pickOverdriveTarget(state.board), lines={rows:[],cols:[]}; if(target.type==='row')lines.rows.push(target.index);else lines.cols.push(target.index);
     const marks=applyClears(state.board,lines);state.score+=150+target.count*8;state.overdrives++;save.totalOverdrives++;state.core=0;persist();
     await wait(100);shell.classList.add('overdrive-dark');$('coreFill').classList.add('hot');reactMascot('overdrive');state.clearing=marks;renderBoard();updateHud();
+    showPraise('OVERDRIVE!',state.combo);
     if(window.GombaFX&&GombaFX.ready){GombaFX.overdrive(target);}
-    else{fireBeams({rows:[target.type==='row'?target.index:3],cols:[target.type==='col'?target.index:3]},true);spawnDebris(true);spawnCoreBits();showPraise('OVERDRIVE!',state.combo);}
+    else{fireBeams({rows:[target.type==='row'?target.index:3],cols:[target.type==='col'?target.index:3]},true);spawnDebris(true);spawnCoreBits();}
     flashScreen();powerFrame(true);shake(360);flashMsg('OVERDRIVE!');sfx('overdrive');checkStage();track('overdrive',{stage:state.stage,target});
     await wait(950);state.clearing=null;$('coreFill').classList.remove('hot');shell.classList.remove('overdrive-dark');renderBoard();updateHud();if(state.overdrives===3)maybeShowCta('overdrive3');
   }
