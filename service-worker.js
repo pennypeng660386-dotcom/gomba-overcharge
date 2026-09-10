@@ -1,4 +1,4 @@
-const CACHE = 'gomba-overdrive-v0.9.6';
+const CACHE = 'gomba-overdrive-v0.9.7';
 const ASSETS = [
   './',
   './index.html',
