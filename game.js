@@ -226,10 +226,33 @@
   function shake(ms=200){shell.classList.remove('shaking');void shell.offsetWidth;shell.classList.add('shaking');setTimeout(()=>shell.classList.remove('shaking'),ms);}
   function flashScreen(){const e=$('fxFlash');e.classList.remove('on');void e.offsetWidth;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),300);}
   function showPraise(word,combo){
-    const e=$('praise'); $('praiseWord').textContent=word;
-    $('praisePlate').textContent=word==='OVERDRIVE!'?'CORE 100%':combo>=1?`COMBO X${combo}`:'LINE CLEAR';
-    e.hidden=false; e.style.animation='none'; void e.offsetWidth; e.style.animation='';
-    clearTimeout(showPraise.t); showPraise.t=setTimeout(()=>e.hidden=true,1180);
+    const e=$('praise'), wordEl=$('praiseWord'), plate=$('praisePlate');
+    wordEl.textContent=word;
+    plate.textContent=word==='OVERDRIVE!'?'CORE 100%':combo>=1?`COMBO X${combo}`:'LINE CLEAR';
+    e.hidden=false;
+    clearTimeout(showPraise.t);
+    const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(window.gsap&&!reduce){
+      e.style.animation='none';
+      if(showPraise.tl) showPraise.tl.kill();
+      gsap.set(e,{autoAlpha:1,xPercent:-50,yPercent:-50,scale:.2,rotation:-8,force3D:true});
+      gsap.set(wordEl,{scale:1,y:0});
+      gsap.set(plate,{autoAlpha:0,scale:.7,y:12});
+      showPraise.tl=gsap.timeline({
+        defaults:{ease:'power3.out'},
+        onComplete(){ e.hidden=true; gsap.set(e,{clearProps:'all'}); e.style.animation=''; }
+      })
+        .to(e,{scale:1.22,rotation:2,duration:.22,ease:'back.out(2.4)'})
+        .to(e,{scale:.98,rotation:-1,duration:.12},'>-0.02')
+        .to(e,{scale:1.06,rotation:0,duration:.1})
+        .to(plate,{autoAlpha:1,scale:1,y:0,duration:.28,ease:'back.out(1.8)'},'<-0.18')
+        .to(wordEl,{scale:1.06,duration:.18,yoyo:true,repeat:1,ease:'power1.inOut'},'-=0.05')
+        .to(e,{autoAlpha:0,yPercent:-62,scale:1.08,duration:.28,ease:'power2.in'},'+=0.42');
+      return;
+    }
+    e.style.animation='';
+    void e.offsetWidth;
+    showPraise.t=setTimeout(()=>{e.hidden=true;},1180);
   }
   function powerFrame(big=false){ shell.classList.remove('power-hit','power-max'); void shell.offsetWidth; shell.classList.add(big?'power-max':'power-hit'); setTimeout(()=>shell.classList.remove('power-hit','power-max'),big?1000:650); }
 
