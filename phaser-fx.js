@@ -298,22 +298,9 @@
     }
 
     makeAmbience() {
-      this.tweens.add({ targets: this.edge, alpha: { from: 0.18, to: 0.55 }, duration: 1800, yoyo: true, repeat: -1 });
-      this.tweens.add({ targets: this.haze, alpha: { from: 0.08, to: 0.28 }, x: '+=40', duration: 4200, yoyo: true, repeat: -1, ease: 'Sine.InOut' });
-      this.time.addEvent({
-        delay: 720,
-        loop: true,
-        callback: () => {
-          if (!active) return;
-          const map = boardMap();
-          if (!map) return;
-          const filled = [...boardEl().querySelectorAll('.cell.filled')];
-          const pick = filled[Math.floor(Math.random() * Math.max(1, filled.length))];
-          const q = localRect(pick || boardEl());
-          if (q) this.sparks.explode(2, q.cx, q.cy);
-          if (Math.random() < 0.35) this.arcNearMascot();
-        }
-      });
+      /* V0.9.22 Phase A — no persistent board particles/arcs; FX only on clear/combo */
+      this.edge.setAlpha(0);
+      this.haze.setAlpha(0);
     }
 
     syncLayout() {
@@ -335,12 +322,15 @@
         this.halo.setPosition(mascot.cx, mascot.cy);
         this.halo.setDisplaySize(mascot.w * 1.35, mascot.h * 1.35);
       }
-      this.halo.setAlpha(active ? 0.18 + corePct * 0.006 : 0);
+      /* V0.9.22 — quieter mascot halo; react/combo still bumps via mascotReact */
+      this.halo.setAlpha(active ? 0.06 + corePct * 0.002 : 0);
       this.edge.setVisible(active);
       this.haze.setVisible(active);
       this.praise.setVisible(active);
-      if (active) this.idleEmbers.start();
-      else this.idleEmbers.stop();
+      /* V0.9.22 — idle embers stay off (R1 clarity) */
+      this.idleEmbers.stop();
+      this.edge.setAlpha(0);
+      this.haze.setAlpha(0);
       return map;
     }
 
