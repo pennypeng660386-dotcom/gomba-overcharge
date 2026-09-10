@@ -1,4 +1,4 @@
-const CACHE = 'gomba-overdrive-v0.9.16';
+const CACHE = 'gomba-overdrive-v0.9.17';
 const ASSETS = [
   './',
   './index.html',
@@ -8,7 +8,6 @@ const ASSETS = [
   './manifest.json',
   './assets/gomba-mascot.png',
   './assets/ui/cabinet-skin.jpg',
-  './assets/ui/cabinet-skin-v016.png',
   './assets/reference/v09/03_cabinet_skin_production.png',
   './assets/vendor/phaser.min.js',
   './assets/vendor/gsap.min.js',
