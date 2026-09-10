@@ -115,7 +115,7 @@
   function click() { noise(0,.035,.028,2200); tone(180,0,.06,'triangle',.035,70); }
   function speak(word) {
     if(!soundOn || !('speechSynthesis' in window)) return;
-    if(!['AMAZING!','EXCELLENT!','UNSTOPPABLE!','OVERDRIVE!'].includes(word)) return;
+    if(!['GREAT!','AMAZING!','EXCELLENT!','UNSTOPPABLE!','OVERDRIVE!'].includes(word)) return;
     const now=Date.now(); if(now-lastSpeak<850) return; lastSpeak=now;
     try {
       speechSynthesis.cancel();
@@ -128,31 +128,40 @@
   }
   function rewardSfx(word) {
     if(!soundOn) return;
+    /* Original WebAudio stingers — bright casual-game ladder (not ripped samples) */
     const sets={
-      'NICE!':[420,620], 'GREAT!':[500,720,930],
-      'AMAZING!':[500,700,960,1280],
-      'EXCELLENT!':[460,680,980,1320,1680],
-      'UNSTOPPABLE!':[400,620,900,1260,1740]
+      'NICE!':[523,784],
+      'GREAT!':[587,784,988],
+      'AMAZING!':[659,880,1175,1568],
+      'EXCELLENT!':[698,880,1175,1568,1976],
+      'UNSTOPPABLE!':[784,988,1319,1760,2093]
     };
     if(word==='OVERDRIVE!') {
-      tone(68,0,.58,'sawtooth',.075,34); noise(.02,.16,.07,430); noise(.14,.38,.075,900);
-      [240,520,920,1460,1900].forEach((f,i)=>tone(f,.12+i*.09,.24,i<2?'square':'triangle',.04));
+      tone(55,0,.62,'sawtooth',.08,28); noise(.02,.18,.075,420); noise(.12,.4,.08,950);
+      [262,523,784,1047,1568,2093].forEach((f,i)=>tone(f,.1+i*.08,.28,i<2?'square':'triangle',.045));
       return;
     }
-    tone(word==='EXCELLENT!'||word==='UNSTOPPABLE!'?105:145,0,.15,'sine',.075,48);
-    noise(.01,.1,.045,word==='AMAZING!'?1800:1100);
-    (sets[word]||sets['NICE!']).forEach((f,i)=>tone(f,.045+i*.07,.17,'triangle',.04));
-    [1200,1650,2150].forEach((f,i)=>tone(f,.16+i*.035,.09,'sine',.018));
+    /* soft low thump + sparkle like match-3 / lesson-complete ding */
+    tone(word==='EXCELLENT!'||word==='UNSTOPPABLE!'?98:130,0,.12,'sine',.07,40);
+    noise(.005,.07,.038,word==='AMAZING!'||word==='EXCELLENT!'?2400:1600);
+    const ladder=sets[word]||sets['NICE!'];
+    ladder.forEach((f,i)=>tone(f,.03+i*.055,.16+(i*.02),'triangle',.048-.003*i));
+    /* shimmer tail */
+    [1760,2093,2637].forEach((f,i)=>tone(f,.12+ladder.length*.05+i*.03,.08,'sine',.016));
   }
   function sfx(kind, word='') {
     if(!soundOn) return;
-    if(kind==='tap') click();
-    else if(kind==='place'){ click(); tone(235,.01,.085,'triangle',.045,86); }
-    else if(kind==='invalid') tone(120,0,.15,'sawtooth',.045);
+    if(kind==='tap'){ noise(0,.02,.02,2800); tone(880,0,.04,'sine',.02,640); }
+    else if(kind==='place'){
+      /* satisfying drop-click + soft resolve */
+      noise(0,.03,.03,1800); tone(196,0,.07,'triangle',.05,120);
+      tone(523,.04,.09,'sine',.035,784); tone(784,.09,.1,'triangle',.028);
+    }
+    else if(kind==='invalid'){ tone(140,0,.12,'sawtooth',.04,90); tone(110,.06,.14,'triangle',.035); }
     else if(kind==='clear'||kind==='combo'){ rewardSfx(word||'NICE!'); if(kind==='combo') speak(word); }
     else if(kind==='overdrive'){ rewardSfx('OVERDRIVE!'); speak('OVERDRIVE!'); }
-    else if(kind==='over'){ tone(315,0,.12,'sawtooth',.05); tone(175,.08,.24,'triangle',.05); }
-    else if(kind==='stage'){ tone(500,0,.08,'triangle',.05); tone(760,.08,.14,'triangle',.05); }
+    else if(kind==='over'){ tone(330,0,.1,'triangle',.045); tone(196,.07,.22,'sine',.04,110); }
+    else if(kind==='stage'){ tone(659,0,.07,'triangle',.05); tone(880,.07,.1,'triangle',.05); tone(1175,.14,.16,'sine',.04); }
   }
 
   function syncSoundBtn(){ $('soundBtn').textContent=soundOn?'SOUND ON':'SOUND OFF'; $('soundBtn').setAttribute('aria-pressed',soundOn?'true':'false'); }
@@ -217,8 +226,10 @@
   function shake(ms=200){shell.classList.remove('shaking');void shell.offsetWidth;shell.classList.add('shaking');setTimeout(()=>shell.classList.remove('shaking'),ms);}
   function flashScreen(){const e=$('fxFlash');e.classList.remove('on');void e.offsetWidth;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),300);}
   function showPraise(word,combo){
-    const e=$('praise'); $('praiseWord').textContent=word; $('praisePlate').textContent=word==='OVERDRIVE!'?'CORE 100%':combo>1?`COMBO X${combo}`:'LINE CLEAR';
-    e.hidden=false; void e.offsetWidth; clearTimeout(showPraise.t); showPraise.t=setTimeout(()=>e.hidden=true,1100);
+    const e=$('praise'); $('praiseWord').textContent=word;
+    $('praisePlate').textContent=word==='OVERDRIVE!'?'CORE 100%':combo>=1?`COMBO X${combo}`:'LINE CLEAR';
+    e.hidden=false; e.style.animation='none'; void e.offsetWidth; e.style.animation='';
+    clearTimeout(showPraise.t); showPraise.t=setTimeout(()=>e.hidden=true,1180);
   }
   function powerFrame(big=false){ shell.classList.remove('power-hit','power-max'); void shell.offsetWidth; shell.classList.add(big?'power-max':'power-hit'); setTimeout(()=>shell.classList.remove('power-hit','power-max'),big?1000:650); }
 
@@ -241,11 +252,13 @@
   }
   function playClearFx(lines,n,combo,word,kind){
     reactMascot(kind);
+    /* Always show DOM praise (COMBO Xn / NICE…) so juice is visible even when Phaser is up */
+    showPraise(word,combo);
     if(window.GombaFX&&GombaFX.ready){
       GombaFX.lineClear(lines,{n,combo});
       GombaFX.combo(word,combo);
     }else{
-      showPraise(word,combo);fireBeams(lines,n>=2||combo>=3);spawnDebris(n>=2||combo>=3);spawnCoreBits();
+      fireBeams(lines,n>=2||combo>=3);spawnDebris(n>=2||combo>=3);spawnCoreBits();
     }
     flashScreen();powerFrame(combo>=4);shake(combo>=4?320:250);flashMsg(word);sfx(combo>=2||n>=2?'combo':'clear',word);
   }
