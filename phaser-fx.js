@@ -372,7 +372,7 @@
       const b = cellAt(map, r, 7);
       if (!a || !b) return;
       const img = this.add.image((a.cx + b.cx) / 2, a.cy, 'fx-beam-h')
-        .setDisplaySize(map.board.w * 1.12, fat ? 42 : 22)
+        .setDisplaySize(map.board.w * 0.98, fat ? 28 : 16)
         .setBlendMode(Phaser.BlendModes.ADD)
         .setScale(0.08, 1)
         .setDepth(10);
@@ -387,7 +387,7 @@
       const b = cellAt(map, 7, c);
       if (!a || !b) return;
       const img = this.add.image(a.cx, (a.cy + b.cy) / 2, 'fx-beam-v')
-        .setDisplaySize(fat ? 52 : 28, map.board.h * 1.14)
+        .setDisplaySize(fat ? 34 : 18, map.board.h * 0.98)
         .setBlendMode(Phaser.BlendModes.ADD)
         .setScale(1, 0.08)
         .setDepth(10);
@@ -411,9 +411,9 @@
           y: y0 + (y1 - y0) * t + (vertical ? (Math.random() - 0.5) * jag * 0.25 * edge : (Math.random() - 0.5) * jag * edge)
         });
       }
-      g.lineStyle(fat ? 16 : 9, 0xff4b00, 0.45);
+      g.lineStyle(fat ? 11 : 6, 0xff4b00, 0.4);
       g.beginPath(); g.moveTo(pts[0].x, pts[0].y); pts.slice(1).forEach((p) => g.lineTo(p.x, p.y)); g.strokePath();
-      g.lineStyle(fat ? 9 : 5, 0xff9a20, 0.85);
+      g.lineStyle(fat ? 6 : 3.5, 0xff9a20, 0.8);
       g.beginPath(); g.moveTo(pts[0].x, pts[0].y); pts.slice(1).forEach((p) => g.lineTo(p.x, p.y)); g.strokePath();
       g.lineStyle(fat ? 4 : 2.5, 0xffffff, 1);
       g.beginPath(); g.moveTo(pts[0].x, pts[0].y); pts.slice(1).forEach((p) => g.lineTo(p.x, p.y)); g.strokePath();
@@ -479,48 +479,42 @@
       const plateW = Math.max(170, 24 + plate.length * 12);
       this.praisePlate.setSize(plateW, 36);
       /* DOM #praise owns concept gradient AMAZING! + orange pill; Phaser = energy FX */
+      /* DOM #praise owns readable badge; Phaser praise stays hidden to avoid muddy double text */
       this.praise.setAlpha(0).setScale(0.16);
-      /* Concept image 2: white-hot column beam, L/R jagged bolts, 3D shard burst */
+      /* V0.9.19 — keep slam energy INSIDE board frame (skin already has chrome lightning) */
       if (map) {
-        /* Concept AMAZING: white-hot vertical column + horizontal cross beam */
-        this.beamCol(map, 3, true);
-        this.beamCol(map, 4, true);
-        this.beamRow(map, 3, true);
-        this.beamRow(map, 4, true);
-        const mid = cellAt(map, 3, 3) || cellAt(map, 4, 4);
-        if (mid) {
-          const core = this.add.image(cx, cy, 'fx-beam-v')
-            .setDisplaySize(72, map.board.h * 1.2)
-            .setBlendMode(Phaser.BlendModes.ADD)
-            .setAlpha(1)
-            .setDepth(11);
-          this.tweens.add({ targets: core, alpha: 0, delay: 300, duration: 360, onComplete: () => core.destroy() });
-          const crossH = this.add.image(cx, cy, 'fx-beam-h')
-            .setDisplaySize(map.board.w * 1.18, 48)
-            .setBlendMode(Phaser.BlendModes.ADD)
-            .setAlpha(0.95)
-            .setDepth(11);
-          this.tweens.add({ targets: crossH, alpha: 0, delay: 260, duration: 340, onComplete: () => crossH.destroy() });
-        }
-        /* Dense jagged bolts L/R like concept lightning sweeps */
-        this.bolt(cx, cy, map.board.x - 12, cy + (Math.random() - 0.5) * 28, true);
-        this.bolt(cx, cy, map.board.x + map.board.w + 12, cy + (Math.random() - 0.5) * 28, true);
-        this.bolt(cx, cy - 18, map.board.x - 6, cy - 36 + (Math.random() - 0.5) * 20, true);
-        this.bolt(cx, cy + 16, map.board.x + map.board.w + 6, cy + 34 + (Math.random() - 0.5) * 20, true);
-        this.bolt(cx, cy - 10, map.board.x - 4, cy + 14, true);
-        this.bolt(cx, cy + 8, map.board.x + map.board.w + 4, cy - 12, true);
-        this.bolt(cx - 8, cy, map.board.x - 2, cy - 22, false);
-        this.bolt(cx + 8, cy, map.board.x + map.board.w + 2, cy + 20, false);
-        this.blast(cx, cy, true);
-        this.shockwave(cx, cy);
-        this.sparks.explode(120, cx, cy);
-        this.shards.explode(72, cx, cy);
-        if (this.shardsTall) this.shardsTall.explode(40, cx, cy);
-        this.embers.explode(42, cx, cy);
-        this.boardFlash(true);
-        this.cameras.main.shake(280, 0.018);
+        const inset = Math.min(18, map.board.w * 0.04);
+        const left = map.board.x + inset;
+        const right = map.board.x + map.board.w - inset;
+        const top = map.board.y + inset;
+        const bot = map.board.y + map.board.h - inset;
+        this.beamCol(map, 3, false);
+        this.beamRow(map, 3, false);
+        const core = this.add.image(cx, cy, 'fx-beam-v')
+          .setDisplaySize(46, map.board.h * 0.92)
+          .setBlendMode(Phaser.BlendModes.ADD)
+          .setAlpha(0.85)
+          .setDepth(11);
+        this.tweens.add({ targets: core, alpha: 0, delay: 180, duration: 260, onComplete: () => core.destroy() });
+        const crossH = this.add.image(cx, cy, 'fx-beam-h')
+          .setDisplaySize(map.board.w * 0.92, 28)
+          .setBlendMode(Phaser.BlendModes.ADD)
+          .setAlpha(0.8)
+          .setDepth(11);
+        this.tweens.add({ targets: crossH, alpha: 0, delay: 160, duration: 240, onComplete: () => crossH.destroy() });
+        /* 4 short bolts clipped to board inset — no spray over chrome */
+        this.bolt(cx, cy, left, cy + (Math.random() - 0.5) * 16, false);
+        this.bolt(cx, cy, right, cy + (Math.random() - 0.5) * 16, false);
+        this.bolt(cx, cy, cx + (Math.random() - 0.5) * 24, top, false);
+        this.bolt(cx, cy, cx + (Math.random() - 0.5) * 24, bot, false);
+        this.blast(cx, cy, false);
+        this.sparks.explode(36, cx, cy);
+        this.shards.explode(18, cx, cy);
+        this.embers.explode(14, cx, cy);
+        this.boardFlash(false);
+        this.cameras.main.shake(140, 0.008);
       } else {
-        this.sparks.explode(48, cx, cy);
+        this.sparks.explode(24, cx, cy);
       }
       this.tweens.killTweensOf(this.praise);
       this.tweens.add({
@@ -587,9 +581,8 @@
       if (!active) return;
       this.syncLayout();
       const plate = combo > 1 ? `COMBO X${combo}` : 'LINE CLEAR';
-      this.slam(word, plate, combo >= 4 ? 700 : combo >= 2 ? 560 : 480);
-      this.arcNearMascot();
-      if (combo >= 2) this.time.delayedCall(50, () => this.arcNearMascot());
+      this.slam(word, plate, combo >= 4 ? 420 : combo >= 2 ? 320 : 260);
+      if (combo >= 3) this.arcNearMascot();
     }
 
     playOverdrive() {

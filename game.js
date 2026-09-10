@@ -259,17 +259,15 @@
         defaults:{ease:'power3.out'},
         onComplete(){ e.hidden=true; gsap.set(e,{clearProps:'all'}); e.style.animation=''; }
       })
-        .to(e,{scale:1.22,rotation:2,duration:.22,ease:'back.out(2.4)'})
-        .to(e,{scale:.98,rotation:-1,duration:.12},'>-0.02')
-        .to(e,{scale:1.06,rotation:0,duration:.1})
-        .to(plate,{autoAlpha:1,scale:1,y:0,duration:.28,ease:'back.out(1.8)'},'<-0.18')
-        .to(wordEl,{scale:1.06,duration:.18,yoyo:true,repeat:1,ease:'power1.inOut'},'-=0.05')
-        .to(e,{autoAlpha:0,yPercent:-62,scale:1.08,duration:.28,ease:'power2.in'},'+=0.42');
+        .to(e,{scale:1.12,rotation:1,duration:.16,ease:'back.out(2.1)'})
+        .to(e,{scale:1.0,rotation:0,duration:.1})
+        .to(plate,{autoAlpha:1,scale:1,y:0,duration:.2,ease:'back.out(1.6)'},'<-0.12')
+        .to(e,{autoAlpha:0,yPercent:-58,scale:1.04,duration:.22,ease:'power2.in'},'+=0.28');
       return;
     }
     e.style.animation='';
     void e.offsetWidth;
-    showPraise.t=setTimeout(()=>{e.hidden=true;},1180);
+    showPraise.t=setTimeout(()=>{e.hidden=true;},900);
   }
   function powerFrame(big=false){ shell.classList.remove('power-hit','power-max'); void shell.offsetWidth; shell.classList.add(big?'power-max':'power-hit'); setTimeout(()=>shell.classList.remove('power-hit','power-max'),big?1000:650); }
 
