@@ -108,8 +108,9 @@ button,input{font:inherit}.sr-only{position:absolute;width:1px;height:1px;overfl
 .beam.cross{left:50%;top:50%;width:150px;height:150px;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,#fff 0 7%,#ffd246 13%,rgba(255,97,0,.88) 22%,rgba(255,63,0,.15) 52%,transparent 70%);box-shadow:0 0 30px #fff,0 0 85px #ff6a00;animation:crossBoom .76s ease-out forwards}@keyframes crossBoom{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.5)}100%{opacity:0;transform:translate(-50%,-50%) scale(2.2)}}
 .shard,.spark,.core-bit{position:absolute;display:block;pointer-events:none;z-index:50}.shard{width:8px;height:13px;background:linear-gradient(135deg,#fff4a0,#ff8500 45%,#ff3a00);clip-path:polygon(50% 0,100% 65%,35% 100%,0 42%);box-shadow:0 0 7px #ff7200;animation:debris .76s ease-out forwards}.spark{width:3px;height:15px;border-radius:3px;background:#fff0a4;box-shadow:0 0 7px #ff8a00;animation:debris .82s ease-out forwards}@keyframes debris{to{transform:translate(var(--dx),var(--dy)) rotate(520deg);opacity:0}}
 .core-bit{width:7px;height:7px;border-radius:50%;background:#fff4a6;box-shadow:0 0 8px #ff8a00,0 0 15px #ff4d00;animation:toCore .85s cubic-bezier(.18,.7,.3,1) forwards}@keyframes toCore{to{transform:translate(var(--tx),var(--ty)) scale(.2);opacity:0}}
-.praise{position:absolute;z-index:60;left:50%;top:52%;width:100%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;animation:praiseHit 1.08s cubic-bezier(.12,.8,.2,1)}.praise:before{content:"";position:absolute;left:2%;right:2%;top:46%;height:5px;background:#fff8b8;box-shadow:0 0 8px #fff,0 0 22px #ffae00,0 0 50px #ff5700;z-index:-1}.praise .word{display:inline-block;font-size:clamp(40px,12vw,64px);line-height:.9;font-style:italic;color:#fff8dc;-webkit-text-stroke:4px #4a1200;text-shadow:0 3px 0 #1d0700,0 0 8px #fff,0 0 22px #ffab00,0 0 44px #ff4d00;transform:skewX(-8deg)}.praise .plate{display:block;width:max-content;margin:8px auto 0;padding:5px 16px;border:2px solid #ff8b00;background:linear-gradient(#2a1608,#070707);color:#ffc63f;letter-spacing:.09em;font-size:16px;box-shadow:0 0 18px rgba(255,92,0,.5),inset 0 0 9px rgba(255,91,0,.12)}
-@keyframes praiseHit{0%{opacity:0;transform:translate(-50%,-50%) scale(.28) rotate(-5deg)}22%{opacity:1;transform:translate(-50%,-50%) scale(1.18) rotate(1deg)}42%{transform:translate(-50%,-50%) scale(.98)}78%{opacity:1}100%{opacity:0;transform:translate(-50%,-57%) scale(1.05)}}
+.praise{position:absolute;z-index:60;left:50%;top:48%;width:100%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;animation:praiseHit 1.15s cubic-bezier(.12,.9,.2,1)}.praise:before{content:"";position:absolute;left:4%;right:4%;top:44%;height:6px;background:linear-gradient(90deg,transparent,#fff8b8 20%,#ffe08a 50%,#fff8b8 80%,transparent);box-shadow:0 0 10px #fff,0 0 28px #ffae00,0 0 60px #ff5700;z-index:-1}.praise .word{display:inline-block;font-size:clamp(44px,13vw,72px);line-height:.88;font-style:italic;font-weight:900;color:#fff8dc;-webkit-text-stroke:4px #4a1200;paint-order:stroke fill;text-shadow:0 4px 0 #1d0700,0 0 10px #fff,0 0 26px #ffab00,0 0 52px #ff4d00,0 0 80px rgba(255,80,0,.85);transform:skewX(-8deg)}.praise .plate{display:block;width:max-content;margin:10px auto 0;padding:6px 18px;border:2px solid #ff9a2a;border-radius:4px;background:linear-gradient(180deg,#3a1c08,#070707);color:#ffd056;letter-spacing:.12em;font-size:clamp(14px,4vw,18px);font-weight:800;box-shadow:0 0 22px rgba(255,92,0,.65),inset 0 0 12px rgba(255,140,0,.2);animation:platePop .55s cubic-bezier(.2,1.4,.3,1)}
+@keyframes praiseHit{0%{opacity:0;transform:translate(-50%,-50%) scale(.18) rotate(-8deg)}18%{opacity:1;transform:translate(-50%,-50%) scale(1.28) rotate(2deg)}38%{transform:translate(-50%,-50%) scale(.96) rotate(-1deg)}55%{transform:translate(-50%,-50%) scale(1.06)}78%{opacity:1}100%{opacity:0;transform:translate(-50%,-62%) scale(1.08)}}
+@keyframes platePop{0%{transform:scale(.6);opacity:0}40%{transform:scale(1.12);opacity:1}100%{transform:scale(1)}}
 
 /* stage / result / CTA */
 .stage-banner{position:absolute;z-index:100;left:50%;top:45%;transform:translate(-50%,-50%);min-width:230px;text-align:center;padding:18px;border:2px solid #ff7600;background:rgba(5,5,5,.94);box-shadow:0 0 45px #ff6100}.stage-banner strong,.stage-banner span{display:block}.stage-banner strong{font-size:34px;color:#fff}.stage-banner span{color:#ffad20;letter-spacing:.15em;margin-top:5px}.result-reactor{position:relative;width:200px;height:210px;margin:15px auto 5px;display:grid;place-items:center;background:radial-gradient(circle,#ff9c16 0,rgba(255,79,0,.38) 38%,transparent 68%)}.result-mascot{max-width:180px;max-height:205px}.result-smoke i{position:absolute;width:30px;height:30px;border-radius:50%;background:rgba(160,160,160,.18);filter:blur(8px)}#result h2,#cta h2{text-align:center;color:#ff9d18;letter-spacing:.08em}.new-best{text-align:center;color:#ffd04c}.score-card{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px}.score-card div{padding:10px;text-align:center;border:1px solid #503019;background:#0b0b0b}.score-card span,.score-card strong{display:block}.score-card span{font-size:9px;color:#ffad23}.score-card strong{font-size:20px}.score-card .span-2{grid-column:span 2}.cta-copy,.offline-note,.success{text-align:center}.cta-form{display:flex;flex-direction:column;gap:7px;margin:10px}.cta-form input{min-height:48px;padding:0 13px;border:1px solid #4a3324;border-radius:5px;background:#0a0a0a;color:#fff}.or{text-align:center;margin:0;color:#999}.success{color:#ffc13d;font-size:22px}
@@ -249,21 +250,23 @@ button,input{font:inherit}.sr-only{position:absolute;width:1px;height:1px;overfl
 /* Reactor + HUD ~9–21% */
 .skin-v09 #game.active .reactor-hud{
   position:absolute;
-  top:8.2%;
+  top:8%;
   left:4%;
-  right:7%;
-  height:13%;
+  right:6%;
+  /* Must cover SCORE/BEST metal boxes (~20–22.6% of cabinet); was 13% and clipped values out */
+  height:15.2%;
   margin:0;
   padding:0;
   display:grid;
-  grid-template-columns:36% 1fr;
-  gap:2.5%;
+  grid-template-columns:34% 1fr;
+  gap:2%;
   align-items:stretch;
   background:transparent;
   border:0;
   box-shadow:none;
   flex:none;
   z-index:4;
+  overflow:visible;
 }
 .skin-v09 #game.active .mascot-chamber{
   height:100%;
@@ -303,11 +306,11 @@ button,input{font:inherit}.sr-only{position:absolute;width:1px;height:1px;overfl
 }
 .skin-v09 #game.active .core-row{
   position:absolute;
-  top:2%;
-  right:2%;
+  top:48%;
+  right:1%;
   left:auto;
   width:auto;
-  height:20%;
+  height:16%;
   margin:0;
   justify-content:flex-end;
   align-items:center;
@@ -320,10 +323,10 @@ button,input{font:inherit}.sr-only{position:absolute;width:1px;height:1px;overfl
 /* Overlay fill on painted CORE bar */
 .skin-v09 #game.active .core-track{
   position:absolute;
-  top:8%;
+  top:52%;
   left:1%;
-  right:12%;
-  height:16%;
+  right:14%;
+  height:10%;
   min-height:0;
   margin:0;
   padding:0;
@@ -332,19 +335,18 @@ button,input{font:inherit}.sr-only{position:absolute;width:1px;height:1px;overfl
   box-shadow:inset 0 0 6px rgba(0,0,0,.55);
   z-index:1;
 }
-/* Four value cells centered inside painted SCORE/BEST/COMBO/STAGE boxes */
-/* Boxes sit ~mid of right HUD (not bottom); previous top:48% put numbers under the frames */
+/* Four values in dark interiors of painted boxes (~20–22.4% cabinet ≈ 79–95% of dash) */
 .skin-v09 #game.active .stat-grid{
   position:absolute;
-  top:28%;
+  top:78%;
   left:0;
-  right:0;
-  height:36%;
+  right:1%;
+  height:18%;
   margin:0;
-  gap:2.5%;
+  gap:2.2%;
   flex:none;
   align-content:stretch;
-  z-index:2;
+  z-index:5;
 }
 .skin-v09 #game.active .stat-grid div{
   padding:0;
@@ -355,18 +357,18 @@ button,input{font:inherit}.sr-only{position:absolute;width:1px;height:1px;overfl
 .skin-v09 #game.active .stat-grid strong{
   display:block;
   line-height:1;
-  transform:translateY(-18%);
-  font-size:clamp(12px,3.1vw,17px);color:#fff4d6;
-  text-shadow:0 0 8px rgba(255,140,0,.55);
+  transform:none;
+  font-size:clamp(13px,3.4vw,18px);color:#fff8e2;font-weight:800;
+  text-shadow:0 0 8px rgba(255,160,0,.75),0 0 16px rgba(255,90,0,.45);
 }
 
 /* Status bar ~22.5–26% — skin paints ENERGY GRID copy */
 .skin-v09 #game.active .status-bar{
   position:absolute;
-  top:22.5%;
+  top:24%;
   left:8%;
   right:8%;
-  height:3.5%;
+  height:3.2%;
   margin:0;
   padding:0;
   background:transparent;
@@ -506,7 +508,10 @@ button,input{font:inherit}.sr-only{position:absolute;width:1px;height:1px;overfl
   opacity:1!important;
 }
 .skin-v09 #game.active .praise .word{
-  text-shadow:0 3px 0 #1d0700,0 0 10px #fff,0 0 24px #ffab00,0 0 48px #ff4d00,0 0 70px rgba(255,80,0,.8);
+  text-shadow:0 4px 0 #1d0700,0 0 12px #fff,0 0 28px #ffab00,0 0 56px #ff4d00,0 0 90px rgba(255,80,0,.9);
+}
+.skin-v09 #game.active .praise .plate{
+  box-shadow:0 0 28px rgba(255,110,0,.8),inset 0 0 14px rgba(255,160,0,.25);
 }
 
 /* FX / decor never intercept pointers */
