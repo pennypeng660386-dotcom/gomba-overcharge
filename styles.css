@@ -1549,8 +1549,7 @@ button,input{font:inherit}.sr-only{position:absolute;width:1px;height:1px;overfl
   border-radius:12px!important;
 }
 .skin-v09 #landing.active:before{
-  background:transparent!important;
-  opacity:0!important;
+  /* superseded by V0.9.22c mute bands */
 }
 .skin-v09 #landing .landing-stack{
   background:transparent!important;
@@ -1598,3 +1597,37 @@ button,input{font:inherit}.sr-only{position:absolute;width:1px;height:1px;overfl
 .skin-v09 #game.active .gomba-fx-host{
   z-index:26;
 }
+
+
+/* V0.9.22c — mute painted L/R board-frame lightning (skin art residual) */
+.skin-v09 #game.active::before,
+.skin-v09 #landing.active::before{
+  content:""!important;
+  display:block!important;
+  position:absolute;
+  top:27.8%;
+  left:0;
+  right:0;
+  height:47.5%;
+  z-index:2;
+  pointer-events:none;
+  background:linear-gradient(90deg,
+    rgba(0,0,0,.82) 0%,
+    rgba(0,0,0,.7) 5.5%,
+    rgba(0,0,0,.35) 10.5%,
+    transparent 13.2%,
+    transparent 86.8%,
+    rgba(0,0,0,.35) 89.5%,
+    rgba(0,0,0,.7) 94.5%,
+    rgba(0,0,0,.82) 100%);
+  opacity:1;
+}
+/* Keep landing stack / board above mute bands */
+.skin-v09 #landing .landing-stack,
+.skin-v09 #landing .landing-chamber{z-index:3!important}
+.skin-v09 #game.active #boardMachine,
+.skin-v09 #game.active .board-machine{z-index:3!important}
+.skin-v09 #game.active .reactor-hud,
+.skin-v09 #game.active .arcade-header,
+.skin-v09 #game.active #tray,
+.skin-v09 #game.active .tray{z-index:4!important}
