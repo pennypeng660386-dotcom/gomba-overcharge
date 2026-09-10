@@ -1567,12 +1567,11 @@ button,input{font:inherit}.sr-only{position:absolute;width:1px;height:1px;overfl
 .skin-v09 #game.active .mascot-chamber{
   filter:none!important;
   box-shadow:
-    0 0 16px #fff6c8,
-    0 0 28px #ffb000,
-    0 0 52px rgba(255,100,0,.9),
-    0 0 78px rgba(255,60,0,.55),
-    inset 0 0 28px rgba(255,210,90,.55)!important;
-  background:radial-gradient(circle at 50% 44%,#fffce8 0 7%,#ffe08a 12%,#ffb000 22%,#ff7a00 38%,rgba(255,60,0,.7) 55%,rgba(40,10,0,.2) 72%,transparent 82%)!important;
+    0 0 10px #ffd080,
+    0 0 18px rgba(255,140,0,.65),
+    0 0 32px rgba(255,90,0,.4),
+    inset 0 0 16px rgba(255,180,60,.35)!important;
+  background:radial-gradient(circle at 50% 44%,#ffe8a8 0 6%,#ffc050 14%,#ff8a00 30%,rgba(255,70,0,.45) 52%,rgba(40,10,0,.15) 70%,transparent 82%)!important;
 }
 .skin-v09 #game.active .hud-mascot{
   filter:drop-shadow(0 0 1.5px #fff8d0) drop-shadow(0 0 5px #ffd24a) drop-shadow(0 0 12px #ff9a00) drop-shadow(0 0 24px rgba(255,110,0,.95)) drop-shadow(0 0 42px rgba(255,70,0,.75)) brightness(1.14) saturate(1.22)!important;
@@ -1693,3 +1692,243 @@ button,input{font:inherit}.sr-only{position:absolute;width:1px;height:1px;overfl
   width:5px!important;height:5px!important;
   box-shadow:0 0 8px #fff,0 0 16px #ff8a00,0 0 28px #ff5a00!important;
 }
+
+/* ===== V0.9.24 — Near-indistinguishable SoT match (SOT-penny-target-gameplay.png) ===== */
+/* Priority: side chrome skin v024, molten column (not white cross), praise ABOVE FX, tray heat */
+
+.cabinet.skin-v09 .cab-skin{
+  filter:none!important;
+  opacity:1!important;
+  background-image:url("./assets/ui/cabinet-skin-v024.png")!important;
+}
+
+/* Praise is cabinet sibling AFTER #gombaFxHost — must sit above Phaser beams */
+.cabinet.skin-v09 > .praise,
+.cabinet.skin-v09 #praise{
+  position:absolute!important;
+  left:50%!important;
+  top:48%!important;
+  width:88%!important;
+  z-index:92!important;
+  pointer-events:none!important;
+  text-align:center!important;
+  transform:translate(-50%,-50%)!important;
+  transform-origin:50% 50%!important;
+}
+.cabinet.skin-v09 .gomba-fx-host{
+  z-index:55!important;
+  pointer-events:none!important;
+}
+.cabinet.skin-v09 #fxFlash{
+  z-index:70!important;
+  opacity:0;
+}
+.cabinet.skin-v09 #fxFlash.on{
+  /* softer flash so praise stays readable */
+  background:radial-gradient(circle at 50% 47%,rgba(255,200,120,.35) 0,rgba(255,120,30,.18) 22%,transparent 58%)!important;
+}
+
+/* SoT AMAZING weight/stroke/bloom — plate above FX */
+.cabinet.skin-v09 > .praise .word,
+.cabinet.skin-v09 #praise .word{
+  display:inline-block!important;
+  font-size:clamp(48px,13.5vw,78px)!important;
+  line-height:.86!important;
+  font-style:italic!important;
+  font-weight:900!important;
+  letter-spacing:.005em!important;
+  transform:skewX(-10deg)!important;
+  background-image:linear-gradient(180deg,#fffef0 0%,#fff3a0 18%,#ffd030 44%,#ff9a00 72%,#ff5a00 100%)!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;
+  -webkit-text-stroke:5.5px #140500!important;
+  paint-order:stroke fill!important;
+  filter:
+    drop-shadow(0 4px 0 #0a0300)
+    drop-shadow(0 0 6px rgba(255,255,220,.9))
+    drop-shadow(0 0 16px #ffb000)
+    drop-shadow(0 0 34px rgba(255,90,0,.85))!important;
+}
+.cabinet.skin-v09 > .praise .plate,
+.cabinet.skin-v09 #praise .plate{
+  display:block!important;
+  width:max-content!important;
+  margin:16px auto 0!important;
+  padding:9px 28px!important;
+  border:3px solid #ff9a28!important;
+  border-radius:999px!important;
+  background:linear-gradient(180deg,#1c0c04 0%,#080808 100%)!important;
+  color:#ffe066!important;
+  letter-spacing:.18em!important;
+  font-size:clamp(16px,4.4vw,20px)!important;
+  font-weight:800!important;
+  text-shadow:0 0 12px rgba(255,190,60,.85)!important;
+  box-shadow:
+    0 0 14px #ff8a00,
+    0 0 32px rgba(255,100,0,.95),
+    0 0 56px rgba(255,70,0,.6),
+    inset 0 0 18px rgba(255,140,0,.35)!important;
+}
+.cabinet.skin-v09 > .praise:before,
+.cabinet.skin-v09 #praise:before{
+  content:""!important;
+  position:absolute!important;
+  left:8%!important;
+  right:8%!important;
+  top:46%!important;
+  height:3px!important;
+  z-index:-1!important;
+  opacity:.55!important;
+  background:linear-gradient(90deg,transparent,#ff9a20 18%,#fff8b8 45%,#fff8b8 55%,#ff9a20 82%,transparent)!important;
+  box-shadow:0 0 8px #ffae00,0 0 18px rgba(255,120,0,.55)!important;
+  filter:blur(.4px)!important;
+}
+
+/* Hard ban tutorial during praise / clear peak */
+.cabinet.skin-v09.praising #firstHint,
+.cabinet.skin-v09.praising .first-hint,
+.skin-v09 #game.active.praising #firstHint,
+.skin-v09 #game.active.praising .first-hint,
+.cabinet.skin-v09:has(#praise:not([hidden])) #firstHint,
+.cabinet.skin-v09:has(#praise:not([hidden])) .first-hint,
+.skin-v09 #game.active:has(+ #gombaFxHost + #praise:not([hidden])) #firstHint,
+.skin-v09 #game.active #firstHint.gone,
+.skin-v09 #game.active .first-hint.gone{
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
+}
+
+/* When praising, also mark shell (JS adds on #game; mirror via :has) */
+.cabinet.skin-v09:has(#praise:not([hidden])){
+  /* shell marker for any residual selectors */
+}
+
+/* CORE high-energy at peak + always hotter fill */
+.skin-v09 #game.active .core-fill{
+  box-shadow:0 0 16px #ff8500,0 0 32px rgba(255,100,0,.95),0 0 52px rgba(255,60,0,.55),inset 0 0 10px rgba(255,240,180,.55)!important;
+  filter:saturate(1.25) brightness(1.12)!important;
+  background:linear-gradient(90deg,#ff5a00 0%,#ff9a00 42%,#ffe08a 78%,#fff6d0 100%)!important;
+}
+.skin-v09 #game.active.praising .core-fill,
+.cabinet.skin-v09:has(#praise:not([hidden])) .core-fill{
+  filter:saturate(1.35) brightness(1.18)!important;
+  box-shadow:0 0 20px #ff9a00,0 0 40px rgba(255,120,0,1),0 0 70px rgba(255,70,0,.7),inset 0 0 12px rgba(255,250,200,.7)!important;
+}
+.skin-v09 #game.active.praising .mascot-chamber,
+.cabinet.skin-v09:has(#praise:not([hidden])) .mascot-chamber{
+  filter:brightness(1.22)!important;
+}
+
+/* Tray: perforated metal bay + orange frame heat (SoT) */
+.skin-v09 #game.active .piece{
+  border:3px solid #ff9a28!important;
+  border-radius:6px!important;
+  background:
+    radial-gradient(circle at 50% 88%,rgba(255,110,0,.35),transparent 48%),
+    repeating-radial-gradient(circle at 50% 50%,#1a1a1a 0 1px,#0a0a0a 1px 4px),
+    linear-gradient(180deg,#141414 0%,#050505 100%)!important;
+  box-shadow:
+    inset 0 0 0 1px #5a2208,
+    inset 0 0 22px #000,
+    inset 0 -20px 18px rgba(255,90,0,.28),
+    0 0 14px rgba(255,130,0,.75),
+    0 0 28px rgba(255,90,0,.45),
+    0 0 42px rgba(255,60,0,.25)!important;
+}
+.skin-v09 #game.active .piece:after{
+  display:block!important;
+  opacity:.85!important;
+  left:10%!important;
+  right:10%!important;
+  bottom:7%!important;
+  height:3px!important;
+  background:linear-gradient(90deg,transparent,#ffb040,transparent)!important;
+  box-shadow:0 0 10px #ff8a00,0 0 18px rgba(255,100,0,.7)!important;
+}
+.skin-v09 #game.active .piece .mini{
+  filter:brightness(1.14) saturate(1.25)!important;
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.75),
+    0 0 12px #ffc000,
+    0 0 24px rgba(255,110,0,1),
+    0 0 36px rgba(255,70,0,.65)!important;
+}
+.skin-v09 #game.active .rotate{
+  box-shadow:0 0 14px rgba(255,160,40,.9),0 0 26px rgba(255,100,0,.55)!important;
+  border-color:#ffb040!important;
+}
+
+/* DOM beams — molten column language; kill fat white cross */
+.skin-v09 #game.active .beam{
+  z-index:40!important;
+  filter:blur(.15px) brightness(1.15) saturate(1.25)!important;
+}
+.skin-v09 #game.active .beam.col,
+.skin-v09 #game.active .beam.col.molten{
+  width:22px!important;
+  background:linear-gradient(180deg,rgba(255,60,0,.2),#ff8a00 18%,#ffe08a 42%,#fff6d0 50%,#ffe08a 58%,#ff8a00 82%,rgba(255,60,0,.2))!important;
+  box-shadow:0 0 8px #ffb000,0 0 18px #ff8a00,0 0 36px #ff5a00,0 0 64px rgba(255,40,0,.75)!important;
+}
+.skin-v09 #game.active .beam.row{
+  height:8px!important;
+  background:linear-gradient(90deg,rgba(255,80,0,.12),#ffb040 30%,#ffe8a0 50%,#ffb040 70%,rgba(255,80,0,.12))!important;
+  box-shadow:0 0 6px #ffae00,0 0 16px rgba(255,120,0,.7)!important;
+  filter:blur(.2px) brightness(1.05)!important;
+}
+.skin-v09 #game.active .beam.cross{
+  width:120px!important;
+  height:120px!important;
+  opacity:.35!important;
+  background:radial-gradient(circle,rgba(255,200,120,.35) 0%,rgba(255,100,0,.12) 40%,transparent 70%)!important;
+  box-shadow:none!important;
+  filter:blur(2px)!important;
+}
+.skin-v09 #game.active .beam.cross.thin{
+  width:100%!important;
+  height:4px!important;
+  left:0!important;
+  top:50%!important;
+  opacity:.55!important;
+  background:linear-gradient(90deg,transparent,#ff9a20 20%,#ffe8a0 50%,#ff9a20 80%,transparent)!important;
+  box-shadow:0 0 8px #ffae00!important;
+  filter:blur(.3px)!important;
+}
+.skin-v09 #game.active .shard{
+  width:11px!important;
+  height:7px!important;
+  box-shadow:0 0 6px #ffb000,0 0 14px #ff7200,0 0 22px rgba(255,80,0,.75)!important;
+}
+.skin-v09 #game.active .spark{
+  width:3px!important;
+  height:3px!important;
+  box-shadow:0 0 6px #fff,0 0 12px #ff8a00,0 0 20px #ff5a00!important;
+}
+
+/* Board bezel heat during praise — orange seams read hotter */
+.skin-v09 #game.active.praising #boardMachine,
+.skin-v09 #game.active.praising .board-machine,
+.cabinet.skin-v09:has(#praise:not([hidden])) #boardMachine{
+  box-shadow:
+    0 0 18px rgba(255,120,0,.45),
+    0 0 36px rgba(255,80,0,.28),
+    inset 0 0 20px rgba(255,100,0,.12)!important;
+}
+.skin-v09 #game.active .board{
+  box-shadow:
+    inset 0 0 28px rgba(0,0,0,.75),
+    inset 0 0 22px rgba(255,100,0,.22),
+    0 0 24px rgba(255,90,0,.22)!important;
+}
+
+/* Keep gameplay layers sensible under cabinet praise */
+.skin-v09 #game.active #boardMachine,
+.skin-v09 #game.active .board-machine{z-index:3!important}
+.skin-v09 #game.active .reactor-hud,
+.skin-v09 #game.active .arcade-header,
+.skin-v09 #game.active #tray,
+.skin-v09 #game.active .tray{z-index:4!important}
+.skin-v09 #game.active .fx-layer{z-index:28!important}
+.skin-v09 #game.active .praise{display:none!important} /* moved to cabinet sibling */
