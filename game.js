@@ -241,6 +241,11 @@
     const e=$('praise'), wordEl=$('praiseWord'), plate=$('praisePlate');
     wordEl.textContent=word;
     plate.textContent=word==='OVERDRIVE!'?'CORE 100%':combo>=1?`COMBO X${combo}`:'LINE CLEAR';
+    e.classList.remove('tier-amazing','tier-excellent','tier-unstoppable','tier-overdrive');
+    if(word==='UNSTOPPABLE!') e.classList.add('tier-unstoppable');
+    else if(word==='EXCELLENT!') e.classList.add('tier-excellent');
+    else if(word==='AMAZING!') e.classList.add('tier-amazing');
+    else if(word==='OVERDRIVE!') e.classList.add('tier-overdrive');
     e.hidden=false;
     clearTimeout(showPraise.t);
     const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -417,7 +422,9 @@
 
   function tapThen(fn){return()=>{sfx('tap');fn();};}
   $('soundBtn').addEventListener('click',()=>{soundOn=!soundOn;localStorage.setItem(SOUND_KEY,soundOn?'1':'0');syncSoundBtn();if(soundOn){ensureAudio();sfx('tap');}else if('speechSynthesis'in window)speechSynthesis.cancel();});
-  $('playBtn').addEventListener('click',tapThen(startGame));$('againBtn').addEventListener('click',tapThen(()=>{track('retry');startGame();}));$('backHomeBtn').addEventListener('click',tapThen(goHome));$('gameClose').addEventListener('click',tapThen(goHome));$('resultClose').addEventListener('click',tapThen(goHome));$('ctaClose').addEventListener('click',tapThen(goHome));$('ctaHome').addEventListener('click',tapThen(goHome));
+  $('playBtn').addEventListener('click',tapThen(startGame));
+  if(/[?&]autostart=1\b/.test(location.search)){window.addEventListener('load',()=>setTimeout(()=>{try{startGame();}catch(e){}},180));}
+  $('againBtn').addEventListener('click',tapThen(()=>{track('retry');startGame();}));$('backHomeBtn').addEventListener('click',tapThen(goHome));$('gameClose').addEventListener('click',tapThen(goHome));$('resultClose').addEventListener('click',tapThen(goHome));$('ctaClose').addEventListener('click',tapThen(goHome));$('ctaHome').addEventListener('click',tapThen(goHome));
   $('ctaKeep').addEventListener('click',tapThen(()=>{if(afterCta==='game'&&state)show('game');else if(state)show('result');else show('landing');}));
   $('ctaForm').addEventListener('submit',e=>{e.preventDefault();const email=$('ctaEmail').value.trim(),phone=$('ctaPhone').value.trim(),emailOk=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),phoneOk=phone.replace(/\D/g,'').length>=6;if(!emailOk&&!phoneOk)return;submitContactLead(buildContactPayload(emailOk?email:'',phoneOk?phone:''));markContactSubmitted();readPublicIp().then(ip=>{if(ip)localStorage.setItem(CONTACT_IP,ip)});sfx('tap');$('ctaForm').hidden=true;$('ctaThanks').hidden=false;$('ctaEmail').value='';$('ctaPhone').value='';});
 
