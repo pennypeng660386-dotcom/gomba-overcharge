@@ -481,38 +481,39 @@
       /* DOM #praise owns concept gradient AMAZING! + orange pill; Phaser = energy FX */
       /* DOM #praise owns readable badge; Phaser praise stays hidden to avoid muddy double text */
       this.praise.setAlpha(0).setScale(0.16);
-      /* V0.9.19 — keep slam energy INSIDE board frame (skin already has chrome lightning) */
+      /* V0.9.20 — particles inside board; soft inset so bolts aren't hard-sheared at L/R */
       if (map) {
-        const inset = Math.min(18, map.board.w * 0.04);
+        const inset = Math.min(28, map.board.w * 0.07);
         const left = map.board.x + inset;
         const right = map.board.x + map.board.w - inset;
         const top = map.board.y + inset;
         const bot = map.board.y + map.board.h - inset;
+        /* keep beams away from outer chrome — skin owns side lightning */
         this.beamCol(map, 3, false);
         this.beamRow(map, 3, false);
         const core = this.add.image(cx, cy, 'fx-beam-v')
-          .setDisplaySize(46, map.board.h * 0.92)
+          .setDisplaySize(40, map.board.h * 0.82)
           .setBlendMode(Phaser.BlendModes.ADD)
-          .setAlpha(0.85)
+          .setAlpha(0.78)
           .setDepth(11);
         this.tweens.add({ targets: core, alpha: 0, delay: 180, duration: 260, onComplete: () => core.destroy() });
         const crossH = this.add.image(cx, cy, 'fx-beam-h')
-          .setDisplaySize(map.board.w * 0.92, 28)
+          .setDisplaySize(map.board.w * 0.78, 24)
           .setBlendMode(Phaser.BlendModes.ADD)
-          .setAlpha(0.8)
+          .setAlpha(0.72)
           .setDepth(11);
         this.tweens.add({ targets: crossH, alpha: 0, delay: 160, duration: 240, onComplete: () => crossH.destroy() });
-        /* 4 short bolts clipped to board inset — no spray over chrome */
-        this.bolt(cx, cy, left, cy + (Math.random() - 0.5) * 16, false);
-        this.bolt(cx, cy, right, cy + (Math.random() - 0.5) * 16, false);
-        this.bolt(cx, cy, cx + (Math.random() - 0.5) * 24, top, false);
-        this.bolt(cx, cy, cx + (Math.random() - 0.5) * 24, bot, false);
+        /* short bolts stay inside soft inset — no rectangular shear at board rim */
+        this.bolt(cx, cy, left, cy + (Math.random() - 0.5) * 12, false);
+        this.bolt(cx, cy, right, cy + (Math.random() - 0.5) * 12, false);
+        this.bolt(cx, cy, cx + (Math.random() - 0.5) * 20, top, false);
+        this.bolt(cx, cy, cx + (Math.random() - 0.5) * 20, bot, false);
         this.blast(cx, cy, false);
-        this.sparks.explode(36, cx, cy);
-        this.shards.explode(18, cx, cy);
-        this.embers.explode(14, cx, cy);
+        this.sparks.explode(32, cx, cy);
+        this.shards.explode(14, cx, cy);
+        this.embers.explode(12, cx, cy);
         this.boardFlash(false);
-        this.cameras.main.shake(140, 0.008);
+        this.cameras.main.shake(120, 0.007);
       } else {
         this.sparks.explode(24, cx, cy);
       }
@@ -553,14 +554,14 @@
       this.heatCells(map, rows, cols);
       rows.forEach((r) => {
         this.beamRow(map, r, fat);
-        const left = cellAt(map, r, 0);
-        const right = cellAt(map, r, 7);
+        const left = cellAt(map, r, 1);
+        const right = cellAt(map, r, 6);
         if (left && right) this.bolt(left.x, left.cy, right.x + right.w, right.cy, fat);
       });
       cols.forEach((c) => {
         this.beamCol(map, c, fat);
-        const top = cellAt(map, 0, c);
-        const bot = cellAt(map, 7, c);
+        const top = cellAt(map, 1, c);
+        const bot = cellAt(map, 6, c);
         if (top && bot) this.bolt(top.cx, top.y, bot.cx, bot.y + bot.h, fat);
       });
       if (rows.length && cols.length) {

@@ -982,3 +982,174 @@ button,input{font:inherit}.sr-only{position:absolute;width:1px;height:1px;overfl
   /* keep host full-cabinet for mascot arcs, but board-machine clips DOM beams */
   overflow:hidden;
 }
+
+/* ===== V0.9.20 — Penny clip fix: chamber / hero lid / FX soft edges ===== */
+.cabinet.skin-v09 .cab-skin{
+  background-image:url("./assets/ui/cabinet-skin-v020.png");
+}
+
+/* Chamber: full head+shoulders inside circle — contain, center, no up-left shove */
+.skin-v09 #landing .landing-chamber{
+  top:8.5%;
+  left:7.6%;
+  width:24.2%;
+  height:13.6%;
+  border-radius:50%;
+  overflow:hidden!important;
+  display:grid!important;
+  place-items:center!important;
+  background:radial-gradient(circle at 50% 42%,#fffce8 0 8%,#ffe08a 14%,#ffb000 24%,#ff7a00 40%,rgba(255,60,0,.75) 58%,rgba(20,6,0,.5) 74%,transparent 88%);
+}
+.skin-v09 #landing .landing-chamber img{
+  width:72%!important;
+  height:72%!important;
+  max-width:72%!important;
+  max-height:72%!important;
+  margin:0!important;
+  object-fit:contain!important;
+  object-position:50% 50%!important;
+  filter:drop-shadow(0 0 6px #ffd24a) drop-shadow(0 0 14px rgba(255,110,0,.85)) brightness(1.1) saturate(1.15);
+}
+.skin-v09 #game.active .mascot-chamber{
+  border-radius:50%;
+  aspect-ratio:1 / 1;
+  width:auto;
+  max-width:100%;
+  height:100%;
+  justify-self:center;
+  overflow:hidden!important;
+  place-items:center!important;
+  align-content:center!important;
+  justify-items:center!important;
+}
+.skin-v09 #game.active .hud-mascot{
+  width:72%!important;
+  height:72%!important;
+  max-width:72%!important;
+  max-height:72%!important;
+  margin:0!important;
+  object-fit:contain!important;
+  object-position:50% 50%!important;
+}
+
+/* Landing hero: more vertical room so open lid is not hard-cut */
+.skin-v09 #landing.active{
+  overflow:visible!important;
+}
+.skin-v09 #landing.active:before{
+  top:28.8%;
+  left:13.39%;
+  width:77.68%;
+  height:46.4%;
+  background:
+    radial-gradient(ellipse 70% 62% at 50% 40%, rgba(255,120,0,.18) 0%, rgba(20,8,0,.1) 48%, rgba(0,0,0,.22) 100%);
+  border-radius:4px;
+  overflow:visible;
+  pointer-events:none;
+}
+.skin-v09 #landing .landing-stack{
+  top:30.2%;
+  left:13.39%;
+  width:77.68%;
+  height:44.8%;
+  overflow:visible!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  border:0!important;
+  padding:3.5% 2% 1.2%;
+  gap:clamp(2px,0.6vh,6px);
+  justify-content:flex-start;
+  align-items:center;
+  z-index:2;
+}
+.skin-v09 #landing .hero-reactor{
+  width:min(58%,170px);
+  height:min(46%,165px);
+  flex:0 0 auto;
+  margin-top:2%;
+  overflow:visible!important;
+  background:transparent!important;
+  filter:drop-shadow(0 0 18px rgba(255,120,0,.55)) drop-shadow(0 0 36px rgba(255,70,0,.35));
+}
+.skin-v09 #landing .hero-img{
+  width:60%!important;
+  max-height:84%!important;
+  object-fit:contain!important;
+  object-position:50% 58%; /* bias down so open lid clears top */
+}
+.skin-v09 #landing .tagline{margin:0}
+.skin-v09 #landing .play-btn{
+  width:min(78%,240px);
+  min-height:clamp(40px,5.8vh,52px);
+  margin-top:0;
+}
+
+/* Board flush in hole — soft L/R edge so skin lightning is not hard-sheared */
+.skin-v09 #game.active #boardMachine,
+.skin-v09 #game.active .board-machine{
+  top:31.04%;
+  left:13.39%;
+  width:77.68%;
+  height:42.88%;
+  padding:0!important;
+  margin:0;
+  overflow:visible!important; /* let soft edge glow bleed; cells still clipped below */
+  background:transparent;
+  border:0;
+  box-shadow:none;
+  filter:none;
+  display:block;
+  z-index:3;
+}
+.skin-v09 #game.active .board{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  max-width:none;
+  aspect-ratio:auto;
+  margin:0;
+  padding:0.9%;
+  gap:1.7%;
+  box-sizing:border-box;
+  border:0 solid transparent;
+  border-radius:0;
+  background:#050505;
+  box-shadow:
+    inset 0 0 18px rgba(0,0,0,.55),
+    -6px 0 14px rgba(255,100,0,.18),
+    6px 0 14px rgba(255,100,0,.18);
+  overflow:hidden; /* clip cells only */
+  /* Soft-mask L/R so arcs/lightning aren't straight-cut against chrome */
+  -webkit-mask-image:linear-gradient(90deg, transparent 0%, #000 1.6%, #000 98.4%, transparent 100%);
+  mask-image:linear-gradient(90deg, transparent 0%, #000 1.6%, #000 98.4%, transparent 100%);
+}
+.skin-v09 #game.active .fx-layer{
+  inset:-2% -3%!important; /* slightly larger than board hole */
+  overflow:visible!important;
+  z-index:28;
+  -webkit-mask-image:linear-gradient(90deg, transparent 0%, #000 2.5%, #000 97.5%, transparent 100%);
+  mask-image:linear-gradient(90deg, transparent 0%, #000 2.5%, #000 97.5%, transparent 100%);
+  pointer-events:none;
+}
+
+/* FX host: full cabinet; no hard clip of side arcs — cabinet still bounds */
+.skin-v09 .gomba-fx-host{
+  overflow:visible;
+  z-index:36;
+}
+
+/* Scrub stray orange vertical leftover near left tray / board BL */
+.skin-v09 #game.active .board-machine:before,
+.skin-v09 #game.active .board-machine:after{display:none!important;content:none!important}
+.skin-v09 #game.active .piece:after{opacity:0!important;display:none!important}
+.skin-v09 #game.active #boardMachine{
+  /* kill any residual orange edge bar from prior drop-shadow / corner marks */
+  outline:0;
+  filter:none!important;
+}
+
+@media(max-height:720px){
+  .skin-v09 #landing .hero-reactor{height:min(44%,155px)}
+  .skin-v09 #landing .hero-img{width:58%!important;max-height:82%!important}
+}
