@@ -1932,3 +1932,276 @@ button,input{font:inherit}.sr-only{position:absolute;width:1px;height:1px;overfl
 .skin-v09 #game.active .tray{z-index:4!important}
 .skin-v09 #game.active .fx-layer{z-index:28!important}
 .skin-v09 #game.active .praise{display:none!important} /* moved to cabinet sibling */
+
+/* ===== V0.9.25 — Near-indistinguishable SoT match (SOT-penny-target-gameplay.png) ===== */
+/* Chamber canopy (not round portal), crystal shards, molten column, slim COMBO, matte-hot cells, cool tray */
+
+.cabinet.skin-v09 .cab-skin{
+  filter:none!important;
+  opacity:1!important;
+  background-image:url("./assets/ui/cabinet-skin-v025.png")!important;
+}
+
+/* --- 1. Gomba chamber: rectangular/canopy stage + larger mascot --- */
+.skin-v09 #game.active .reactor-hud{
+  top:7.0%!important;
+  left:3.6%!important;
+  right:4.4%!important;
+  height:13.4%!important;
+  grid-template-columns:25.2% 1fr!important;
+  gap:1.2%!important;
+}
+.skin-v09 #game.active .mascot-chamber{
+  border-radius:10px!important; /* rectangular canopy stage — NOT circle */
+  clip-path:polygon(8% 0, 92% 0, 100% 8%, 100% 92%, 92% 100%, 8% 100%, 0 92%, 0 8%)!important;
+  aspect-ratio:auto!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:100%!important;
+  max-height:100%!important;
+  justify-self:stretch!important;
+  overflow:hidden!important;
+  place-items:end center!important;
+  align-content:end!important;
+  justify-items:center!important;
+  background:
+    radial-gradient(ellipse 95% 85% at 50% 62%,#ffe8a0 0 5%,#ffb020 14%,#ff7a00 32%,rgba(255,50,0,.5) 52%,rgba(20,6,0,.4) 70%,#0a0400 88%)!important;
+  border:0 solid transparent!important;
+  box-shadow:
+    0 0 8px rgba(255,160,40,.45),
+    0 0 16px rgba(255,100,0,.35),
+    inset 0 0 14px rgba(255,140,40,.3)!important;
+  filter:none!important;
+}
+.skin-v09 #game.active .mascot-chamber:before{
+  border-radius:8px!important;
+  inset:4%!important;
+  opacity:.35!important;
+  border-color:rgba(255,220,130,.35)!important;
+  box-shadow:0 0 8px rgba(255,140,0,.35)!important;
+  animation:none!important;
+}
+.skin-v09 #game.active .chamber-arcs{
+  border-radius:10px!important;
+  opacity:.25!important;
+  clip-path:polygon(8% 0, 92% 0, 100% 8%, 100% 92%, 92% 100%, 8% 100%, 0 92%, 0 8%)!important;
+}
+.skin-v09 #game.active .chamber-core{
+  border-radius:40%!important;
+  inset:22%!important;
+  opacity:.7!important;
+}
+.skin-v09 #game.active .hud-mascot{
+  width:122%!important;
+  height:auto!important;
+  max-width:130%!important;
+  max-height:118%!important;
+  margin:0 0 -8%!important;
+  object-fit:contain!important;
+  object-position:50% 100%!important;
+  filter:
+    drop-shadow(0 0 2px #fff8d0)
+    drop-shadow(0 0 8px #ffd24a)
+    drop-shadow(0 0 16px rgba(255,120,0,.9))
+    brightness(1.08) saturate(1.15)!important;
+}
+.skin-v09 #landing .landing-chamber{
+  border-radius:14%!important;
+}
+.skin-v09 #landing .landing-chamber img,
+.skin-v09 #game.active .hud-mascot{
+  /* shared large canopy fill */
+}
+
+/* --- 7. CORE ~80%: percent placement + inner glow --- */
+.skin-v09 #game.active .core-row{
+  top:18%!important;
+  right:2.5%!important;
+  left:auto!important;
+  width:auto!important;
+  height:16%!important;
+  align-items:center!important;
+}
+.skin-v09 #game.active .core-row strong{
+  font-size:clamp(11px,2.8vw,15px)!important;
+  color:#fff6e0!important;
+  letter-spacing:.02em!important;
+  text-shadow:0 0 6px rgba(255,180,60,.55)!important;
+}
+.skin-v09 #game.active .core-track{
+  top:28%!important;
+  left:2%!important;
+  right:14%!important;
+  height:13%!important;
+  border-radius:3px!important;
+  background:rgba(0,0,0,.25)!important;
+  box-shadow:inset 0 1px 0 rgba(255,220,160,.18),inset 0 0 8px rgba(0,0,0,.55),0 0 10px rgba(255,120,0,.28)!important;
+}
+.skin-v09 #game.active .core-fill{
+  background:linear-gradient(90deg,#ff5200 0%,#ff8a00 42%,#ffb030 78%,#ffd070 100%)!important;
+  box-shadow:
+    0 0 10px #ff8500,
+    0 0 22px rgba(255,100,0,.75),
+    inset 0 0 8px rgba(255,240,180,.55)!important;
+  filter:saturate(1.18) brightness(1.06)!important;
+}
+.skin-v09 #game.active.praising .core-fill,
+.cabinet.skin-v09:has(#praise:not([hidden])) .core-fill{
+  filter:saturate(1.28) brightness(1.1)!important;
+  box-shadow:
+    0 0 14px #ff9a00,
+    0 0 28px rgba(255,110,0,.9),
+    inset 0 0 10px rgba(255,245,200,.65)!important;
+}
+
+/* --- 5. Board cells: matte-hot (less liquid bloom) --- */
+.skin-v09 #game.active .cell.filled{
+  animation:none!important;
+  filter:brightness(.98) saturate(1.08)!important;
+  border-color:#c87828!important;
+  background:
+    linear-gradient(160deg,#ffc858 0%,#ff9a18 26%,#ff5e00 70%,#6a1400 100%)!important;
+  box-shadow:
+    inset 0 1px rgba(255,230,160,.35),
+    inset 0 -4px 6px rgba(70,10,0,.6),
+    0 0 3px rgba(255,140,40,.55),
+    0 0 8px rgba(255,90,0,.35)!important;
+}
+.skin-v09 #game.active .cell.filled:before{
+  box-shadow:inset 0 0 6px rgba(255,220,140,.22)!important;
+  border-color:rgba(255,220,140,.35)!important;
+  background:linear-gradient(135deg,rgba(255,255,255,.22),transparent 42%,rgba(255,80,0,.08))!important;
+}
+
+/* --- 6. Tray: cool frame heat + smaller pieces --- */
+.skin-v09 #game.active .piece{
+  border:2px solid rgba(255,150,50,.55)!important;
+  border-radius:5px!important;
+  background:
+    radial-gradient(circle at 50% 88%,rgba(255,110,0,.18),transparent 48%),
+    repeating-radial-gradient(circle at 50% 50%,#161616 0 1px,#080808 1px 4px),
+    linear-gradient(180deg,#121212 0%,#050505 100%)!important;
+  box-shadow:
+    inset 0 0 0 1px #3a1808,
+    inset 0 0 16px #000,
+    inset 0 -12px 12px rgba(255,90,0,.14),
+    0 0 6px rgba(255,130,0,.35),
+    0 0 14px rgba(255,90,0,.18)!important;
+  padding:14% 14% 14%!important;
+}
+.skin-v09 #game.active .piece:after{
+  opacity:.45!important;
+  height:2px!important;
+  box-shadow:0 0 6px rgba(255,140,0,.45)!important;
+}
+.skin-v09 #game.active .piece .mini{
+  width:clamp(8px,2.05vw,11px)!important;
+  height:clamp(8px,2.05vw,11px)!important;
+  filter:brightness(1.02) saturate(1.1)!important;
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.5),
+    0 0 5px rgba(255,170,40,.7),
+    0 0 10px rgba(255,100,0,.45)!important;
+}
+.skin-v09 #game.active .piece .piece-grid{
+  gap:2px!important;
+  transform:scale(.72)!important;
+}
+.skin-v09 #game.active .rotate{
+  box-shadow:0 0 8px rgba(255,150,40,.55)!important;
+  border-color:#ff9a28!important;
+  width:clamp(14px,3.4vw,20px)!important;
+  height:clamp(14px,3.4vw,20px)!important;
+}
+
+/* --- 4. AMAZING / COMBO: type in front; slim COMBO pill; lighter halo --- */
+.cabinet.skin-v09 > .praise,
+.cabinet.skin-v09 #praise{
+  z-index:92!important;
+  top:48%!important;
+}
+.cabinet.skin-v09 > .praise .word,
+.cabinet.skin-v09 #praise .word{
+  font-size:clamp(46px,13vw,74px)!important;
+  -webkit-text-stroke:4.5px #140500!important;
+  filter:
+    drop-shadow(0 3px 0 #0a0300)
+    drop-shadow(0 0 4px rgba(255,255,220,.75))
+    drop-shadow(0 0 12px rgba(255,176,0,.75))
+    drop-shadow(0 0 24px rgba(255,90,0,.55))!important;
+}
+.cabinet.skin-v09 > .praise .plate,
+.cabinet.skin-v09 #praise .plate{
+  margin:6px auto 0!important;
+  padding:3px 14px!important;
+  border:1.4px solid #ff9a28!important;
+  border-radius:999px!important;
+  background:linear-gradient(180deg,#140a04 0%,#060606 100%)!important;
+  color:#ffe066!important;
+  letter-spacing:.14em!important;
+  font-size:clamp(13px,3.6vw,16px)!important;
+  font-weight:800!important;
+  text-shadow:0 0 6px rgba(255,180,40,.55)!important;
+  box-shadow:
+    0 0 6px rgba(255,140,0,.55),
+    0 0 14px rgba(255,100,0,.35),
+    inset 0 0 8px rgba(255,140,0,.18)!important;
+}
+.cabinet.skin-v09 > .praise:before,
+.cabinet.skin-v09 #praise:before{
+  height:2px!important;
+  opacity:.4!important;
+  filter:blur(.3px)!important;
+  box-shadow:0 0 6px #ffae00!important;
+}
+
+/* --- 2+3. DOM shards = triangles; sparks = needles; thinner molten column --- */
+.skin-v09 #game.active .shard,
+.skin-v09 #game.active .shard.crystal{
+  width:12px!important;
+  height:14px!important;
+  border-radius:0!important;
+  background:linear-gradient(160deg,#fff6c8 0%,#ffc040 28%,#ff7a00 62%,#ff2a00 100%)!important;
+  clip-path:polygon(50% 0%, 100% 88%, 0% 72%)!important;
+  box-shadow:0 0 5px #ffb000,0 0 10px rgba(255,100,0,.75)!important;
+  filter:none!important;
+  transform:rotate(var(--rot,25deg)) scale(var(--sc,1))!important;
+}
+.skin-v09 #game.active .spark,
+.skin-v09 #game.active .spark.needle{
+  width:2px!important;
+  height:12px!important;
+  border-radius:1px!important;
+  background:linear-gradient(180deg,#fffef0,#ffd24a 40%,#ff7a00)!important;
+  box-shadow:0 0 4px #fff6c8,0 0 8px #ff9a00!important;
+}
+.skin-v09 #game.active .beam.col,
+.skin-v09 #game.active .beam.col.molten{
+  width:10px!important;
+  background:linear-gradient(180deg,rgba(255,60,0,.15),#ff6a00 18%,#ffb040 42%,#ffe08a 50%,#ffb040 58%,#ff6a00 82%,rgba(255,60,0,.15))!important;
+  box-shadow:0 0 6px #ff9a00,0 0 14px #ff6a00,0 0 28px rgba(255,60,0,.65)!important;
+  filter:blur(.1px) brightness(1.05) saturate(1.2)!important;
+}
+.skin-v09 #game.active .beam.row{
+  height:6px!important;
+  filter:blur(.15px) brightness(1.0)!important;
+}
+.skin-v09 #game.active .beam.cross,
+.skin-v09 #game.active .beam.cross.thin{
+  opacity:.4!important;
+}
+
+/* Keep firstHint hard-hidden during praise */
+.cabinet.skin-v09.praising #firstHint,
+.skin-v09 #game.active.praising #firstHint,
+.cabinet.skin-v09:has(#praise:not([hidden])) #firstHint{
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
+}
+
+/* FX under praise */
+.cabinet.skin-v09 .gomba-fx-host{z-index:55!important}
+.cabinet.skin-v09 #fxFlash.on{
+  background:radial-gradient(circle at 50% 47%,rgba(255,180,100,.22) 0,rgba(255,100,30,.1) 22%,transparent 58%)!important;
+}
