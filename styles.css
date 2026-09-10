@@ -12,7 +12,7 @@ button,input{font:inherit}.sr-only{position:absolute;width:1px;height:1px;overfl
 .gomba-fx-host canvas{pointer-events:none!important;display:block;width:100%;height:100%}
 .cabinet{position:relative;width:min(100vw,430px);height:100dvh;min-height:640px;padding:max(6px,env(safe-area-inset-top)) 10px max(10px,env(safe-area-inset-bottom));overflow:hidden;background:#050505;border:0 solid transparent;box-shadow:0 0 0 1px #000,0 0 40px rgba(255,100,0,.22)}
 /* REAL shell — full opacity; no transform/filter on #appShell (dragGhost uses machine-local coords) */
-.cab-skin{position:absolute;inset:0;z-index:0;pointer-events:none;background:url("./assets/reference/v09/03_cabinet_skin_production.png") center top / 100% 100% no-repeat;opacity:1;filter:none}
+.cab-skin{position:absolute;inset:0;z-index:0;pointer-events:none;background:url("./assets/ui/cabinet-skin-v016.png") center top / 100% 100% no-repeat;opacity:1;filter:none}
 /* Hide old CSS decor that fights the bitmap shell */
 .energy-tube,.cab-haze,.cab-streaks,.bolt,.pipe{display:none!important}
 .cabinet:before,.cabinet:after{content:none!important;display:none!important}
@@ -614,4 +614,126 @@ button,input{font:inherit}.sr-only{position:absolute;width:1px;height:1px;overfl
 }
 .skin-v09 #game.active .board-machine{
   filter:drop-shadow(0 0 10px rgba(255,110,0,.25));
+}
+
+
+/* ===== V0.9.16 — Penny concept skin (gameplay-amazing chrome) ===== */
+.cabinet.skin-v09 .cab-skin{
+  background-image:url("./assets/ui/cabinet-skin-v016.png");
+  background-size:100% 100%;
+  background-position:center top;
+  background-repeat:no-repeat;
+}
+
+/* Landing: empty top-left ring (skin) + hero/PLAY in board window */
+.skin-v09 #landing .landing-stack{
+  top:32.4%;
+  left:14%;
+  width:72%;
+  height:39%;
+}
+.skin-v09 #landing .hero-reactor{
+  width:min(82%,260px);
+  height:min(64%,220px);
+  filter:drop-shadow(0 0 22px rgba(255,120,0,.7)) drop-shadow(0 0 48px rgba(255,70,0,.45));
+}
+.skin-v09 #landing .play-btn{
+  width:min(90%,270px);
+  min-height:clamp(48px,7.4vh,64px);
+  border-radius:12px;
+  box-shadow:inset 0 2px rgba(255,255,255,.72),0 9px 0 #5a1800,0 0 30px #ff7600,0 0 64px rgba(255,90,0,.95),0 0 100px rgba(255,50,0,.5);
+}
+
+/* Game slots recalibrated to gameplay-amazing hole geometry */
+.skin-v09 #game.active .arcade-header{
+  top:1.2%;
+  height:6.2%;
+  padding:0 3.5% 0 5%;
+}
+.skin-v09 #game.active .reactor-hud{
+  top:10.8%;
+  left:8.5%;
+  right:5%;
+  height:13.5%;
+  grid-template-columns:24% 1fr;
+  gap:2%;
+}
+.skin-v09 #game.active .mascot-chamber{
+  /* Opaque energy chamber covers residual skin glow; live mascot sits on top */
+  background:radial-gradient(circle at 50% 44%,#fffce8 0 6%,#ffe08a 11%,#ffb000 20%,#ff7a00 36%,rgba(255,60,0,.75) 52%,rgba(20,6,0,.92) 70%,#050505 86%);
+}
+.skin-v09 #game.active .core-row{
+  top:10%;
+  right:1%;
+  height:16%;
+}
+.skin-v09 #game.active .core-track{
+  top:18%;
+  left:18%;
+  right:14%;
+  height:16%;
+  /* Opaque mask over painted CORE fill */
+  background:linear-gradient(180deg,#0e0e0e,#050505);
+  border-radius:999px;
+  box-shadow:inset 0 0 10px rgba(0,0,0,.9),0 0 14px rgba(255,120,0,.35);
+}
+.skin-v09 #game.active .stat-grid{
+  top:42%;
+  left:1%;
+  right:1%;
+  height:52%;
+  gap:2.2%;
+}
+.skin-v09 #game.active .stat-grid div{
+  /* Opaque dark wells cover painted SCORE/BEST/COMBO/STAGE values */
+  background:linear-gradient(180deg,#121212,#060606);
+  border:1px solid rgba(255,140,40,.22);
+  border-radius:4px;
+  box-shadow:inset 0 0 10px rgba(0,0,0,.85);
+}
+.skin-v09 #game.active .stat-grid strong{
+  font-size:clamp(13px,3.2vw,18px);
+  color:#fff4d8;
+  text-shadow:0 0 10px rgba(255,160,0,.85),0 0 20px rgba(255,90,0,.55);
+}
+.skin-v09 #game.active .status-bar{
+  top:25.2%;
+  left:9%;
+  right:9%;
+  height:2.6%;
+}
+.skin-v09 #game.active #boardMachine,
+.skin-v09 #game.active .board-machine{
+  top:32.2%;
+  left:13.8%;
+  width:72.4%;
+  height:40%;
+  padding:1.2%;
+}
+.skin-v09 #game.active .board{
+  background:radial-gradient(circle at 50% 45%,rgba(255,120,0,.14),transparent 55%),#030303;
+  border-color:rgba(255,140,40,.45);
+  box-shadow:
+    inset 0 0 22px rgba(0,0,0,.55),
+    0 0 0 1px rgba(255,180,60,.28),
+    0 0 16px rgba(255,120,0,.4),
+    0 0 36px rgba(255,80,0,.22);
+}
+.skin-v09 #game.active #tray,
+.skin-v09 #game.active .tray{
+  top:76%;
+  left:10%;
+  right:10%;
+  height:11.5%;
+  gap:4.8%;
+}
+.skin-v09 #game.active .piece{
+  background:radial-gradient(circle at 50% 70%,rgba(255,110,0,.18),transparent 52%),#080808;
+  border:2px solid rgba(255,150,50,.4);
+}
+.skin-v09 #game.active .praise .word{
+  font-size:clamp(54px,15.5vw,88px);
+  letter-spacing:.02em;
+  -webkit-text-stroke:6px #140500;
+  filter:drop-shadow(0 4px 0 #0e0400) drop-shadow(0 0 14px rgba(255,255,220,.98)) drop-shadow(0 0 30px #ffb400) drop-shadow(0 0 58px #ff5a00) drop-shadow(0 0 100px rgba(255,60,0,.95));
 }

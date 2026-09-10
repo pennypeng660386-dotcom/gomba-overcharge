@@ -372,7 +372,7 @@
       const b = cellAt(map, r, 7);
       if (!a || !b) return;
       const img = this.add.image((a.cx + b.cx) / 2, a.cy, 'fx-beam-h')
-        .setDisplaySize(map.board.w * 1.08, fat ? 34 : 18)
+        .setDisplaySize(map.board.w * 1.12, fat ? 42 : 22)
         .setBlendMode(Phaser.BlendModes.ADD)
         .setScale(0.08, 1)
         .setDepth(10);
@@ -387,7 +387,7 @@
       const b = cellAt(map, 7, c);
       if (!a || !b) return;
       const img = this.add.image(a.cx, (a.cy + b.cy) / 2, 'fx-beam-v')
-        .setDisplaySize(fat ? 42 : 22, map.board.h * 1.1)
+        .setDisplaySize(fat ? 52 : 28, map.board.h * 1.14)
         .setBlendMode(Phaser.BlendModes.ADD)
         .setScale(1, 0.08)
         .setDepth(10);
@@ -421,19 +421,19 @@
     }
 
     blast(x, y, dense) {
-      const cross = this.add.image(x, y, 'fx-cross').setBlendMode(Phaser.BlendModes.ADD).setScale(0.18).setDepth(13);
+      const cross = this.add.image(x, y, 'fx-cross').setBlendMode(Phaser.BlendModes.ADD).setScale(0.22).setDepth(13);
       this.tweens.add({
         targets: cross,
-        scale: dense ? 2.5 : 1.7,
+        scale: dense ? 3.1 : 2.0,
         alpha: 0,
-        duration: dense ? 600 : 440,
+        duration: dense ? 680 : 480,
         ease: 'Cubic.Out',
         onComplete: () => cross.destroy()
       });
-      this.sparks.explode(dense ? 72 : 36, x, y);
-      this.shards.explode(dense ? 40 : 22, x, y);
-      if (this.shardsTall) this.shardsTall.explode(dense ? 22 : 12, x, y);
-      this.embers.explode(dense ? 24 : 12, x, y);
+      this.sparks.explode(dense ? 110 : 48, x, y);
+      this.shards.explode(dense ? 64 : 30, x, y);
+      if (this.shardsTall) this.shardsTall.explode(dense ? 36 : 16, x, y);
+      this.embers.explode(dense ? 40 : 16, x, y);
     }
 
     shockwave(x, y) {
@@ -482,35 +482,45 @@
       this.praise.setAlpha(0).setScale(0.16);
       /* Concept image 2: white-hot column beam, L/R jagged bolts, 3D shard burst */
       if (map) {
+        /* Concept AMAZING: white-hot vertical column + horizontal cross beam */
         this.beamCol(map, 3, true);
         this.beamCol(map, 4, true);
-        /* Extra white core beam through center */
+        this.beamRow(map, 3, true);
+        this.beamRow(map, 4, true);
         const mid = cellAt(map, 3, 3) || cellAt(map, 4, 4);
         if (mid) {
           const core = this.add.image(cx, cy, 'fx-beam-v')
-            .setDisplaySize(56, map.board.h * 1.14)
+            .setDisplaySize(72, map.board.h * 1.2)
+            .setBlendMode(Phaser.BlendModes.ADD)
+            .setAlpha(1)
+            .setDepth(11);
+          this.tweens.add({ targets: core, alpha: 0, delay: 300, duration: 360, onComplete: () => core.destroy() });
+          const crossH = this.add.image(cx, cy, 'fx-beam-h')
+            .setDisplaySize(map.board.w * 1.18, 48)
             .setBlendMode(Phaser.BlendModes.ADD)
             .setAlpha(0.95)
             .setDepth(11);
-          this.tweens.add({ targets: core, alpha: 0, delay: 280, duration: 320, onComplete: () => core.destroy() });
+          this.tweens.add({ targets: crossH, alpha: 0, delay: 260, duration: 340, onComplete: () => crossH.destroy() });
         }
-        /* Jagged horizontal lightning from praise center outward */
-        this.bolt(cx, cy, map.board.x - 8, cy + (Math.random() - 0.5) * 24, true);
-        this.bolt(cx, cy, map.board.x + map.board.w + 8, cy + (Math.random() - 0.5) * 24, true);
-        this.bolt(cx, cy - 14, map.board.x - 4, cy - 28 + (Math.random() - 0.5) * 18, true);
-        this.bolt(cx, cy + 12, map.board.x + map.board.w + 4, cy + 26 + (Math.random() - 0.5) * 18, true);
-        this.bolt(cx, cy - 8, map.board.x - 2, cy + 10, false);
-        this.bolt(cx, cy + 6, map.board.x + map.board.w + 2, cy - 8, false);
+        /* Dense jagged bolts L/R like concept lightning sweeps */
+        this.bolt(cx, cy, map.board.x - 12, cy + (Math.random() - 0.5) * 28, true);
+        this.bolt(cx, cy, map.board.x + map.board.w + 12, cy + (Math.random() - 0.5) * 28, true);
+        this.bolt(cx, cy - 18, map.board.x - 6, cy - 36 + (Math.random() - 0.5) * 20, true);
+        this.bolt(cx, cy + 16, map.board.x + map.board.w + 6, cy + 34 + (Math.random() - 0.5) * 20, true);
+        this.bolt(cx, cy - 10, map.board.x - 4, cy + 14, true);
+        this.bolt(cx, cy + 8, map.board.x + map.board.w + 4, cy - 12, true);
+        this.bolt(cx - 8, cy, map.board.x - 2, cy - 22, false);
+        this.bolt(cx + 8, cy, map.board.x + map.board.w + 2, cy + 20, false);
         this.blast(cx, cy, true);
         this.shockwave(cx, cy);
-        this.sparks.explode(80, cx, cy);
-        this.shards.explode(48, cx, cy);
-        if (this.shardsTall) this.shardsTall.explode(28, cx, cy);
-        this.embers.explode(28, cx, cy);
+        this.sparks.explode(120, cx, cy);
+        this.shards.explode(72, cx, cy);
+        if (this.shardsTall) this.shardsTall.explode(40, cx, cy);
+        this.embers.explode(42, cx, cy);
         this.boardFlash(true);
-        this.cameras.main.shake(240, 0.014);
+        this.cameras.main.shake(280, 0.018);
       } else {
-        this.sparks.explode(36, cx, cy);
+        this.sparks.explode(48, cx, cy);
       }
       this.tweens.killTweensOf(this.praise);
       this.tweens.add({
