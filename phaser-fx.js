@@ -462,9 +462,10 @@
     }
 
     boardFlash(strong) {
-      this.flash.setFillStyle(strong ? 0xffffff : 0xfff4c2, 1);
-      this.flash.setAlpha(strong ? 0.72 : 0.42);
-      this.tweens.add({ targets: this.flash, alpha: 0, duration: strong ? 200 : 150 });
+      /* V0.9.21 — softer flash so DOM praise stays readable (not muddy white wash) */
+      this.flash.setFillStyle(strong ? 0xfff0c0 : 0xffe8a0, 1);
+      this.flash.setAlpha(strong ? 0.38 : 0.22);
+      this.tweens.add({ targets: this.flash, alpha: 0, duration: strong ? 220 : 160 });
     }
 
     slam(word, plate, hold) {
@@ -483,7 +484,7 @@
       this.praise.setAlpha(0).setScale(0.16);
       /* V0.9.20 — particles inside board; soft inset so bolts aren't hard-sheared at L/R */
       if (map) {
-        const inset = Math.min(28, map.board.w * 0.07);
+        const inset = Math.min(34, map.board.w * 0.09);
         const left = map.board.x + inset;
         const right = map.board.x + map.board.w - inset;
         const top = map.board.y + inset;

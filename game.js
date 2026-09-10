@@ -121,7 +121,7 @@
     const clip=window.GOMBA_VO&&window.GOMBA_VO[key];
     if(clip){
       try{
-        const a=new Audio(clip); a.volume=.95; a.playbackRate=1; a.play().catch(()=>{});
+        const a=new Audio(clip); a.volume=.68; a.playbackRate=1; a.play().catch(()=>{});
         return;
       }catch(_){}
     }
@@ -131,7 +131,7 @@
       speechSynthesis.cancel();
       const u=new SpeechSynthesisUtterance(word.replace('!',''));
       /* Fallback TTS if GOMBA_VO clip missing — bright/high pitch */
-      u.lang='en-US'; u.rate=1.18; u.pitch=word==='OVERDRIVE!'?1.35:1.85; u.volume=1;
+      u.lang='en-US'; u.rate=1.18; u.pitch=word==='OVERDRIVE!'?1.3:1.7; u.volume=.72;
       const voices=speechSynthesis.getVoices();
       u.voice=voices.find(v=>/^en/i.test(v.lang)&&/Samantha|Kathy|Princess|Flo|Girl|Child|Kids|Siri|Zira|Aria|Jenny|Google UK English Female/i.test(v.name))
         || voices.find(v=>/^en/i.test(v.lang)&&/female|woman/i.test(v.name))
@@ -141,39 +141,45 @@
   }
   function rewardSfx(word) {
     if(!soundOn) return;
-    /* Original WebAudio stingers — bright casual-game ladder (not ripped samples) */
+    /* V0.9.21 — 开心消消乐 comfort lane: soft-satisfying clear/combo (not squeaky, not industrial slam) */
     const sets={
-      'NICE!':[523,784],
-      'GREAT!':[587,784,988],
-      'AMAZING!':[659,880,1175,1568],
-      'EXCELLENT!':[698,880,1175,1568,1976],
-      'UNSTOPPABLE!':[784,988,1319,1760,2093]
+      'NICE!':[392,523,659],
+      'GREAT!':[440,554,698,880],
+      'AMAZING!':[494,659,831,988],
+      'EXCELLENT!':[523,659,784,988,1175],
+      'UNSTOPPABLE!':[587,740,932,1175,1480]
     };
     if(word==='OVERDRIVE!') {
-      tone(55,0,.62,'sawtooth',.08,28); noise(.02,.18,.075,420); noise(.12,.4,.08,950);
-      [262,523,784,1047,1568,2093].forEach((f,i)=>tone(f,.1+i*.08,.28,i<2?'square':'triangle',.045));
+      /* Warm swell + shimmer — power without harsh saw boom */
+      tone(98,0,.55,'sine',.05,55);
+      tone(196,0,.45,'triangle',.04,110);
+      noise(.04,.22,.04,700);
+      noise(.14,.28,.035,1400);
+      [330,523,659,880,1175].forEach((f,i)=>tone(f,.12+i*.07,.26,'sine',.032-.003*i));
+      tone(1568,.48,.18,'triangle',.018);
       return;
     }
-    /* Cheerful sparkle — bright, no deep boom */
-    noise(.0,.05,.03,3200);
-    tone(880,0,.05,'sine',.035,1200);
+    /* Soft pop + warm ascending chime (match-3 comfort) */
+    noise(0,.028,.018,1600);
+    tone(330,0,.05,'sine',.028,220);
     const ladder=sets[word]||sets['NICE!'];
-    ladder.forEach((f,i)=>tone(f,.02+i*.045,.14+(i*.015),'triangle',.055-.004*i));
-    [2093,2637,3136].forEach((f,i)=>tone(f,.1+ladder.length*.04+i*.025,.07,'sine',.022));
+    ladder.forEach((f,i)=>tone(f,.03+i*.055,.16+(i*.012),'sine',.038-.003*i));
+    /* Gentle sparkle bed — no piercing 3k+ whistle */
+    [1319,1568].forEach((f,i)=>tone(f,.08+ladder.length*.05+i*.03,.1,'triangle',.014));
   }
   function sfx(kind, word='') {
     if(!soundOn) return;
-    if(kind==='tap'){ noise(0,.02,.02,2800); tone(880,0,.04,'sine',.02,640); }
+    if(kind==='tap'){ noise(0,.016,.012,2100); tone(740,0,.035,'sine',.014,520); }
     else if(kind==='place'){
-      /* satisfying drop-click + soft resolve */
-      noise(0,.03,.03,1800); tone(196,0,.07,'triangle',.05,120);
-      tone(523,.04,.09,'sine',.035,784); tone(784,.09,.1,'triangle',.028);
+      /* Soft settle thump + tiny resolve chime */
+      noise(0,.025,.018,1200); tone(165,0,.08,'sine',.032,95);
+      tone(440,.05,.1,'triangle',.022); tone(660,.1,.12,'sine',.016);
     }
-    else if(kind==='invalid'){ tone(140,0,.12,'sawtooth',.04,90); tone(110,.06,.14,'triangle',.035); }
+    else if(kind==='invalid'){ tone(160,0,.1,'triangle',.028,100); tone(120,.05,.12,'sine',.022); }
     else if(kind==='clear'||kind==='combo'){ rewardSfx(word||'NICE!'); speak(word||'NICE!'); }
     else if(kind==='overdrive'){ rewardSfx('OVERDRIVE!'); speak('OVERDRIVE!'); }
-    else if(kind==='over'){ tone(330,0,.1,'triangle',.045); tone(196,.07,.22,'sine',.04,110); }
-    else if(kind==='stage'){ tone(659,0,.07,'triangle',.05); tone(880,.07,.1,'triangle',.05); tone(1175,.14,.16,'sine',.04); }
+    else if(kind==='over'){ tone(294,0,.1,'sine',.03); tone(196,.06,.2,'triangle',.025,120); }
+    else if(kind==='stage'){ tone(523,0,.08,'sine',.03); tone(659,.07,.1,'triangle',.028); tone(880,.14,.14,'sine',.022); }
   }
 
   function syncSoundBtn(){ $('soundBtn').textContent=soundOn?'SOUND ON':'SOUND OFF'; $('soundBtn').setAttribute('aria-pressed',soundOn?'true':'false'); }
