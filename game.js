@@ -248,7 +248,7 @@
     if(window.GombaFX)GombaFX.syncCore(state.core);
   }
   function flashMsg(t){$('feedback').textContent=t;clearTimeout(flashMsg.t);flashMsg.t=setTimeout(()=>$('feedback').textContent='',850);}
-  /* V0.9.24 — SoT peak is AMAZING + COMBO x4; shift cheer map to match */
+  /* V0.9.25 — SoT peak is AMAZING + COMBO x4; shift cheer map to match */
   function cheerFor(n,combo){ if(combo>=6)return['UNSTOPPABLE!','unstoppable']; if(combo===5)return['EXCELLENT!','excellent']; if(combo===4)return['AMAZING!','amazing']; if(combo===3||combo===2||n>=2)return['GREAT!','great']; return['NICE!','nice']; }
   function reactMascot(kind){
     const el=$('mascotWrap'); el.className='mascot-chamber'+(state?.core>=70?' charged':''); if(!kind)return;
@@ -310,9 +310,32 @@
   }
   function spawnDebris(big=false){
     const lr=fxLayer.getBoundingClientRect(), br=boardEl.getBoundingClientRect(), cx=br.left-lr.left+br.width/2, cy=br.top-lr.top+br.height/2;
-    const shards=big?70:44, sparks=big?110:70; /* V0.9.24 — finer spark cloud like SoT */
-    for(let i=0;i<shards;i++){const p=document.createElement('i');p.className='shard';p.style.left=(cx+(Math.random()-.5)*br.width*.7)+'px';p.style.top=(cy+(Math.random()-.5)*br.height*.4)+'px';p.style.setProperty('--dx',((Math.random()-.5)*(big?400:280))+'px');p.style.setProperty('--dy',((-40-Math.random()*(big?280:190)))+'px');p.style.setProperty('--rot',((Math.random()-.5)*720)+'deg');fxLayer.appendChild(p);setTimeout(()=>p.remove(),760);}
-    for(let i=0;i<sparks;i++){const p=document.createElement('i');p.className='spark';p.style.left=(cx+(Math.random()-.5)*br.width*.75)+'px';p.style.top=(cy+(Math.random()-.5)*br.height*.4)+'px';p.style.setProperty('--dx',((Math.random()-.5)*(big?460:320))+'px');p.style.setProperty('--dy',((-40-Math.random()*(big?280:200)))+'px');fxLayer.appendChild(p);setTimeout(()=>p.remove(),820);}
+    /* V0.9.25 — triangular crystal shards + fine needle sparks (SoT) */
+    const shards=big?64:40, sparks=big?120:80;
+    for(let i=0;i<shards;i++){
+      const p=document.createElement('i');
+      p.className='shard crystal';
+      const s=0.55+Math.random()*1.15;
+      p.style.left=(cx+(Math.random()-.5)*br.width*.7)+'px';
+      p.style.top=(cy+(Math.random()-.5)*br.height*.4)+'px';
+      p.style.setProperty('--dx',((Math.random()-.5)*(big?400:280))+'px');
+      p.style.setProperty('--dy',((-40-Math.random()*(big?280:190)))+'px');
+      p.style.setProperty('--rot',((Math.random()-.5)*720)+'deg');
+      p.style.setProperty('--sc',String(s));
+      fxLayer.appendChild(p);setTimeout(()=>p.remove(),780);
+    }
+    for(let i=0;i<sparks;i++){
+      const p=document.createElement('i');
+      p.className='spark needle';
+      const len=8+Math.random()*16;
+      p.style.width='2px';p.style.height=len+'px';
+      p.style.left=(cx+(Math.random()-.5)*br.width*.75)+'px';
+      p.style.top=(cy+(Math.random()-.5)*br.height*.4)+'px';
+      p.style.setProperty('--dx',((Math.random()-.5)*(big?460:320))+'px');
+      p.style.setProperty('--dy',((-40-Math.random()*(big?280:200)))+'px');
+      p.style.setProperty('--rot',((Math.random()-.5)*720)+'deg');
+      fxLayer.appendChild(p);setTimeout(()=>p.remove(),840);
+    }
   }
   function spawnCoreBits(){
     const lr=fxLayer.getBoundingClientRect(),br=boardEl.getBoundingClientRect(),core=$('mascotWrap').getBoundingClientRect();
@@ -326,7 +349,7 @@
     if(window.GombaFX&&GombaFX.ready){
       GombaFX.lineClear(lines,{n,combo});
       GombaFX.combo(word,combo);
-      /* Extra DOM rect shards/sparks (show through transparent Phaser canvas) */
+      /* Extra DOM crystal shards/sparks (show through transparent Phaser canvas) */
       spawnDebris(n>=2||combo>=3);
     }else{
       fireBeams(lines,n>=2||combo>=3);spawnDebris(n>=2||combo>=3);spawnCoreBits();

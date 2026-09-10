@@ -77,38 +77,37 @@
     }
 
     makeTextures() {
+      /* V0.9.25 — fine needle sparks (SoT) */
       const spark = this.add.graphics();
-      spark.fillStyle(0xfff3b0, 1);
-      spark.fillRoundedRect(5, 0, 6, 22, 3);
-      spark.fillStyle(0xff7a00, 0.95);
-      spark.fillRoundedRect(6, 2, 4, 18, 2);
+      spark.fillStyle(0xfff8d0, 1);
+      spark.fillTriangle(8, 0, 10, 22, 6, 22);
+      spark.fillStyle(0xffb020, 0.95);
+      spark.fillTriangle(8, 2, 9.2, 20, 6.8, 20);
+      spark.fillStyle(0xffffff, 0.9);
+      spark.fillRect(7.4, 0, 1.2, 14);
       spark.generateTexture('fx-spark', 16, 22);
       spark.destroy();
 
-      /* 3D rectangular glowing orange/gold shards (concept art) */
+      /* V0.9.25 — sharp triangular crystal shards (SoT) */
       const shard = this.add.graphics();
-      shard.fillStyle(0xff3a00, 1);
-      shard.fillRoundedRect(0, 4, 18, 12, 2);
-      shard.fillStyle(0xff8500, 1);
-      shard.fillRoundedRect(1, 3, 16, 10, 2);
+      shard.fillStyle(0xff2a00, 1);
+      shard.fillTriangle(10, 0, 18, 16, 0, 14);
+      shard.fillStyle(0xff8a00, 1);
+      shard.fillTriangle(10, 2, 15, 13, 3, 12);
       shard.fillStyle(0xffe08a, 1);
-      shard.fillRoundedRect(2, 3, 14, 4, 1);
+      shard.fillTriangle(10, 3, 13, 10, 6, 9);
       shard.fillStyle(0xfff8d0, 0.95);
-      shard.fillRect(3, 4, 10, 1.5);
-      shard.fillStyle(0xb82000, 0.9);
-      shard.fillRect(1, 12, 16, 3);
+      shard.fillTriangle(10, 4, 11.5, 8, 8, 7.5);
       shard.generateTexture('fx-shard', 18, 16);
       shard.destroy();
 
       const shard2 = this.add.graphics();
-      shard2.fillStyle(0xff5200, 1);
-      shard2.fillRoundedRect(0, 2, 12, 20, 2);
+      shard2.fillStyle(0xff3a00, 1);
+      shard2.fillTriangle(6, 0, 12, 22, 0, 18);
       shard2.fillStyle(0xffc43d, 1);
-      shard2.fillRoundedRect(1, 2, 10, 7, 1);
-      shard2.fillStyle(0xfff6c8, 0.9);
-      shard2.fillRect(2, 3, 7, 2);
-      shard2.fillStyle(0xc43000, 1);
-      shard2.fillRect(1, 18, 10, 3);
+      shard2.fillTriangle(6, 2, 10, 16, 2, 14);
+      shard2.fillStyle(0xfff6c8, 0.95);
+      shard2.fillTriangle(6, 3, 8.5, 10, 3.5, 9);
       shard2.generateTexture('fx-shard-tall', 12, 22);
       shard2.destroy();
 
@@ -143,20 +142,20 @@
       beamH.generateTexture('fx-beam-h', 256, 48);
       beamH.destroy();
 
-      /* V0.9.24 — molten vertical column (orange body, narrow white core) */
+      /* V0.9.25 — molten orange column (less white-blown, denser orange body) */
       const beamV = this.add.graphics();
-      beamV.fillStyle(0xff2a00, 0.45);
-      beamV.fillRect(0, 0, 64, 256);
-      beamV.fillStyle(0xff6a00, 0.85);
-      beamV.fillRect(6, 0, 52, 256);
-      beamV.fillStyle(0xffa020, 1);
+      beamV.fillStyle(0xff1a00, 0.35);
+      beamV.fillRect(8, 0, 48, 256);
+      beamV.fillStyle(0xff4a00, 0.75);
       beamV.fillRect(14, 0, 36, 256);
-      beamV.fillStyle(0xffd24a, 1);
+      beamV.fillStyle(0xff8a00, 0.95);
       beamV.fillRect(20, 0, 24, 256);
-      beamV.fillStyle(0xfff6c8, 0.95);
-      beamV.fillRect(26, 0, 12, 256);
-      beamV.fillStyle(0xffffff, 0.9);
-      beamV.fillRect(29, 0, 6, 256);
+      beamV.fillStyle(0xffc040, 1);
+      beamV.fillRect(25, 0, 14, 256);
+      beamV.fillStyle(0xffe8a0, 0.85);
+      beamV.fillRect(28, 0, 8, 256);
+      beamV.fillStyle(0xfff6d0, 0.55);
+      beamV.fillRect(30, 0, 4, 256);
       beamV.generateTexture('fx-beam-v', 64, 256);
       beamV.destroy();
 
@@ -282,13 +281,13 @@
         fontStyle: 'italic bold',
         color: '#ffc020',
         stroke: '#160600',
-        strokeThickness: 16,
-        shadow: { offsetX: 0, offsetY: 4, color: '#ff5a00', blur: 28, stroke: true, fill: true }
+        strokeThickness: 12,
+        shadow: { offsetX: 0, offsetY: 3, color: '#ff5a00', blur: 16, stroke: true, fill: true }
       }).setOrigin(0.5).setAngle(-2);
-      this.praisePlate = this.add.rectangle(0, 46, 188, 36, 0x0a0500, 0.96).setStrokeStyle(3.5, 0xff9a28);
-      this.praiseSub = this.add.text(0, 46, 'COMBO X4', {
+      this.praisePlate = this.add.rectangle(0, 42, 168, 26, 0x0a0500, 0.92).setStrokeStyle(2, 0xff9a28);
+      this.praiseSub = this.add.text(0, 42, 'COMBO X4', {
         fontFamily: 'Impact, Arial Black, Arial',
-        fontSize: '19px',
+        fontSize: '17px',
         color: '#ffe066',
         stroke: '#2a1000',
         strokeThickness: 2
@@ -385,9 +384,9 @@
       const a = cellAt(map, 0, c);
       const b = cellAt(map, 7, c);
       if (!a || !b) return;
-      /* SoT column blast — fat white-hot vertical beam */
+      /* V0.9.25 — molten column, narrower, less overexposed */
       const img = this.add.image(a.cx, (a.cy + b.cy) / 2, 'fx-beam-v')
-        .setDisplaySize(fat ? 44 : 30, map.board.h * 1.04)
+        .setDisplaySize(fat ? 20 : 14, map.board.h * 1.01)
         .setBlendMode(Phaser.BlendModes.ADD)
         .setScale(1, 0.08)
         .setDepth(10)
@@ -481,8 +480,8 @@
       this.praiseSub.setText(plate);
       this.praiseWord.setFontSize(word.length > 10 ? 58 : 76);
       this.praiseWord.setColor(word.length > 8 ? '#ffb020' : '#ffc020');
-      const plateW = Math.max(170, 24 + plate.length * 12);
-      this.praisePlate.setSize(plateW, 36);
+      const plateW = Math.max(140, 18 + plate.length * 10);
+      this.praisePlate.setSize(plateW, 26);
       /* DOM #praise owns concept gradient AMAZING! + orange pill; Phaser = energy FX */
       /* DOM #praise owns readable badge; Phaser praise stays hidden to avoid muddy double text */
       this.praise.setAlpha(0).setScale(0.16);
@@ -493,24 +492,24 @@
         const right = map.board.x + map.board.w - inset;
         const top = map.board.y + inset;
         const bot = map.board.y + map.board.h - inset;
-        /* V0.9.24 — SoT molten column + fine sparks; NO overexposed white cross */
+        /* V0.9.25 — molten orange column + crystal shards; no white-blown slab */
         this.beamCol(map, 3, true);
         const core = this.add.image(cx, cy, 'fx-beam-v')
-          .setDisplaySize(52, map.board.h * 1.04)
+          .setDisplaySize(22, map.board.h * 1.01)
           .setBlendMode(Phaser.BlendModes.ADD)
-          .setAlpha(0.98)
+          .setAlpha(0.92)
           .setDepth(12);
         this.tweens.add({ targets: core, alpha: 0, delay: 300, duration: 340, onComplete: () => core.destroy() });
         const coreGlow = this.add.image(cx, cy, 'fx-beam-v')
-          .setDisplaySize(78, map.board.h * 1.0)
+          .setDisplaySize(34, map.board.h * 0.98)
           .setBlendMode(Phaser.BlendModes.ADD)
-          .setAlpha(0.55)
+          .setAlpha(0.42)
           .setDepth(11);
         this.tweens.add({ targets: coreGlow, alpha: 0, delay: 220, duration: 360, onComplete: () => coreGlow.destroy() });
         const coreHot = this.add.image(cx, cy, 'fx-beam-v')
-          .setDisplaySize(18, map.board.h * 1.06)
+          .setDisplaySize(7, map.board.h * 1.03)
           .setBlendMode(Phaser.BlendModes.ADD)
-          .setAlpha(0.9)
+          .setAlpha(0.7)
           .setDepth(13);
         this.tweens.add({ targets: coreHot, alpha: 0, delay: 180, duration: 280, onComplete: () => coreHot.destroy() });
         /* thin horizontal energy arc only — never a white slab over AMAZING */
