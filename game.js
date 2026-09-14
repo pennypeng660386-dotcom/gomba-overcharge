@@ -197,7 +197,14 @@
     else if(kind==='stage'){ tone(523,0,.08,'sine',.03); tone(659,.07,.1,'triangle',.028); tone(880,.14,.14,'sine',.022); }
   }
 
-  function syncSoundBtn(){ $('soundBtn').textContent=soundOn?'SOUND ON':'SOUND OFF'; $('soundBtn').setAttribute('aria-pressed',soundOn?'true':'false'); }
+  function syncSoundBtn(){
+    const btn=$('soundBtn');
+    const label=btn.querySelector('.btn-label');
+    const text=soundOn?'SOUND ON':'SOUND OFF';
+    if(label) label.textContent=text; else btn.textContent=text;
+    btn.setAttribute('aria-pressed',soundOn?'true':'false');
+    btn.classList.toggle('is-off',!soundOn);
+  }
   function syncOffline(){ $('statusLeft').textContent=navigator.onLine===false?'OFFLINE MODE':'⚡ ENERGY GRID'; }
   function show(name){ Object.values(screens).forEach(s=>s.classList.remove('active')); screens[name].classList.add('active'); window.scrollTo(0,0); if(window.GombaFX){GombaFX.setActive(name==='game');if(name==='game'&&state)GombaFX.syncCore(state.core);} }
 
