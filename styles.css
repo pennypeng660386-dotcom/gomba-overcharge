@@ -2205,3 +2205,194 @@ button,input{font:inherit}.sr-only{position:absolute;width:1px;height:1px;overfl
 .cabinet.skin-v09 #fxFlash.on{
   background:radial-gradient(circle at 50% 47%,rgba(255,180,100,.22) 0,rgba(255,100,30,.1) 22%,transparent 58%)!important;
 }
+
+/* ===== V0.9.26 — Design-board 01–05 (left mock / right requirements) ===== */
+/* Keep V0.9.25 skin + openings; boost energy pod, cell density, rim, clear FX, footer. */
+/* Do NOT transform #appShell / boardMetrics — preserve V0.7.4 drag coords. */
+
+/* 01 — Mascot glowing orange energy pod (industrial dark metal) */
+.skin-v09 #game.active .mascot-chamber{
+  background:
+    radial-gradient(ellipse 90% 80% at 50% 58%,#fff6c0 0 4%,#ffd24a 10%,#ff9a00 24%,#ff5a00 42%,rgba(255,40,0,.55) 58%,rgba(12,4,0,.55) 74%,#050200 92%)!important;
+  box-shadow:
+    0 0 12px #ffd080,
+    0 0 28px rgba(255,140,0,.75),
+    0 0 52px rgba(255,80,0,.55),
+    inset 0 0 22px rgba(255,200,80,.45),
+    inset 0 0 40px rgba(255,90,0,.25)!important;
+}
+.skin-v09 #game.active .chamber-arcs{
+  opacity:.72!important;
+  filter:drop-shadow(0 0 10px #ff8500) drop-shadow(0 0 22px rgba(255,120,0,.85))!important;
+  animation:spin 2.6s linear infinite!important;
+}
+.skin-v09 #game.active .chamber-sparks{
+  opacity:.7!important;
+  visibility:visible!important;
+}
+.skin-v09 #game.active .chamber-core{
+  opacity:.95!important;
+  filter:brightness(1.15)!important;
+}
+.skin-v09 #game.active .mascot-chamber:before{
+  opacity:.7!important;
+  animation:pulse 1.4s ease-in-out infinite!important;
+  box-shadow:0 0 16px #ffb000,0 0 32px rgba(255,120,0,.7)!important;
+  border-color:rgba(255,230,150,.75)!important;
+}
+.skin-v09 #game.active .hud-mascot{
+  filter:
+    drop-shadow(0 0 2px #fff8d0)
+    drop-shadow(0 0 8px #ffd24a)
+    drop-shadow(0 0 18px rgba(255,120,0,1))
+    drop-shadow(0 0 36px rgba(255,70,0,.8))
+    brightness(1.12) saturate(1.2)!important;
+}
+
+/* 02 — Thick industrial rim + denser textured cells */
+.skin-v09 #game.active #boardMachine,
+.skin-v09 #game.active .board-machine{
+  /* orange neon rim without changing layout box / drag origin */
+  box-shadow:
+    inset 0 0 0 2px rgba(255,140,0,.55),
+    inset 0 0 0 5px rgba(20,10,0,.9),
+    inset 0 0 0 7px rgba(255,110,0,.35),
+    0 0 18px rgba(255,100,0,.35),
+    0 0 36px rgba(255,70,0,.18)!important;
+}
+.skin-v09 #game.active .board{
+  background:
+    repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 3px),
+    repeating-linear-gradient(90deg,rgba(255,255,255,.014) 0 1px,transparent 1px 3px),
+    radial-gradient(ellipse 80% 70% at 50% 45%,rgba(255,110,0,.1),transparent 62%),
+    #070707!important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,130,0,.4),
+    inset 0 0 28px rgba(0,0,0,.8),
+    inset 0 0 20px rgba(255,100,0,.2)!important;
+}
+.skin-v09 #game.active .cell{
+  border-radius:4px!important;
+  border-color:#0a0a0a!important;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.04),transparent 40%),
+    repeating-linear-gradient(135deg,rgba(255,255,255,.03) 0 1px,transparent 1px 4px),
+    linear-gradient(145deg,#1c1c1c 0,#0e0e0e 55%,#050505 100%)!important;
+  box-shadow:
+    inset 2px 2px 3px #000,
+    inset -1px -1px 1px rgba(255,255,255,.06),
+    0 0 0 1px #000!important;
+}
+.skin-v09 #game.active .cell.filled{
+  filter:brightness(1.16) saturate(1.25)!important;
+  box-shadow:
+    inset 0 2px rgba(255,255,255,.8),
+    inset 0 -6px 10px rgba(90,15,0,.55),
+    0 0 12px #ffc000,
+    0 0 26px rgba(255,120,0,1),
+    0 0 44px rgba(255,70,0,.75)!important;
+}
+
+/* 03 — Clear VFX readability (DOM beams/shards amplify Phaser) */
+.skin-v09 #game.active .beam.row{
+  height:10px!important;
+  filter:blur(.1px) brightness(1.25) saturate(1.25)!important;
+  box-shadow:0 0 8px #fff,0 0 18px #fff6c8,0 0 36px #ffd339,0 0 64px #ff7a00!important;
+}
+.skin-v09 #game.active .beam.col,
+.skin-v09 #game.active .beam.col.molten{
+  width:16px!important;
+  filter:blur(.1px) brightness(1.2) saturate(1.3)!important;
+  box-shadow:0 0 10px #fff6c8,0 0 22px #ffb000,0 0 44px #ff6a00,0 0 72px rgba(255,50,0,.75)!important;
+}
+.skin-v09 #game.active .shard,
+.skin-v09 #game.active .shard.crystal{
+  width:16px!important;
+  height:18px!important;
+  box-shadow:0 0 8px #ffb000,0 0 16px #ff7200,0 0 28px rgba(255,80,0,.9)!important;
+}
+/* screen shake stays on .cabinet.shaking + Phaser camera — no board transform (drag coords) */
+
+/* 04 — Glowing slanted impact praise (AMAZING / EXCELLENT / UNSTOPPABLE) */
+.cabinet.skin-v09 > .praise .word,
+.cabinet.skin-v09 #praise .word{
+  font-size:clamp(50px,14vw,80px)!important;
+  font-style:italic!important;
+  font-weight:900!important;
+  transform:skewX(-12deg)!important;
+  letter-spacing:.02em!important;
+  background-image:linear-gradient(180deg,#fffef5 0%,#fff6b0 16%,#ffe040 40%,#ffb000 70%,#ff6a00 100%)!important;
+  -webkit-text-stroke:5px #120400!important;
+  filter:
+    drop-shadow(0 4px 0 #0a0300)
+    drop-shadow(0 0 10px rgba(255,255,230,1))
+    drop-shadow(0 0 24px #ffc000)
+    drop-shadow(0 0 48px #ff6a00)
+    drop-shadow(0 0 80px rgba(255,70,0,.9))!important;
+}
+.cabinet.skin-v09 > .praise .plate,
+.cabinet.skin-v09 #praise .plate{
+  margin:10px auto 0!important;
+  padding:6px 20px!important;
+  border:2.2px solid #ff9a28!important;
+  letter-spacing:.16em!important;
+  font-size:clamp(14px,3.8vw,18px)!important;
+  box-shadow:
+    0 0 10px #ff8a00,
+    0 0 24px rgba(255,100,0,.85),
+    0 0 40px rgba(255,70,0,.45),
+    inset 0 0 12px rgba(255,140,0,.28)!important;
+}
+.cabinet.skin-v09 > .praise.tier-excellent .word,
+.cabinet.skin-v09 #praise.tier-excellent .word{
+  background-image:linear-gradient(180deg,#ffffff 0%,#ffe566 30%,#ffb000 70%,#ff7a00 100%)!important;
+}
+.cabinet.skin-v09 > .praise.tier-unstoppable .word,
+.cabinet.skin-v09 #praise.tier-unstoppable .word{
+  background-image:linear-gradient(180deg,#ffffff 0%,#fff0a0 20%,#ffd020 45%,#ff8a00 75%,#ff3b00 100%)!important;
+  filter:
+    drop-shadow(0 4px 0 #0a0300)
+    drop-shadow(0 0 14px #fff)
+    drop-shadow(0 0 32px #ffc000)
+    drop-shadow(0 0 64px #ff5a00)
+    drop-shadow(0 0 100px rgba(255,40,0,1))!important;
+}
+
+/* 05 cue + match: footer PLACE. CLEAR. OVERDRIVE. (pointer-events none) */
+.cabinet.skin-v09 .game-footer-tag{
+  position:absolute;
+  left:50%;
+  bottom:1.6%;
+  transform:translateX(-50%);
+  z-index:6;
+  margin:0;
+  padding:0;
+  pointer-events:none;
+  font-size:clamp(9px,2.4vw,11px);
+  letter-spacing:.22em;
+  font-weight:700;
+  color:rgba(255,230,180,.78);
+  text-shadow:0 0 8px rgba(255,140,0,.45),0 1px 0 #000;
+  white-space:nowrap;
+  opacity:0;
+}
+.cabinet.skin-v09:has(#game.active) .game-footer-tag{opacity:.9}
+
+/* CORE / stats heat nudge (match mock readability) */
+.skin-v09 #game.active .stat-grid strong{
+  color:#ffe9b8!important;
+  text-shadow:0 0 8px rgba(255,180,60,.65),0 1px 0 #1a0800!important;
+}
+.skin-v09 #game.active .core-fill{
+  box-shadow:0 0 16px #ff7500,0 0 32px rgba(255,90,0,.9),0 0 48px rgba(255,60,0,.5)!important;
+}
+
+/* Tray neon bays read hotter (design-board piece tray) */
+.skin-v09 #game.active .piece .mini{
+  filter:brightness(1.14) saturate(1.22)!important;
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.75),
+    0 0 12px #ffb800,
+    0 0 22px rgba(255,100,0,1),
+    0 0 36px rgba(255,70,0,.6)!important;
+}

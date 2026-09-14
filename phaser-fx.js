@@ -285,7 +285,7 @@
         shadow: { offsetX: 0, offsetY: 3, color: '#ff5a00', blur: 16, stroke: true, fill: true }
       }).setOrigin(0.5).setAngle(-2);
       this.praisePlate = this.add.rectangle(0, 42, 168, 26, 0x0a0500, 0.92).setStrokeStyle(2, 0xff9a28);
-      this.praiseSub = this.add.text(0, 42, 'COMBO X4', {
+      this.praiseSub = this.add.text(0, 42, 'COMBO x4', {
         fontFamily: 'Impact, Arial Black, Arial',
         fontSize: '17px',
         color: '#ffe066',
@@ -368,35 +368,37 @@
       const a = cellAt(map, r, 0);
       const b = cellAt(map, r, 7);
       if (!a || !b) return;
+      /* V0.9.26 — clearer horizontal lightning sweep */
       const img = this.add.image((a.cx + b.cx) / 2, a.cy, 'fx-beam-h')
-        .setDisplaySize(map.board.w * 1.02, fat ? 18 : 12)
+        .setDisplaySize(map.board.w * 1.04, fat ? 26 : 16)
         .setBlendMode(Phaser.BlendModes.ADD)
         .setScale(0.08, 1)
         .setDepth(10)
         .setAlpha(1);
-      this.tweens.add({ targets: img, scaleX: 1, duration: 70, ease: 'Cubic.Out' });
-      this.tweens.add({ targets: img, alpha: 0, delay: 520, duration: 280, onComplete: () => img.destroy() });
-      this.sparks.explode(fat ? 22 : 14, a.cx, a.cy);
-      this.sparks.explode(fat ? 22 : 14, b.cx, b.cy);
+      this.tweens.add({ targets: img, scaleX: 1, duration: 65, ease: 'Cubic.Out' });
+      this.tweens.add({ targets: img, alpha: 0, delay: 540, duration: 280, onComplete: () => img.destroy() });
+      this.sparks.explode(fat ? 34 : 20, a.cx, a.cy);
+      this.sparks.explode(fat ? 34 : 20, b.cx, b.cy);
+      if (this.shards) this.shards.explode(fat ? 10 : 6, (a.cx + b.cx) / 2, a.cy);
     }
 
     beamCol(map, c, fat) {
       const a = cellAt(map, 0, c);
       const b = cellAt(map, 7, c);
       if (!a || !b) return;
-      /* V0.9.25 — molten column, narrower, less overexposed */
+      /* V0.9.26 — molten vertical lightning + explosive debris */
       const img = this.add.image(a.cx, (a.cy + b.cy) / 2, 'fx-beam-v')
-        .setDisplaySize(fat ? 20 : 14, map.board.h * 1.01)
+        .setDisplaySize(fat ? 28 : 18, map.board.h * 1.02)
         .setBlendMode(Phaser.BlendModes.ADD)
         .setScale(1, 0.08)
         .setDepth(10)
         .setAlpha(1);
-      this.tweens.add({ targets: img, scaleY: 1, duration: 70, ease: 'Cubic.Out' });
-      this.tweens.add({ targets: img, alpha: 0, delay: 560, duration: 300, onComplete: () => img.destroy() });
-      this.sparks.explode(fat ? 28 : 18, a.cx, a.cy);
-      this.sparks.explode(fat ? 28 : 18, b.cx, b.cy);
-      if (this.shards) this.shards.explode(fat ? 18 : 10, a.cx, (a.cy + b.cy) / 2);
-      if (this.shardsTall) this.shardsTall.explode(fat ? 12 : 6, a.cx, (a.cy + b.cy) / 2);
+      this.tweens.add({ targets: img, scaleY: 1, duration: 65, ease: 'Cubic.Out' });
+      this.tweens.add({ targets: img, alpha: 0, delay: 580, duration: 300, onComplete: () => img.destroy() });
+      this.sparks.explode(fat ? 42 : 26, a.cx, a.cy);
+      this.sparks.explode(fat ? 42 : 26, b.cx, b.cy);
+      if (this.shards) this.shards.explode(fat ? 28 : 16, a.cx, (a.cy + b.cy) / 2);
+      if (this.shardsTall) this.shardsTall.explode(fat ? 18 : 10, a.cx, (a.cy + b.cy) / 2);
     }
 
     bolt(x0, y0, x1, y1, fat) {
@@ -494,43 +496,43 @@
         const bot = map.board.y + map.board.h - inset;
         /* V0.9.25 — molten orange column + crystal shards; no white-blown slab */
         this.beamCol(map, 3, true);
+        /* V0.9.26 — clearer H/V lightning + explosive orange debris + screen shake */
         const core = this.add.image(cx, cy, 'fx-beam-v')
-          .setDisplaySize(22, map.board.h * 1.01)
+          .setDisplaySize(28, map.board.h * 1.02)
           .setBlendMode(Phaser.BlendModes.ADD)
-          .setAlpha(0.92)
+          .setAlpha(0.95)
           .setDepth(12);
-        this.tweens.add({ targets: core, alpha: 0, delay: 300, duration: 340, onComplete: () => core.destroy() });
+        this.tweens.add({ targets: core, alpha: 0, delay: 320, duration: 340, onComplete: () => core.destroy() });
         const coreGlow = this.add.image(cx, cy, 'fx-beam-v')
-          .setDisplaySize(34, map.board.h * 0.98)
+          .setDisplaySize(44, map.board.h * 0.99)
           .setBlendMode(Phaser.BlendModes.ADD)
-          .setAlpha(0.42)
+          .setAlpha(0.5)
           .setDepth(11);
-        this.tweens.add({ targets: coreGlow, alpha: 0, delay: 220, duration: 360, onComplete: () => coreGlow.destroy() });
+        this.tweens.add({ targets: coreGlow, alpha: 0, delay: 240, duration: 360, onComplete: () => coreGlow.destroy() });
         const coreHot = this.add.image(cx, cy, 'fx-beam-v')
-          .setDisplaySize(7, map.board.h * 1.03)
+          .setDisplaySize(9, map.board.h * 1.04)
           .setBlendMode(Phaser.BlendModes.ADD)
-          .setAlpha(0.7)
+          .setAlpha(0.8)
           .setDepth(13);
-        this.tweens.add({ targets: coreHot, alpha: 0, delay: 180, duration: 280, onComplete: () => coreHot.destroy() });
-        /* thin horizontal energy arc only — never a white slab over AMAZING */
+        this.tweens.add({ targets: coreHot, alpha: 0, delay: 200, duration: 280, onComplete: () => coreHot.destroy() });
+        /* horizontal lightning sweep — readable but not a white slab over AMAZING */
         const crossH = this.add.image(cx, cy, 'fx-beam-h')
-          .setDisplaySize(map.board.w * 0.92, 10)
+          .setDisplaySize(map.board.w * 0.98, 16)
           .setBlendMode(Phaser.BlendModes.ADD)
-          .setAlpha(0.7)
+          .setAlpha(0.85)
           .setDepth(10);
-        this.tweens.add({ targets: crossH, alpha: 0, delay: 160, duration: 240, onComplete: () => crossH.destroy() });
-        /* side bolts into frame — SoT energy language */
+        this.tweens.add({ targets: crossH, alpha: 0, delay: 180, duration: 260, onComplete: () => crossH.destroy() });
         this.bolt(cx, cy, left - 8, cy + (Math.random() - 0.5) * 14, true);
         this.bolt(cx, cy, right + 8, cy + (Math.random() - 0.5) * 14, true);
         this.bolt(cx, cy, left + 4, cy - 28, false);
         this.bolt(cx, cy, right - 4, cy + 28, false);
-        this.blast(cx, cy, false);
-        this.sparks.explode(96, cx, cy);
-        this.shards.explode(28, cx, cy);
-        if (this.shardsTall) this.shardsTall.explode(16, cx, cy);
-        this.embers.explode(36, cx, cy);
+        this.blast(cx, cy, true);
+        this.sparks.explode(128, cx, cy);
+        this.shards.explode(42, cx, cy);
+        if (this.shardsTall) this.shardsTall.explode(24, cx, cy);
+        this.embers.explode(52, cx, cy);
         this.boardFlash(false);
-        this.cameras.main.shake(140, 0.009);
+        this.cameras.main.shake(200, 0.014);
       } else {
         this.sparks.explode(24, cx, cy);
       }
@@ -598,7 +600,7 @@
     playCombo(word, combo) {
       if (!active) return;
       this.syncLayout();
-      const plate = combo > 1 ? `COMBO X${combo}` : 'LINE CLEAR';
+      const plate = combo > 1 ? `COMBO x${combo}` : 'LINE CLEAR';
       this.slam(word, plate, combo >= 4 ? 420 : combo >= 2 ? 320 : 260);
       if (combo >= 3) this.arcNearMascot();
     }

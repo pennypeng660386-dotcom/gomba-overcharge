@@ -169,14 +169,29 @@
   }
   function sfx(kind, word='') {
     if(!soundOn) return;
+    /* V0.9.26 — layered SFX: place / clear / combo / overdrive (Web Audio) */
     if(kind==='tap'){ noise(0,.016,.012,2100); tone(740,0,.035,'sine',.014,520); }
     else if(kind==='place'){
-      /* Soft settle thump + tiny resolve chime */
-      noise(0,.025,.018,1200); tone(165,0,.08,'sine',.032,95);
-      tone(440,.05,.1,'triangle',.022); tone(660,.1,.12,'sine',.016);
+      /* Layer: soft thud + settle click + tiny sparkle */
+      noise(0,.03,.022,900); tone(140,0,.09,'triangle',.038,70);
+      tone(220,.04,.07,'sine',.02,140);
+      tone(520,.09,.08,'triangle',.014);
     }
     else if(kind==='invalid'){ tone(160,0,.1,'triangle',.028,100); tone(120,.05,.12,'sine',.022); }
-    else if(kind==='clear'||kind==='combo'){ rewardSfx(word||'NICE!'); speak(word||'NICE!'); }
+    else if(kind==='clear'){
+      /* Layer: crack + debris whoosh + reward chime */
+      noise(0,.05,.045,1800); noise(.02,.08,.03,700);
+      tone(110,0,.12,'sawtooth',.02,55);
+      rewardSfx(word||'NICE!'); speak(word||'NICE!');
+    }
+    else if(kind==='combo'){
+      /* Layer: clear bed + brighter ascending stack (combo emphasis) */
+      noise(0,.04,.035,1600); noise(.03,.1,.028,900);
+      tone(98,0,.18,'sine',.03,60);
+      rewardSfx(word||'AMAZING!');
+      tone(1760,.22,.12,'triangle',.012);
+      speak(word||'AMAZING!');
+    }
     else if(kind==='overdrive'){ rewardSfx('OVERDRIVE!'); speak('OVERDRIVE!'); }
     else if(kind==='over'){ tone(294,0,.1,'sine',.03); tone(196,.06,.2,'triangle',.025,120); }
     else if(kind==='stage'){ tone(523,0,.08,'sine',.03); tone(659,.07,.1,'triangle',.028); tone(880,.14,.14,'sine',.022); }
@@ -261,7 +276,7 @@
     const e=$('praise'), wordEl=$('praiseWord'), plate=$('praisePlate');
     const gameEl=$('game');
     wordEl.textContent=word;
-    plate.textContent=word==='OVERDRIVE!'?'CORE 100%':combo>=1?`COMBO X${combo}`:'LINE CLEAR';
+    plate.textContent=word==='OVERDRIVE!'?'CORE 100%':combo>=1?`COMBO x${combo}`:'LINE CLEAR';
     e.classList.remove('tier-amazing','tier-excellent','tier-unstoppable','tier-overdrive');
     if(word==='UNSTOPPABLE!') e.classList.add('tier-unstoppable');
     else if(word==='EXCELLENT!') e.classList.add('tier-excellent');
@@ -311,7 +326,7 @@
   function spawnDebris(big=false){
     const lr=fxLayer.getBoundingClientRect(), br=boardEl.getBoundingClientRect(), cx=br.left-lr.left+br.width/2, cy=br.top-lr.top+br.height/2;
     /* V0.9.25 — triangular crystal shards + fine needle sparks (SoT) */
-    const shards=big?64:40, sparks=big?120:80;
+    const shards=big?80:52, sparks=big?150:100; /* V0.9.26 denser orange debris */
     for(let i=0;i<shards;i++){
       const p=document.createElement('i');
       p.className='shard crystal';
@@ -344,7 +359,7 @@
   }
   function playClearFx(lines,n,combo,word,kind){
     reactMascot(kind);
-    /* Always show DOM praise (COMBO Xn / NICE…) so juice is visible even when Phaser is up */
+    /* Always show DOM praise (COMBO xn / NICE…) so juice is visible even when Phaser is up */
     showPraise(word,combo);
     if(window.GombaFX&&GombaFX.ready){
       GombaFX.lineClear(lines,{n,combo});
@@ -354,7 +369,7 @@
     }else{
       fireBeams(lines,n>=2||combo>=3);spawnDebris(n>=2||combo>=3);spawnCoreBits();
     }
-    flashScreen();powerFrame(combo>=4);shake(combo>=4?320:250);flashMsg(word);sfx(combo>=2||n>=2?'combo':'clear',word);
+    flashScreen();powerFrame(combo>=4);shake(combo>=4?380:280);flashMsg(word);sfx(combo>=2||n>=2?'combo':'clear',word);
   }
 
   function showStageBanner(n){const e=$('stageBanner');$('stageBannerNum').textContent=`STAGE ${n}`;e.hidden=false;sfx('stage');setTimeout(()=>e.hidden=true,1000);}
@@ -376,7 +391,7 @@
     showPraise('OVERDRIVE!',state.combo);
     if(window.GombaFX&&GombaFX.ready){GombaFX.overdrive(target);}
     else{fireBeams({rows:[target.type==='row'?target.index:3],cols:[target.type==='col'?target.index:3]},true);spawnDebris(true);spawnCoreBits();}
-    flashScreen();powerFrame(true);shake(360);flashMsg('OVERDRIVE!');sfx('overdrive');checkStage();track('overdrive',{stage:state.stage,target});
+    flashScreen();powerFrame(true);shake(400);flashMsg('OVERDRIVE!');sfx('overdrive');checkStage();track('overdrive',{stage:state.stage,target});
     await wait(950);state.clearing=null;$('coreFill').classList.remove('hot');shell.classList.remove('overdrive-dark');renderBoard();updateHud();if(state.overdrives===3)maybeShowCta('overdrive3');
   }
   async function afterPlace(cells){
