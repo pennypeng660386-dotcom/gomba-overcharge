@@ -90,17 +90,27 @@
     if (!soundOn) return null;
     const Ctx = window.AudioContext || window.webkitAudioContext;
     if (!Ctx) return null;
-    if (!audioCtx) audioCtx = new Ctx();
+    if (!audioCtx) {
+      audioCtx = new Ctx();
+      /* V0.9.29 — master bus: soft limiter so stacked chimes + VO never clip */
+      const comp=audioCtx.createDynamicsCompressor();
+      comp.threshold.value=-16; comp.knee.value=12; comp.ratio.value=6; comp.attack.value=.003; comp.release.value=.12;
+      const master=audioCtx.createGain(); master.gain.value=.75;
+      comp.connect(master); master.connect(audioCtx.destination);
+      audioCtx.gombaBus=comp;
+    }
     if (audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
     return audioCtx;
   }
+  function bus(c){ return c.gombaBus||c.destination; }
   function tone(freq, when=0, dur=.1, type='sine', vol=.04, end=0) {
     const c=ensureAudio(); if(!c) return;
     const t=c.currentTime+when, o=c.createOscillator(), g=c.createGain();
     o.type=type; o.frequency.setValueAtTime(freq,t);
     if(end) o.frequency.exponentialRampToValueAtTime(Math.max(30,end),t+dur);
-    g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(.001,t+dur);
-    o.connect(g); g.connect(c.destination); o.start(t); o.stop(t+dur+.03);
+    /* 6ms attack ramp — no click at onset */
+    g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(vol,t+.006); g.gain.exponentialRampToValueAtTime(.001,t+dur);
+    o.connect(g); g.connect(bus(c)); o.start(t); o.stop(t+dur+.03);
   }
   function noise(when=0,dur=.08,vol=.04,center=1200) {
     const c=ensureAudio(); if(!c) return;
@@ -109,8 +119,8 @@
     for(let i=0;i<len;i++) data[i]=(Math.random()*2-1)*(1-i/len);
     const s=c.createBufferSource(), f=c.createBiquadFilter(), g=c.createGain(), t=c.currentTime+when;
     s.buffer=b; f.type='bandpass'; f.frequency.value=center; f.Q.value=.8;
-    g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(.001,t+dur);
-    s.connect(f); f.connect(g); g.connect(c.destination); s.start(t); s.stop(t+dur);
+    g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(vol,t+.004); g.gain.exponentialRampToValueAtTime(.001,t+dur);
+    s.connect(f); f.connect(g); g.connect(bus(c)); s.start(t); s.stop(t+dur);
   }
   function click() { noise(0,.035,.028,2200); tone(180,0,.06,'triangle',.035,70); }
   function speak(word) {
@@ -121,7 +131,10 @@
     const clip=window.GOMBA_VO&&window.GOMBA_VO[key];
     if(clip){
       try{
-        const a=new Audio(clip); a.volume=.68; a.playbackRate=1; a.play().catch(()=>{});
+        const a=new Audio(clip); a.volume=.6; a.playbackRate=1;
+        /* route VO through the master limiter when possible (same-origin) */
+        try{ const c=ensureAudio(); if(c&&c.gombaBus){ const src=c.createMediaElementSource(a); const g=c.createGain(); g.gain.value=.9; src.connect(g); g.connect(c.gombaBus); a.volume=1; } }catch(_){}
+        a.play().catch(()=>{});
         return;
       }catch(_){}
     }
@@ -181,7 +194,7 @@
     else if(kind==='clear'){
       /* Layer: crack + debris whoosh + reward chime */
       noise(0,.05,.045,1800); noise(.02,.08,.03,700);
-      tone(110,0,.12,'sawtooth',.02,55);
+      tone(110,0,.12,'triangle',.02,55);
       rewardSfx(word||'NICE!'); speak(word||'NICE!');
     }
     else if(kind==='combo'){
@@ -277,10 +290,12 @@
     const gameEl=$('game');
     wordEl.textContent=word;
     plate.textContent=word==='OVERDRIVE!'?'CORE 100%':combo>=1?`COMBO x${combo}`:'LINE CLEAR';
-    e.classList.remove('tier-amazing','tier-excellent','tier-unstoppable','tier-overdrive');
-    if(word==='UNSTOPPABLE!') e.classList.add('tier-unstoppable');
-    else if(word==='EXCELLENT!') e.classList.add('tier-excellent');
+    e.classList.remove('tier-nice','tier-great','tier-amazing','tier-excellent','tier-unstoppable','tier-overdrive');
+    if(word==='NICE!') e.classList.add('tier-nice');
+    else if(word==='GREAT!') e.classList.add('tier-great');
     else if(word==='AMAZING!') e.classList.add('tier-amazing');
+    else if(word==='EXCELLENT!') e.classList.add('tier-excellent');
+    else if(word==='UNSTOPPABLE!') e.classList.add('tier-unstoppable');
     else if(word==='OVERDRIVE!') e.classList.add('tier-overdrive');
     e.hidden=false;
     /* V0.9.24 — praise owns board ABOVE FX; hide tutorial; mark shell+game */

@@ -369,13 +369,14 @@
       const b = cellAt(map, r, 7);
       if (!a || !b) return;
       /* V0.9.26 — clearer horizontal lightning sweep */
+      /* V0.9.29 — scale from texture size (256x48) so the beam spans the board, not the raw bitmap */
+      const sxR = (map.board.w * 1.04) / 256, syR = (fat ? 26 : 16) / 48;
       const img = this.add.image((a.cx + b.cx) / 2, a.cy, 'fx-beam-h')
-        .setDisplaySize(map.board.w * 1.04, fat ? 26 : 16)
         .setBlendMode(Phaser.BlendModes.ADD)
-        .setScale(0.08, 1)
+        .setScale(sxR * 0.08, syR)
         .setDepth(10)
         .setAlpha(1);
-      this.tweens.add({ targets: img, scaleX: 1, duration: 65, ease: 'Cubic.Out' });
+      this.tweens.add({ targets: img, scaleX: sxR, duration: 65, ease: 'Cubic.Out' });
       this.tweens.add({ targets: img, alpha: 0, delay: 540, duration: 280, onComplete: () => img.destroy() });
       this.sparks.explode(fat ? 34 : 20, a.cx, a.cy);
       this.sparks.explode(fat ? 34 : 20, b.cx, b.cy);
@@ -387,13 +388,14 @@
       const b = cellAt(map, 7, c);
       if (!a || !b) return;
       /* V0.9.26 — molten vertical lightning + explosive debris */
+      /* V0.9.29 — scale from texture size (64x256): thin molten core, no 64px hard-edged slab */
+      const sxC = (fat ? 28 : 18) / 64, syC = (map.board.h * 1.02) / 256;
       const img = this.add.image(a.cx, (a.cy + b.cy) / 2, 'fx-beam-v')
-        .setDisplaySize(fat ? 28 : 18, map.board.h * 1.02)
         .setBlendMode(Phaser.BlendModes.ADD)
-        .setScale(1, 0.08)
+        .setScale(sxC, syC * 0.08)
         .setDepth(10)
         .setAlpha(1);
-      this.tweens.add({ targets: img, scaleY: 1, duration: 65, ease: 'Cubic.Out' });
+      this.tweens.add({ targets: img, scaleY: syC, duration: 65, ease: 'Cubic.Out' });
       this.tweens.add({ targets: img, alpha: 0, delay: 580, duration: 300, onComplete: () => img.destroy() });
       this.sparks.explode(fat ? 42 : 26, a.cx, a.cy);
       this.sparks.explode(fat ? 42 : 26, b.cx, b.cy);
