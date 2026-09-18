@@ -66,15 +66,6 @@
   }
   function markContactSeen() {
     localStorage.setItem(CONTACT_SEEN_KEY,'1');
-    if (navigator.onLine !== false) fetch(`${CRM_BASE}/game-seen`,{method:'POST',mode:'cors',cache:'no-store'}).catch(()=>{});
-  }
-  async function serverContactSeen() {
-    if (navigator.onLine === false) return false;
-    try {
-      const r=await fetch(`${CRM_BASE}/game-status`,{method:'GET',mode:'cors',cache:'no-store'});
-      const d=await r.json();
-      return !!(r.ok&&(d?.seen||d?.submitted));
-    } catch (_) { return false; }
   }
   function buildContactPayload(email, phone) {
     return {
@@ -434,7 +425,7 @@
   function finishTurn(){if(state.tray.every(p=>!p))fillTray();renderTray();updateHud();if(!anyPieceFits())endGame();}
   function endGame(){const isBest=state.score>save.bestScore;if(isBest)save.bestScore=state.score;if(state.bestCombo>save.bestCombo)save.bestCombo=state.bestCombo;save.totalGames++;persist();reactMascot('gameover');$('newBest').hidden=!isBest;$('finalScore').textContent=state.score;$('finalBest').textContent=save.bestScore;$('finalOver').textContent=state.overdrives;$('finalCombo').textContent=`×${state.bestCombo}`;$('finalStage').textContent=state.stage;sfx('over');show('result');track('game_over',{score:state.score,overdrives:state.overdrives,stage:state.stage});if(state.score>=250||state.overdrives>=1||state.bestCombo>=3)maybeShowCta('gameover');}
 
-  async function maybeShowCta(reason){if(contactSubmitted()||contactSeen()||ctaShown)return;if(await serverContactSeen()){localStorage.setItem(CONTACT_SEEN_KEY,'1');return;}ctaShown=true;markContactSeen();afterCta=reason==='overdrive3'?'game':'result';$('ctaOffline').hidden=navigator.onLine!==false;$('ctaForm').hidden=false;$('ctaThanks').hidden=true;track('contact_cta_view',{reason});if(reason==='overdrive3')show('cta');else setTimeout(()=>{if(screens.result.classList.contains('active'))show('cta')},700);}
+  async function maybeShowCta(reason){if(contactSubmitted()||contactSeen()||ctaShown)return;ctaShown=true;markContactSeen();afterCta=reason==='overdrive3'?'game':'result';$('ctaOffline').hidden=navigator.onLine!==false;$('ctaForm').hidden=false;$('ctaThanks').hidden=true;track('contact_cta_view',{reason});if(reason==='overdrive3')show('cta');else setTimeout(()=>{if(screens.result.classList.contains('active'))show('cta')},700);}
   function goHome(){drag=null;busy=false;ghostEl.hidden=true;state=null;show('landing');}
   function rotateTray(index){if(!state||drag||!state.tray[index])return;state.tray[index]=rotateCells(state.tray[index]);renderTray();}
 
@@ -516,7 +507,7 @@
   window.addEventListener('pointermove',onPointerMove,{passive:false});
   window.addEventListener('pointerup',onPointerUp,{passive:false});
   window.addEventListener('pointercancel',onPointerUp,{passive:false});
-  window.addEventListener('online',()=>{syncOffline();if(contactSeen())markContactSeen();syncPendingContact();});window.addEventListener('offline',syncOffline);
+  window.addEventListener('online',()=>{syncOffline();syncPendingContact();});window.addEventListener('offline',syncOffline);
 
   function tapThen(fn){return()=>{sfx('tap');fn();};}
   $('soundBtn').addEventListener('click',()=>{soundOn=!soundOn;localStorage.setItem(SOUND_KEY,soundOn?'1':'0');syncSoundBtn();if(soundOn){ensureAudio();sfx('tap');}else if('speechSynthesis'in window)speechSynthesis.cancel();});
