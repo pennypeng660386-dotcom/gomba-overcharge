@@ -11,11 +11,24 @@
 body{margin:0;background:radial-gradient(circle at 70% 20%,#3b1400 0,#090909 36%,#000 78%);color:#fff;font-family:Arial,Helvetica,sans-serif}
 .wrap{max-width:1440px;margin:auto;padding:24px}
 .hero{min-height:86vh;display:grid;grid-template-columns:1.05fr .95fr;gap:42px;align-items:center}
-.art{position:relative;border:2px solid #6c2a00;border-radius:28px;overflow:hidden;box-shadow:0 0 60px #ff5a0033;background:radial-gradient(circle at 62% 35%,#492000 0,#120804 38%,#030303 78%)}
-.art-stage{position:relative;min-height:640px;overflow:hidden}
-.game-screen{position:absolute;left:5%;top:5%;width:49%;height:90%;object-fit:cover;object-position:center top;border:2px solid #8e3c08;border-radius:28px;box-shadow:0 0 34px #ff640033}
-.mascot{position:absolute;right:1.5%;bottom:1%;width:47%;max-height:90%;object-fit:contain;filter:drop-shadow(0 18px 24px rgba(0,0,0,.75))}
-.art-glow{position:absolute;inset:auto 6% 8% 48%;height:26%;background:radial-gradient(circle,#ff6a0040 0,transparent 70%);filter:blur(18px);pointer-events:none}
+.art{position:relative;border:2px solid #6c2a00;border-radius:28px;overflow:hidden;box-shadow:0 0 60px #ff5a0033;background:
+  linear-gradient(90deg,rgba(8,3,0,.28),rgba(8,3,0,.72)),
+  url("../../assets/ui/landing-screen-v1.jpg") center/cover no-repeat}
+.art:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 0 37%,rgba(0,0,0,.10) 48%,rgba(0,0,0,.30) 100%);pointer-events:none}
+.art-stage{position:relative;min-height:640px;overflow:hidden;z-index:1}
+.game-screen{position:absolute;left:4%;top:6%;width:39%;height:88%;object-fit:cover;object-position:center top;border:2px solid #8e3c08;border-radius:24px;box-shadow:0 0 34px #ff640044}
+.art-copy{position:absolute;left:44%;top:16%;width:31%;z-index:3}
+.art-copy h3{margin:0 0 8px;color:#ff8b00;font-size:clamp(30px,3vw,54px);line-height:.86;text-shadow:0 2px 0 #5e2300}
+.art-copy .small{margin:0;color:#fff;font-size:clamp(16px,1.3vw,25px);font-weight:800}
+.art-copy .bigger{margin:3px 0 10px;color:#ff9300;font-size:clamp(24px,2.25vw,40px);font-weight:900}
+.art-copy .mini{margin:0 0 16px;color:#f3dfcf;font-size:clamp(9px,.8vw,13px);font-weight:800;white-space:nowrap}
+.art-play{display:inline-flex;align-items:center;justify-content:center;min-width:245px;min-height:52px;padding:0 20px;border:1px solid #ffbd51;border-radius:12px;background:linear-gradient(90deg,#ff5600,#ff9000);color:#fff;text-decoration:none;font-size:16px;font-weight:900;box-shadow:0 8px 22px #ff650033}
+.art-qr-row{display:flex;align-items:center;gap:12px;margin-top:17px}
+.art-qr-row img{width:92px;height:92px;background:#fff;padding:5px;border-radius:4px}
+.art-qr-copy strong{display:block;color:#ff9c16;font-size:17px;line-height:1.05}
+.art-qr-copy a{display:block;margin-top:6px;color:#fff;text-decoration:none;font-size:12px;font-weight:800}
+.art-qr-copy small{display:block;margin-top:5px;color:#e1cfc0;font-size:10px}
+.mascot{position:absolute;right:1.8%;bottom:6%;width:27%;max-height:70%;object-fit:contain;filter:drop-shadow(0 18px 24px rgba(0,0,0,.75));z-index:2}
 .copy h1{font-size:clamp(54px,7vw,108px);line-height:.85;margin:0;color:var(--gold);text-shadow:0 0 28px #ff5a00}
 .copy h2{font-size:clamp(36px,5vw,76px);margin:8px 0 28px;color:var(--orange);font-style:italic}
 .tag{font-size:clamp(22px,2.5vw,34px);font-weight:800;margin:0 0 28px}
@@ -31,20 +44,37 @@ body{margin:0;background:radial-gradient(circle at 70% 20%,#3b1400 0,#090909 36%
 .url a{color:#ffc36b;font-weight:700;text-decoration:none;border-bottom:1px solid #ff9b334d;padding-bottom:2px}
 .url a:hover{color:#fff0d7;border-bottom-color:#ff9b33}
 footer{border-top:1px solid #352113;padding:26px 0;color:#aaa;text-align:center}
-@media(max-width:1050px){.art-stage{min-height:560px}}
+@media(max-width:1120px){
+  .art-stage{min-height:570px}
+  .art-copy{left:43%;top:15%;width:33%}
+  .mascot{right:1%;width:27%}
+  .art-play{min-width:210px;font-size:14px}
+}
 @media(max-width:850px){
   .hero{grid-template-columns:1fr}
   .wrap{padding:14px}
   .features{grid-template-columns:1fr}
   .qr{width:140px;height:140px}
-  .art-stage{min-height:520px}
-  .game-screen{left:4%;width:53%}
-  .mascot{right:0;width:49%}
+  .art-stage{min-height:560px}
+  .game-screen{left:3%;top:5%;width:42%;height:90%}
+  .art-copy{left:46%;top:13%;width:31%}
+  .mascot{right:0;bottom:4%;width:28%}
+  .art-copy .mini{white-space:normal}
 }
-@media(max-width:520px){
-  .art-stage{min-height:430px}
-  .game-screen{left:4%;top:4%;width:57%;height:92%}
-  .mascot{right:-5%;bottom:1%;width:54%}
+@media(max-width:560px){
+  .art-stage{min-height:520px}
+  .game-screen{left:4%;top:4%;width:47%;height:92%}
+  .art-copy{left:52%;top:10%;width:43%}
+  .art-copy h3{font-size:25px}
+  .art-copy .small{font-size:13px}
+  .art-copy .bigger{font-size:24px}
+  .art-copy .mini{font-size:8px}
+  .art-play{min-width:0;width:100%;min-height:42px;padding:0 8px;font-size:11px}
+  .art-qr-row img{width:70px;height:70px}
+  .art-qr-copy strong{font-size:12px}
+  .art-qr-copy a{font-size:9px}
+  .art-qr-copy small{font-size:8px}
+  .mascot{right:-4%;bottom:5%;width:31%}
 }
 </style>
 </head>
@@ -54,7 +84,23 @@ footer{border-top:1px solid #352113;padding:26px 0;color:#aaa;text-align:center}
 <div class="art" aria-label="GOMBA OVERDRIVE game artwork">
   <div class="art-stage">
     <img class="game-screen" src="../../assets/ui/landing-screen-v1.jpg" alt="GOMBA OVERDRIVE game screen">
-    <span class="art-glow" aria-hidden="true"></span>
+    <div class="art-copy">
+      <h3>GOMBA<br>OVERDRIVE</h3>
+      <p class="small">A SMALL GAME FOR</p>
+      <p class="bigger">A BIGGER YOU</p>
+      <p class="mini">NO DOWNLOAD&nbsp;&nbsp;•&nbsp;&nbsp;OFFLINE READY&nbsp;&nbsp;•&nbsp;&nbsp;PLAY ANYWHERE</p>
+      <a class="art-play" href="https://game.gombaglobal.com/" target="_blank" rel="noopener">PLAY GOMBA OVERDRIVE</a>
+      <div class="art-qr-row">
+        <a href="https://game.gombaglobal.com/" target="_blank" rel="noopener" aria-label="Open GOMBA OVERDRIVE">
+          <img src="../../assets/marketing/qr/gomba-game-qr.png" alt="Scan to play GOMBA OVERDRIVE">
+        </a>
+        <div class="art-qr-copy">
+          <strong>SCAN TO PLAY</strong>
+          <a href="https://game.gombaglobal.com/" target="_blank" rel="noopener">game.gombaglobal.com</a>
+          <small>First load online. Then play offline.</small>
+        </div>
+      </div>
+    </div>
     <img class="mascot" src="../../assets/gomba-mascot.png" alt="GOMBA mascot">
   </div>
 </div>
