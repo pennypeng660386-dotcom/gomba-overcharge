@@ -4,7 +4,9 @@
   const SOUND_KEY = 'gomba_overdrive_sound';
   const CONTACT_KEY = 'gomba_contact_submitted';
   const CONTACT_AT = 'gomba_contact_submitted_at';
-  const CONTACT_IP = 'gomba_contact_ip';
+  const CONTACT_SEEN_KEY = 'gomba_contact_cta_seen';
+  const CONTACT_PENDING_KEY = 'gomba_contact_pending';
+  const CRM_BASE = 'https://funleglobal.com/wp-json/funle-crm/v1';
 
   const EASY = [
     [[0,0]], [[0,0],[0,1]], [[0,0],[1,0]],
@@ -57,24 +59,22 @@
   function persist() { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); }
 
   function contactSubmitted() { return localStorage.getItem(CONTACT_KEY) === '1'; }
-  function markContactSubmitted(ip='') {
+  function contactSeen() { return localStorage.getItem(CONTACT_SEEN_KEY) === '1'; }
+  function markContactSubmitted() {
     localStorage.setItem(CONTACT_KEY,'1');
     localStorage.setItem(CONTACT_AT,new Date().toISOString());
-    if (ip) localStorage.setItem(CONTACT_IP,ip);
   }
-  async function readPublicIp() {
-    if (navigator.onLine === false) return '';
+  function markContactSeen() {
+    localStorage.setItem(CONTACT_SEEN_KEY,'1');
+    if (navigator.onLine !== false) fetch(`${CRM_BASE}/game-seen`,{method:'POST',mode:'cors',cache:'no-store'}).catch(()=>{});
+  }
+  async function serverContactSeen() {
+    if (navigator.onLine === false) return false;
     try {
-      const r = await fetch('https://api.ipify.org?format=json',{cache:'no-store'});
-      const d = await r.json();
-      return d?.ip ? String(d.ip) : '';
-    } catch (_) { return ''; }
-  }
-  async function sameContactIp() {
-    const saved = localStorage.getItem(CONTACT_IP);
-    if (!saved) return false;
-    const now = await readPublicIp();
-    return !!(now && now === saved);
+      const r=await fetch(`${CRM_BASE}/game-status`,{method:'GET',mode:'cors',cache:'no-store'});
+      const d=await r.json();
+      return !!(r.ok&&(d?.seen||d?.submitted));
+    } catch (_) { return false; }
   }
   function buildContactPayload(email, phone) {
     return {
@@ -84,7 +84,23 @@
       timestamp:new Date().toISOString()
     };
   }
-  function submitContactLead(payload) { console.log('[GOMBA_CONTACT]', payload); }
+  function queueContactLead(payload) { localStorage.setItem(CONTACT_PENDING_KEY,JSON.stringify(payload)); }
+  async function submitContactLead(payload) {
+    if(navigator.onLine===false){queueContactLead(payload);return {ok:true,queued:true};}
+    try{
+      const r=await fetch(`${CRM_BASE}/game-lead`,{method:'POST',mode:'cors',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      const d=await r.json();
+      if(!r.ok||!d?.ok)throw new Error('crm_submit_failed');
+      localStorage.removeItem(CONTACT_PENDING_KEY);
+      return {...d,queued:false};
+    }catch(_){queueContactLead(payload);return {ok:true,queued:true};}
+  }
+  async function syncPendingContact(){
+    if(navigator.onLine===false)return;
+    let payload=null;try{payload=JSON.parse(localStorage.getItem(CONTACT_PENDING_KEY)||'null');}catch(_){}
+    if(!payload)return;
+    const res=await submitContactLead(payload);if(res&&!res.queued)markContactSubmitted();
+  }
 
   function ensureAudio() {
     if (!soundOn) return null;
@@ -418,7 +434,7 @@
   function finishTurn(){if(state.tray.every(p=>!p))fillTray();renderTray();updateHud();if(!anyPieceFits())endGame();}
   function endGame(){const isBest=state.score>save.bestScore;if(isBest)save.bestScore=state.score;if(state.bestCombo>save.bestCombo)save.bestCombo=state.bestCombo;save.totalGames++;persist();reactMascot('gameover');$('newBest').hidden=!isBest;$('finalScore').textContent=state.score;$('finalBest').textContent=save.bestScore;$('finalOver').textContent=state.overdrives;$('finalCombo').textContent=`×${state.bestCombo}`;$('finalStage').textContent=state.stage;sfx('over');show('result');track('game_over',{score:state.score,overdrives:state.overdrives,stage:state.stage});if(state.score>=250||state.overdrives>=1||state.bestCombo>=3)maybeShowCta('gameover');}
 
-  async function maybeShowCta(reason){if(contactSubmitted()||ctaShown)return;if(await sameContactIp()){markContactSubmitted(localStorage.getItem(CONTACT_IP));return;}ctaShown=true;afterCta=reason==='overdrive3'?'game':'result';$('ctaOffline').hidden=navigator.onLine!==false;$('ctaForm').hidden=false;$('ctaThanks').hidden=true;track('contact_cta_view',{reason});if(reason==='overdrive3')show('cta');else setTimeout(()=>{if(screens.result.classList.contains('active'))show('cta')},700);}
+  async function maybeShowCta(reason){if(contactSubmitted()||contactSeen()||ctaShown)return;if(await serverContactSeen()){localStorage.setItem(CONTACT_SEEN_KEY,'1');return;}ctaShown=true;markContactSeen();afterCta=reason==='overdrive3'?'game':'result';$('ctaOffline').hidden=navigator.onLine!==false;$('ctaForm').hidden=false;$('ctaThanks').hidden=true;track('contact_cta_view',{reason});if(reason==='overdrive3')show('cta');else setTimeout(()=>{if(screens.result.classList.contains('active'))show('cta')},700);}
   function goHome(){drag=null;busy=false;ghostEl.hidden=true;state=null;show('landing');}
   function rotateTray(index){if(!state||drag||!state.tray[index])return;state.tray[index]=rotateCells(state.tray[index]);renderTray();}
 
@@ -500,7 +516,7 @@
   window.addEventListener('pointermove',onPointerMove,{passive:false});
   window.addEventListener('pointerup',onPointerUp,{passive:false});
   window.addEventListener('pointercancel',onPointerUp,{passive:false});
-  window.addEventListener('online',syncOffline);window.addEventListener('offline',syncOffline);
+  window.addEventListener('online',()=>{syncOffline();if(contactSeen())markContactSeen();syncPendingContact();});window.addEventListener('offline',syncOffline);
 
   function tapThen(fn){return()=>{sfx('tap');fn();};}
   $('soundBtn').addEventListener('click',()=>{soundOn=!soundOn;localStorage.setItem(SOUND_KEY,soundOn?'1':'0');syncSoundBtn();if(soundOn){ensureAudio();sfx('tap');}else if('speechSynthesis'in window)speechSynthesis.cancel();});
@@ -508,10 +524,10 @@
   if(/[?&]autostart=1\b/.test(location.search)){window.addEventListener('load',()=>setTimeout(()=>{try{startGame();}catch(e){}},180));}
   $('againBtn').addEventListener('click',tapThen(()=>{track('retry');startGame();}));$('backHomeBtn').addEventListener('click',tapThen(goHome));$('gameClose').addEventListener('click',tapThen(goHome));$('resultClose').addEventListener('click',tapThen(goHome));$('ctaClose').addEventListener('click',tapThen(goHome));$('ctaHome').addEventListener('click',tapThen(goHome));
   $('ctaKeep').addEventListener('click',tapThen(()=>{if(afterCta==='game'&&state)show('game');else if(state)show('result');else show('landing');}));
-  $('ctaForm').addEventListener('submit',e=>{e.preventDefault();const email=$('ctaEmail').value.trim(),phone=$('ctaPhone').value.trim(),emailOk=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),phoneOk=phone.replace(/\D/g,'').length>=6;if(!emailOk&&!phoneOk)return;submitContactLead(buildContactPayload(emailOk?email:'',phoneOk?phone:''));markContactSubmitted();readPublicIp().then(ip=>{if(ip)localStorage.setItem(CONTACT_IP,ip)});sfx('tap');$('ctaForm').hidden=true;$('ctaThanks').hidden=false;$('ctaEmail').value='';$('ctaPhone').value='';});
+  $('ctaForm').addEventListener('submit',async e=>{e.preventDefault();const email=$('ctaEmail').value.trim(),phone=$('ctaPhone').value.trim(),emailOk=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),phoneOk=phone.replace(/\D/g,'').length>=6;if(!emailOk&&!phoneOk)return;const res=await submitContactLead(buildContactPayload(emailOk?email:'',phoneOk?phone:''));markContactSubmitted();sfx('tap');$('ctaForm').hidden=true;$('ctaThanks').textContent=res?.queued?'SAVED — SYNC WHEN ONLINE ⚡':"YOU'RE IN ⚡";$('ctaThanks').hidden=false;$('ctaEmail').value='';$('ctaPhone').value='';});
 
   if('serviceWorker'in navigator)navigator.serviceWorker.register('./service-worker.js').catch(()=>{});
-  syncSoundBtn();syncOffline();$('bestText').textContent=save.bestScore;track('play_visit');
+  syncSoundBtn();syncOffline();syncPendingContact();$('bestText').textContent=save.bestScore;track('play_visit');
 
   window.addEventListener('gomba-qa',async ev=>{if(!state)return;const d=ev.detail||{};if(d.overdrive){state.core=100;await triggerOverdrive();return;}if(d.cta){ctaShown=false;await maybeShowCta(d.reason||'gameover');return;}if(d.peak){/* presentation seed for SoT-like HUD without rewriting rules */state.score=d.score??1250;state.bestCombo=d.bestCombo??4;state.core=d.core??80;state.stage=d.stage??3;state.combo=d.combo??4;try{const best=Number(localStorage.getItem('gomba_best')||0);if((d.score??1250)>best){/* display only */} $('bestText').textContent=String(d.best??3420);}catch(_){}$('scoreText').textContent=String(state.score);$('comboText').textContent=`×${state.combo}`;$('stageText').textContent=String(state.stage);$('coreText').textContent=`${state.core}%`;$('coreFill').style.width=`${state.core}%`;}if(d.rows||d.cols){const lines={rows:d.rows||[],cols:d.cols||[]};lines.rows.forEach(r=>{for(let c=0;c<SIZE;c++)state.board[r][c]=1});lines.cols.forEach(c=>{for(let r=0;r<SIZE;r++)state.board[r][c]=1});state.combo=d.combo||4;if(d.core!=null)state.core=Math.min(100,d.core);else state.core=Math.min(100,Math.max(state.core,80));if(d.score!=null)state.score=d.score;if(d.stage!=null)state.stage=d.stage;const marks=applyClears(state.board,lines);state.clearing=marks;let text,kind;if(d.word){text=d.word;kind=(d.kind||String(d.word).toLowerCase().replace(/!/g,''));}else{[text,kind]=cheerFor(lines.rows.length+lines.cols.length,state.combo);}renderBoard();updateHud();const paintPeak=()=>{if(d.best!=null)$('bestText').textContent=String(d.best);if(d.score!=null)$('scoreText').textContent=Number(d.score).toLocaleString('en-US');if(d.core!=null){$('coreText').textContent=`${state.core}%`;$('coreFill').style.width=`${state.core}%`;}$('comboText').textContent=`×${state.combo}`;if(d.stage!=null)$('stageText').textContent=String(d.stage);};paintPeak();playClearFx(lines,lines.rows.length+lines.cols.length,state.combo,text,kind);paintPeak();await wait(d.hold||900);state.clearing=null;renderBoard();paintPeak();}});
 })();
