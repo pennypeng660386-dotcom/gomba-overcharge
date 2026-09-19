@@ -4,122 +4,111 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>GOMBA OVERDRIVE — Play Now</title>
-<meta name="description" content="Play GOMBA OVERDRIVE in your browser. No download. Offline-ready after first load.">
 <style>
-:root{--orange:#ff6a00;--gold:#ffb11b;--bg:#070707;--panel:#111}
+:root{--orange:#ff6a00;--gold:#ffb11b}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(circle at 70% 20%,#3b1400 0,#090909 36%,#000 78%);color:#fff;font-family:Arial,Helvetica,sans-serif}
-.wrap{max-width:1440px;margin:auto;padding:24px}
-.hero{min-height:86vh;display:grid;grid-template-columns:1.05fr .95fr;gap:42px;align-items:center}
-.art{position:relative;border:2px solid #6c2a00;border-radius:28px;overflow:hidden;box-shadow:0 0 60px #ff5a0033;background:
-  linear-gradient(90deg,rgba(8,3,0,.28),rgba(8,3,0,.72)),
-  url("../../assets/ui/landing-screen-v1.jpg") center/cover no-repeat}
-.art:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 0 37%,rgba(0,0,0,.10) 48%,rgba(0,0,0,.30) 100%);pointer-events:none}
-.art-stage{position:relative;min-height:640px;overflow:hidden;z-index:1}
-.game-screen{position:absolute;left:4%;top:6%;width:39%;height:88%;object-fit:cover;object-position:center top;border:2px solid #8e3c08;border-radius:24px;box-shadow:0 0 34px #ff640044}
-.art-copy{position:absolute;left:44%;top:16%;width:31%;z-index:3}
-.art-copy h3{margin:0 0 8px;color:#ff8b00;font-size:clamp(30px,3vw,54px);line-height:.86;text-shadow:0 2px 0 #5e2300}
-.art-copy .small{margin:0;color:#fff;font-size:clamp(16px,1.3vw,25px);font-weight:800}
-.art-copy .bigger{margin:3px 0 10px;color:#ff9300;font-size:clamp(24px,2.25vw,40px);font-weight:900}
-.art-copy .mini{margin:0 0 16px;color:#f3dfcf;font-size:clamp(9px,.8vw,13px);font-weight:800;white-space:nowrap}
-.art-play{display:inline-flex;align-items:center;justify-content:center;min-width:245px;min-height:52px;padding:0 20px;border:1px solid #ffbd51;border-radius:12px;background:linear-gradient(90deg,#ff5600,#ff9000);color:#fff;text-decoration:none;font-size:16px;font-weight:900;box-shadow:0 8px 22px #ff650033}
-.art-qr-row{display:flex;align-items:center;gap:12px;margin-top:17px}
-.art-qr-row img{width:92px;height:92px;background:#fff;padding:5px;border-radius:4px}
-.art-qr-copy strong{display:block;color:#ff9c16;font-size:17px;line-height:1.05}
-.art-qr-copy a{display:block;margin-top:6px;color:#fff;text-decoration:none;font-size:12px;font-weight:800}
-.art-qr-copy small{display:block;margin-top:5px;color:#e1cfc0;font-size:10px}
-.mascot{position:absolute;right:1.8%;bottom:6%;width:27%;max-height:70%;object-fit:contain;filter:drop-shadow(0 18px 24px rgba(0,0,0,.75));z-index:2}
-.copy h1{font-size:clamp(54px,7vw,108px);line-height:.85;margin:0;color:var(--gold);text-shadow:0 0 28px #ff5a00}
-.copy h2{font-size:clamp(36px,5vw,76px);margin:8px 0 28px;color:var(--orange);font-style:italic}
-.tag{font-size:clamp(22px,2.5vw,34px);font-weight:800;margin:0 0 28px}
-.features{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:28px 0}
-.feature{background:#111c;border:1px solid #632900;border-radius:16px;padding:18px}
-.feature b{display:block;color:#ff9a1a;margin-bottom:7px}
-.actions{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
-.play{display:inline-flex;text-decoration:none;color:#fff;background:linear-gradient(90deg,#ff4f00,#ff9200);font-weight:900;font-size:26px;padding:20px 34px;border-radius:14px;box-shadow:0 0 28px #ff650066}
-.qr-link{display:inline-flex;border-radius:12px;transition:transform .18s ease}
-.qr-link:hover{transform:translateY(-2px)}
-.qr{background:#fff;padding:10px;border-radius:12px;width:160px;height:160px;display:block}
-.url{margin-top:18px}
-.url a{color:#ffc36b;font-weight:700;text-decoration:none;border-bottom:1px solid #ff9b334d;padding-bottom:2px}
-.url a:hover{color:#fff0d7;border-bottom-color:#ff9b33}
-footer{border-top:1px solid #352113;padding:26px 0;color:#aaa;text-align:center}
-@media(max-width:1120px){
-  .art-stage{min-height:570px}
-  .art-copy{left:43%;top:15%;width:33%}
-  .mascot{right:1%;width:27%}
-  .art-play{min-width:210px;font-size:14px}
+html,body{margin:0;min-height:100%;background:#050505;color:#fff;font-family:Arial,Helvetica,sans-serif}
+body{background:radial-gradient(circle at 74% 16%,#351200 0,#0a0705 38%,#020202 78%)}
+.wrap{max-width:1672px;margin:0 auto;padding:54px 56px 48px}
+.hero{display:grid;grid-template-columns:55% 45%;gap:38px;align-items:center;min-height:820px}
+.left-card{position:relative;height:555px;border:2px solid #7b3300;border-radius:26px;overflow:hidden;background:
+linear-gradient(90deg,rgba(8,3,0,.18),rgba(8,3,0,.72)),
+url("https://game.gombaglobal.com/assets/ui/landing-screen-v1.jpg") center/cover no-repeat;
+box-shadow:0 0 52px #ff5a0024}
+.left-card:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 0 34%,rgba(0,0,0,.14) 47%,rgba(0,0,0,.38) 100%)}
+.phone{position:absolute;z-index:2;left:5%;top:7%;width:36%;height:86%;object-fit:cover;object-position:center top;border:2px solid #8e3c08;border-radius:22px;box-shadow:0 0 30px #ff6a0040}
+.left-copy{position:absolute;z-index:4;left:43%;top:16%;width:31%}
+.left-copy h3{margin:0 0 10px;color:#ff8f08;font-weight:900;font-size:32px;line-height:.88;text-shadow:0 2px 0 #4c1a00}
+.left-copy .small{margin:0;color:#fff;font-size:17px;line-height:1.05;font-weight:900;white-space:nowrap}
+.left-copy .bigger{margin:5px 0 12px;color:#ff9200;font-size:29px;line-height:.95;font-weight:900;white-space:nowrap}
+.left-copy .mini{margin:0 0 17px;color:#f6e3d1;font-size:9px;font-weight:800;white-space:nowrap}
+.left-play{display:flex;align-items:center;justify-content:center;width:100%;height:48px;border:1px solid #ffc35c;border-radius:11px;background:linear-gradient(90deg,#ff5900,#ff9200);color:#fff;text-decoration:none;font-size:14px;font-weight:900;box-shadow:0 8px 20px #ff65002d}
+.left-qr-row{display:flex;align-items:center;gap:11px;margin-top:16px}
+.left-qr-row img{width:88px;height:88px;background:#fff;padding:5px;border-radius:3px}
+.left-qr-copy strong{display:block;color:#ff9e18;font-size:15px;line-height:1}
+.left-qr-copy a{display:block;margin-top:6px;color:#fff;text-decoration:none;font-size:11px;font-weight:800;white-space:nowrap}
+.left-qr-copy small{display:block;margin-top:5px;color:#d8c5b4;font-size:9px;white-space:nowrap}
+.mascot{position:absolute;z-index:3;right:1.7%;bottom:5%;width:23.5%;max-height:67%;object-fit:contain;filter:drop-shadow(0 18px 22px rgba(0,0,0,.78))}
+.right{padding:2px 0 0 0}
+.right h1{margin:0;color:var(--gold);font-size:92px;line-height:.88;font-weight:900;text-shadow:0 0 25px #ff5a005c}
+.right h2{margin:10px 0 38px;color:var(--orange);font-size:68px;line-height:.92;font-style:italic;font-weight:900}
+.tag{margin:0 0 34px;font-size:34px;line-height:1;font-weight:900}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:34px}
+.feature{min-height:116px;padding:22px 18px;border:1px solid #663000;border-radius:16px;background:#11100fd9}
+.feature b{display:block;margin-bottom:10px;color:#ff9c17;font-size:17px}
+.feature span{display:block;font-size:16px;line-height:1.3;color:#fff}
+.actions{display:flex;align-items:center;gap:28px}
+.play{display:flex;align-items:center;justify-content:center;width:260px;height:90px;border-radius:16px;background:linear-gradient(90deg,#ff5700,#ff9500);color:#fff;text-decoration:none;font-size:31px;font-weight:900;box-shadow:0 0 30px #ff63004a}
+.qr-link{display:block;padding:0;border-radius:13px}
+.qr{display:block;width:188px;height:188px;padding:12px;background:#fff;border-radius:13px}
+.url{margin:26px 0 0}
+.url a{color:#ffbf55;text-decoration:none;font-size:18px;font-weight:900;border-bottom:1px solid #ff9b3380;padding-bottom:3px}
+footer{margin-top:10px;padding:20px 0 0;text-align:center;color:#777;font-size:12px}
+@media(max-width:1100px){
+  .wrap{padding:28px 20px}
+  .hero{grid-template-columns:1fr;min-height:auto}
+  .left-card{height:560px}
+  .right h1{font-size:72px}.right h2{font-size:54px}
 }
-@media(max-width:850px){
-  .hero{grid-template-columns:1fr}
-  .wrap{padding:14px}
+@media(max-width:650px){
+  .wrap{padding:16px 12px}
+  .left-card{height:420px;border-radius:18px}
+  .phone{left:3%;top:5%;width:40%;height:90%}
+  .left-copy{left:45%;top:12%;width:31%}
+  .left-copy h3{font-size:23px}
+  .left-copy .small{font-size:11px}
+  .left-copy .bigger{font-size:19px}
+  .left-copy .mini{font-size:6px}
+  .left-play{height:38px;font-size:10px}
+  .left-qr-row img{width:64px;height:64px}
+  .left-qr-copy strong{font-size:10px}.left-qr-copy a{font-size:7px}.left-qr-copy small{font-size:6px}
+  .mascot{right:0;width:24%;bottom:5%}
+  .right h1{font-size:54px}.right h2{font-size:42px}.tag{font-size:24px}
   .features{grid-template-columns:1fr}
-  .qr{width:140px;height:140px}
-  .art-stage{min-height:560px}
-  .game-screen{left:3%;top:5%;width:42%;height:90%}
-  .art-copy{left:46%;top:13%;width:31%}
-  .mascot{right:0;bottom:4%;width:28%}
-  .art-copy .mini{white-space:normal}
-}
-@media(max-width:560px){
-  .art-stage{min-height:520px}
-  .game-screen{left:4%;top:4%;width:47%;height:92%}
-  .art-copy{left:52%;top:10%;width:43%}
-  .art-copy h3{font-size:25px}
-  .art-copy .small{font-size:13px}
-  .art-copy .bigger{font-size:24px}
-  .art-copy .mini{font-size:8px}
-  .art-play{min-width:0;width:100%;min-height:42px;padding:0 8px;font-size:11px}
-  .art-qr-row img{width:70px;height:70px}
-  .art-qr-copy strong{font-size:12px}
-  .art-qr-copy a{font-size:9px}
-  .art-qr-copy small{font-size:8px}
-  .mascot{right:-4%;bottom:5%;width:31%}
+  .actions{gap:16px}.play{width:220px;height:72px;font-size:26px}.qr{width:140px;height:140px}
 }
 </style>
-</head>
-<body>
+</head><body>
 <main class="wrap">
 <section class="hero">
-<div class="art" aria-label="GOMBA OVERDRIVE game artwork">
-  <div class="art-stage">
-    <img class="game-screen" src="../../assets/ui/landing-screen-v1.jpg" alt="GOMBA OVERDRIVE game screen">
-    <div class="art-copy">
+  <div class="left-card">
+    <img class="phone" src="https://game.gombaglobal.com/assets/ui/landing-screen-v1.jpg" alt="GOMBA OVERDRIVE game screen">
+    <div class="left-copy">
       <h3>GOMBA<br>OVERDRIVE</h3>
       <p class="small">A SMALL GAME FOR</p>
       <p class="bigger">A BIGGER YOU</p>
       <p class="mini">NO DOWNLOAD&nbsp;&nbsp;•&nbsp;&nbsp;OFFLINE READY&nbsp;&nbsp;•&nbsp;&nbsp;PLAY ANYWHERE</p>
-      <a class="art-play" href="https://game.gombaglobal.com/" target="_blank" rel="noopener">PLAY GOMBA OVERDRIVE</a>
-      <div class="art-qr-row">
-        <a href="https://game.gombaglobal.com/" target="_blank" rel="noopener" aria-label="Open GOMBA OVERDRIVE">
-          <img src="../../assets/marketing/qr/gomba-game-qr.png" alt="Scan to play GOMBA OVERDRIVE">
+      <a class="left-play" href="https://game.gombaglobal.com/" target="_blank" rel="noopener">PLAY GOMBA OVERDRIVE</a>
+      <div class="left-qr-row">
+        <a href="https://game.gombaglobal.com/" target="_blank" rel="noopener">
+          <img src="https://game.gombaglobal.com/assets/marketing/qr/gomba-game-qr.png" alt="Scan to play GOMBA OVERDRIVE">
         </a>
-        <div class="art-qr-copy">
+        <div class="left-qr-copy">
           <strong>SCAN TO PLAY</strong>
           <a href="https://game.gombaglobal.com/" target="_blank" rel="noopener">game.gombaglobal.com</a>
           <small>First load online. Then play offline.</small>
         </div>
       </div>
     </div>
-    <img class="mascot" src="../../assets/gomba-mascot.png" alt="GOMBA mascot">
+    <img class="mascot" src="https://game.gombaglobal.com/assets/gomba-mascot.png" alt="GOMBA mascot">
   </div>
-</div>
-<div class="copy">
-<h1>GOMBA</h1><h2>OVERDRIVE</h2>
-<p class="tag">PLACE. CLEAR. OVERDRIVE.</p>
-<div class="features">
-<div class="feature"><b>NO DOWNLOAD</b>Play instantly in your browser.</div>
-<div class="feature"><b>OFFLINE READY</b>First load online, then keep playing offline.</div>
-<div class="feature"><b>PLAY ANYWHERE</b>Mobile, tablet or desktop.</div>
-</div>
-<div class="actions">
-<a class="play" href="https://game.gombaglobal.com/" target="_blank" rel="noopener">PLAY NOW</a>
-<a class="qr-link" href="https://game.gombaglobal.com/" target="_blank" rel="noopener" aria-label="Open GOMBA OVERDRIVE">
-  <img class="qr" src="../../assets/marketing/qr/gomba-game-qr.png" alt="Scan to play GOMBA OVERDRIVE">
-</a>
-</div>
-<p class="url"><a href="https://game.gombaglobal.com/" target="_blank" rel="noopener">game.gombaglobal.com</a></p>
-</div>
+  <div class="right">
+    <h1>GOMBA</h1>
+    <h2>OVERDRIVE</h2>
+    <p class="tag">PLACE. CLEAR. OVERDRIVE.</p>
+    <div class="features">
+      <div class="feature"><b>NO DOWNLOAD</b><span>Play instantly in your browser.</span></div>
+      <div class="feature"><b>OFFLINE READY</b><span>First load online, then keep playing offline.</span></div>
+      <div class="feature"><b>PLAY ANYWHERE</b><span>Mobile, tablet or desktop.</span></div>
+    </div>
+    <div class="actions">
+      <a class="play" href="https://game.gombaglobal.com/" target="_blank" rel="noopener">PLAY NOW</a>
+      <a class="qr-link" href="https://game.gombaglobal.com/" target="_blank" rel="noopener">
+        <img class="qr" src="https://game.gombaglobal.com/assets/marketing/qr/gomba-game-qr.png" alt="Scan to play GOMBA OVERDRIVE">
+      </a>
+    </div>
+    <p class="url"><a href="https://game.gombaglobal.com/" target="_blank" rel="noopener">game.gombaglobal.com</a></p>
+  </div>
 </section>
 <footer>GOMBA GLOBAL · GOMBA OVERDRIVE</footer>
 </main>
